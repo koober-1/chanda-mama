@@ -43,10 +43,7 @@ class SubSubSubCategoryApiController extends Controller
                 ->orderBy('id', 'DESC');
 
             if ($filter) {
-                $query->where(function ($q) use ($filter) {
-                    $q->where('name', 'like', "%{$filter}%")
-                        ->orWhere('subtitle', 'like', "%{$filter}%");
-                });
+                $query = $this->applyCategoryTreeSearch($query, $filter);
             }
 
             $total = $query->count();
@@ -57,6 +54,24 @@ class SubSubSubCategoryApiController extends Controller
             Log::error('Sub Sub SubCategory list error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             return CommonHelper::responseError('Server Error: ' . $e->getMessage());
         }
+    }
+
+    /** Search the category itself and every ancestor in the four-level tree. */
+    private function applyCategoryTreeSearch($query, string $filter)
+    {
+        $like = '%' . trim($filter) . '%';
+
+        return $query->where(function ($query) use ($like) {
+            $matchCategory = function ($categoryQuery) use ($like) {
+                $categoryQuery->where('name', 'like', $like)
+                    ->orWhere('subtitle', 'like', $like);
+            };
+
+            $matchCategory($query);
+            $query->orWhereHas('parent', $matchCategory)
+                ->orWhereHas('parent.parent', $matchCategory)
+                ->orWhereHas('parent.parent.parent', $matchCategory);
+        });
     }
 
     public function save(Request $request)

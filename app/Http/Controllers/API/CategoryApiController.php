@@ -89,10 +89,7 @@ class CategoryApiController extends Controller
                 }
 
                 if ($filter) {
-                    $categories = $categories->where(function ($query) use ($filter) {
-                        $query->where('name', 'like', "%{$filter}%")
-                            ->orWhere('subtitle', 'like', "%{$filter}%");
-                    });
+                    $categories = $this->applyCategoryTreeSearch($categories, $filter);
                 }
 
                 $total = $categories->count();
@@ -182,10 +179,7 @@ class CategoryApiController extends Controller
                 }
 
                 if ($filter) {
-                    $categoriesQuery = $categoriesQuery->where(function ($query) use ($filter) {
-                        $query->where('name', 'like', "%{$filter}%")
-                            ->orWhere('subtitle', 'like', "%{$filter}%");
-                    });
+                    $categoriesQuery = $this->applyCategoryTreeSearch($categoriesQuery, $filter);
                 }
                 $total = $categoriesQuery->count();
                 if (!$useContentLanguage) {
@@ -210,6 +204,28 @@ class CategoryApiController extends Controller
         } catch (\Throwable $e) {
             return CommonHelper::responseError($e->getMessage());
         }
+    }
+
+    /**
+     * Search a category by its own name/subtitle or any parent in its hierarchy.
+     * This keeps Sub Category and Sub Sub Category searches useful when users
+     * only know the name of the parent category.
+     */
+    private function applyCategoryTreeSearch($query, string $filter)
+    {
+        $like = '%' . trim($filter) . '%';
+
+        return $query->where(function ($query) use ($like) {
+            $matchCategory = function ($categoryQuery) use ($like) {
+                $categoryQuery->where('name', 'like', $like)
+                    ->orWhere('subtitle', 'like', $like);
+            };
+
+            $matchCategory($query);
+            $query->orWhereHas('parent', $matchCategory)
+                ->orWhereHas('parent.parent', $matchCategory)
+                ->orWhereHas('parent.parent.parent', $matchCategory);
+        });
     }
 
     public function getMainCategories(Request $request)
