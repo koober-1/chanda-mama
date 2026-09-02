@@ -29,7 +29,8 @@
                         style="width: 40px; height: 40px;">
                         <img v-if="userTheme === 'theme-dark'" :src="$baseUrl + '/images/header-theme-moon.jpeg'"
                             alt="Dark theme" width="28" height="28" class="header-replacement-icon">
-                        <base-icon v-else name="Top_headeer_icons" width="24" height="24" style="transform: scale(2.4); flex: none;" useCurrentColor />
+                        <img v-else :src="$baseUrl + '/images/header-theme-moon.jpeg'" alt="Light theme"
+                            width="28" height="28" class="header-replacement-icon">
                     </button>
 
                     <!-- Website Link -->
