@@ -256,6 +256,8 @@ export default {
             notificationsInitialized: false,
             notificationAudio: null,
             notificationSoundUnlockHandler: null,
+            notificationSoundUnlocked: false,
+            pendingOrderSound: false,
 
             userTheme: "theme-light",
             isToggle: false,
@@ -345,7 +347,7 @@ export default {
         window.removeEventListener('DOMContentLoaded', this.onResize);
         if (this.timer) clearInterval(this.timer);
         if (this.notificationSoundUnlockHandler) {
-            document.removeEventListener('click', this.notificationSoundUnlockHandler);
+            document.removeEventListener('pointerdown', this.notificationSoundUnlockHandler);
         }
     },
     mounted: function () {
@@ -662,19 +664,34 @@ export default {
         initializeNotificationSound() {
             this.notificationAudio = new Audio(this.$baseUrl + '/assets/order_sound.wav');
             this.notificationAudio.preload = 'auto';
-            this.notificationSoundUnlockHandler = () => {
-                if (!this.notificationAudio) return;
-                this.notificationAudio.volume = 0;
-                const playPromise = this.notificationAudio.play();
-                if (playPromise) {
-                    playPromise.then(() => {
-                        this.notificationAudio.pause();
-                        this.notificationAudio.currentTime = 0;
-                        this.notificationAudio.volume = 1;
-                    }).catch(() => {});
+            this.notificationAudio.load();
+            this.notificationSoundUnlockHandler = this.unlockNotificationSound.bind(this);
+            document.addEventListener('pointerdown', this.notificationSoundUnlockHandler);
+        },
+        unlockNotificationSound() {
+            if (!this.notificationAudio || this.notificationSoundUnlocked) return;
+
+            this.notificationAudio.muted = true;
+            this.notificationAudio.currentTime = 0;
+            const playPromise = this.notificationAudio.play();
+            if (!playPromise) return;
+
+            playPromise.then(() => {
+                this.notificationAudio.pause();
+                this.notificationAudio.currentTime = 0;
+                this.notificationAudio.muted = false;
+                this.notificationAudio.volume = 1;
+                this.notificationSoundUnlocked = true;
+                document.removeEventListener('pointerdown', this.notificationSoundUnlockHandler);
+
+                if (this.pendingOrderSound) {
+                    this.pendingOrderSound = false;
+                    this.playOrderNotificationSound();
                 }
-            };
-            document.addEventListener('click', this.notificationSoundUnlockHandler, { once: true });
+            }).catch(() => {
+                this.notificationAudio.muted = false;
+                this.notificationAudio.volume = 1;
+            });
         },
         isNewOrderNotification(notification) {
             const data = notification && notification.data ? notification.data : {};
@@ -690,10 +707,15 @@ export default {
         },
         playOrderNotificationSound() {
             if (!this.notificationAudio) return;
+            this.notificationAudio.muted = false;
             this.notificationAudio.volume = 1;
             this.notificationAudio.currentTime = 0;
             const playPromise = this.notificationAudio.play();
-            if (playPromise) playPromise.catch(() => {});
+            if (playPromise) {
+                playPromise.catch(() => {
+                    this.pendingOrderSound = true;
+                });
+            }
         },
         markAsReadNotification(notification) {
             if (notification.read_at == null) {

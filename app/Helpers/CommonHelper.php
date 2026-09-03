@@ -3586,11 +3586,33 @@ class CommonHelper
 
             $admin_ids_to_notify = [];
 
-            // 1. Always notify super admins (role_id = 1)
-            $super_admin_ids = Admin::where('role_id', 1)
+            // 1. Notify super admins and every back-office user who can open an
+            // order page. Sellers and delivery boys are handled below only when
+            // the order belongs to / is assigned to them.
+            $orderPermissionNames = ['order_list', 'self_pickup_order_list'];
+            $backOfficeOrderUserIds = Admin::query()
+                ->whereNotIn('role_id', [3, 4])
+                ->where(function ($query) use ($orderPermissionNames) {
+                    $query->where('role_id', 1)
+                        ->orWhereExists(function ($permissionQuery) use ($orderPermissionNames) {
+                            $permissionQuery->select(DB::raw(1))
+                                ->from('role_has_permissions')
+                                ->join('permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
+                                ->whereColumn('role_has_permissions.role_id', 'admins.role_id')
+                                ->whereIn('permissions.name', $orderPermissionNames);
+                        })
+                        ->orWhereExists(function ($permissionQuery) use ($orderPermissionNames) {
+                            $permissionQuery->select(DB::raw(1))
+                                ->from('model_has_permissions')
+                                ->join('permissions', 'permissions.id', '=', 'model_has_permissions.permission_id')
+                                ->whereColumn('model_has_permissions.model_id', 'admins.id')
+                                ->where('model_has_permissions.model_type', Admin::class)
+                                ->whereIn('permissions.name', $orderPermissionNames);
+                        });
+                })
                 ->pluck('id')
                 ->toArray();
-            $admin_ids_to_notify = array_merge($admin_ids_to_notify, $super_admin_ids);
+            $admin_ids_to_notify = array_merge($admin_ids_to_notify, $backOfficeOrderUserIds);
 
             // 2. Notify sellers (role_id = 3) whose items are in this order
             $seller_ids = [];
