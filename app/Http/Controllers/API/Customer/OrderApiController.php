@@ -241,7 +241,14 @@ class OrderApiController extends Controller
             $wallet_balance = (isset($request->wallet_balance) && is_numeric($request->wallet_balance)) ? $request->wallet_balance : 0;
             $formatted_wallet_balance = number_format($wallet_balance, 2);
             $payment_method = $request->payment_method;
-            $delivery_time = (isset($request->delivery_time)) ? $request->delivery_time : "";
+
+            // Set default delivery time if not provided
+            if (isset($request->delivery_time) && !empty($request->delivery_time) && $request->delivery_time !== 'N/A') {
+                $delivery_time = $request->delivery_time;
+            } else {
+                // Default to next day delivery at 10 AM if not specified
+                $delivery_time = date('d-m-Y h:i A', strtotime('+1 day 10:00'));
+            }
 
             if ($order_type == 'selfpickup') {
                 $active_status = $payment_method == Transaction::$paymentTypeCod ? OrderStatusList::$selfPickupPending : OrderStatusList::$paymentPending;

@@ -15,19 +15,6 @@
             </nav>
         </div>
 
-        <!-- Debug Section -->
-        <div v-if="order" class="debug-section mb-4" style="background: #f8f9fa; padding: 20px; border: 2px solid #007bff; border-radius: 8px;">
-            <h4 style="color: #007bff; margin-bottom: 15px;">Debug Information - Order Data</h4>
-            <div style="background: white; padding: 15px; border-radius: 4px; max-height: 300px; overflow-y: auto;">
-                <pre style="margin: 0; font-size: 12px; font-family: monospace;">{{ JSON.stringify(order, null, 2) }}</pre>
-            </div>
-            <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 4px;">
-                <strong>Delivery Time Field:</strong> {{ order.delivery_time }}<br>
-                <strong>Delivery Time Type:</strong> {{ typeof order.delivery_time }}<br>
-                <strong>Has delivery_time:</strong> {{ order.hasOwnProperty('delivery_time') ? 'Yes' : 'No' }}
-            </div>
-        </div>
-
         <div v-if="order" class="order-details-wrapper">
             <!-- Order Header Card -->
             <div class="mb-4 order-header-card"
@@ -396,7 +383,7 @@
                                     style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #D63031; margin-bottom: 4px;">
                                     {{ __('Delivery Time & Date') || 'Delivery Time & Date' }}</div>
                                 <div class="text-dark fw-bold" style="font-size: 16px; line-height: 24px;">{{
-                                    order.delivery_time }}
+                                    formatDeliveryTime(order.delivery_time) }}
                                 </div>
                             </div>
                         </div>
@@ -798,9 +785,6 @@ export default {
                 .then((response) => {
                     this.isLoading = false
                     let data = response.data;
-                    console.log('Full API Response:', response.data);
-                    console.log('Order Data:', response.data.data.order);
-                    console.log('Order Items:', response.data.data.order_items);
                     if (data.status === 1) {
                         this.order = response.data.data.order;
                         this.order_items = response.data.data.order_items;
@@ -825,6 +809,12 @@ export default {
                         this.showError("Something went wrong!");
                     }
                 });
+        },
+        formatDeliveryTime(deliveryTime) {
+            if (!deliveryTime || deliveryTime === 'N/A' || deliveryTime === '') {
+                return 'N/A';
+            }
+            return deliveryTime;
         },
 
         sendInfo(item) {
