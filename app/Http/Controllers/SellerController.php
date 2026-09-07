@@ -357,6 +357,7 @@ class SellerController extends BaseController
         $orders = Order::select(
             'orders.*',
             'orders.id as order_id',
+            'orders.delivery_time',
             'delivery_boys.name as delivery_boy_name',
             'sellers.name as seller_name',
             'users.name as user_name',
@@ -568,6 +569,7 @@ class SellerController extends BaseController
             'orders.id as order_id',
             'orders.active_status',
             'orders.additional_charges',
+            'orders.delivery_time',
             'sellers.name as seller_name',
             'users.name as user_name',
             'order_items.active_status as order_status'

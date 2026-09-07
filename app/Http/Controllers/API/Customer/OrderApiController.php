@@ -1915,6 +1915,7 @@ class OrderApiController extends Controller
             'orders.address as order_address',
             'orders.mobile as order_mobile',
             'orders.id as order_id',
+            'orders.delivery_time',
             "dboys.name as delivery_boy_name",
             "dboys.mobile as delivery_boy_mobile",
 

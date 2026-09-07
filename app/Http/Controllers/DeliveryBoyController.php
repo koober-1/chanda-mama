@@ -94,6 +94,7 @@ class DeliveryBoyController extends BaseController
         $orders = Order::select(
             'orders.*',
             'orders.id as order_id',
+            'orders.delivery_time',
             'delivery_boys.name as delivery_boy_name',
             DB::raw("{$sellerSubquery} as seller_name"),
             'users.name as user_name',

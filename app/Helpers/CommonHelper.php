@@ -2211,6 +2211,7 @@ class CommonHelper
             'orders.mobile as order_mobile',
             'orders.id as order_id',
             'orders.created_at as orders_created_at',
+            'orders.delivery_time',
             'users.*',
             'users.name as user_name',
             'users.email as user_email',
