@@ -603,6 +603,12 @@ export default {
             isModalLoading: false,
             selectedOrder: null,
             orders: [],
+
+            // Real-time updates
+            pollingInterval: null,
+            knownOrderIds: [],
+            lastOrderCount: 0,
+            notificationAudio: null,
             orderFields: [
                 { key: 'id', label: __('Order ID') || 'Order ID', sortable: true, class: 'text-start col-id' },
                 { key: 'user_name', label: __('Customer') || 'Customer', sortable: true, class: 'text-start col-customer' },
@@ -892,7 +898,21 @@ export default {
         this.getSalesData();
         this.getPieChartData();
         this.setSellerWalletTransaction();
-        this.getLatestOrders();
+        this.getLatestOrders().then(() => {
+            // Initialize tracking after orders are loaded
+            this.knownOrderIds = this.orders.map(order => order.id);
+            this.lastOrderCount = this.orders.length;
+        });
+    },
+    mounted() {
+        this.initializeNotificationSound();
+        // Start polling after component is mounted and orders are loaded
+        setTimeout(() => {
+            this.startOrderPolling();
+        }, 1000);
+    },
+    beforeDestroy() {
+        this.stopOrderPolling();
     },
     methods: {
         getDisplayName(name) {
@@ -1052,7 +1072,7 @@ export default {
                 startDeliveryDate: this.deliveryDateRange.startDate ? moment(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
                 endDeliveryDate: this.deliveryDateRange.endDate ? moment(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : '',
             }
-            axios.get(this.$apiUrl + '/orders', { params: param }).then((response) => {
+            return axios.get(this.$apiUrl + '/orders', { params: param }).then((response) => {
                 let data = response.data;
                 if (data.status === 1) {
                     this.filterSellers = response.data.data.sellers;
@@ -1062,11 +1082,18 @@ export default {
                         return o;
                     });
                     this.orderTotalRows = this.orders.length;
+
+                    // Update tracking for real-time updates
+                    this.knownOrderIds = this.orders.map(order => order.id);
+                    this.lastOrderCount = response.data.data.orders_total || this.orders.length;
+
                     this.isLoading = false
+                    return response;
                 }
             }).catch(error => {
                 this.isLoading = false;
                 console.error(error);
+                throw error;
             });
         },
         deleteOrder(index, id) {
@@ -1172,6 +1199,86 @@ export default {
                 return key ? this.__(key) : String(val);
             }
             return String(val);
+        },
+        // Real-time order updates
+        initializeNotificationSound() {
+            // Change this to your custom audio filename
+            this.notificationAudio = new Audio(this.$baseUrl + '/assets/order_sound.mpeg');
+            this.notificationAudio.preload = 'auto';
+            this.notificationAudio.load();
+        },
+        startOrderPolling() {
+            // Only start if we have orders data
+            if (this.orders.length === 0) {
+                console.log('No orders loaded yet, skipping polling start');
+                return;
+            }
+
+            // Store initial order IDs if not already set
+            if (this.knownOrderIds.length === 0) {
+                this.knownOrderIds = this.orders.map(order => order.id);
+            }
+            if (this.lastOrderCount === 0) {
+                this.lastOrderCount = this.orders.length;
+            }
+
+            // Clear any existing interval
+            this.stopOrderPolling();
+
+            // Poll every 30 seconds for new orders
+            this.pollingInterval = setInterval(() => {
+                this.checkForNewOrders();
+            }, 30000); // 30 seconds
+
+            console.log('Order polling started');
+        },
+        stopOrderPolling() {
+            if (this.pollingInterval) {
+                clearInterval(this.pollingInterval);
+                this.pollingInterval = null;
+            }
+        },
+        checkForNewOrders() {
+            // Use the same date parameters as getLatestOrders for consistency
+            let param = {
+                "startDate": (this.dateRange.startDate != null) ? moment(this.dateRange.startDate).format('YYYY-MM-DD') : "",
+                "endDate": (this.dateRange.endDate != null) ? moment(this.dateRange.endDate).format('YYYY-MM-DD') : "",
+                "seller": this.seller,
+                "status": this.status,
+                startDeliveryDate: this.deliveryDateRange.startDate ? moment(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
+                endDeliveryDate: this.deliveryDateRange.endDate ? moment(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : '',
+                per_page: 1, // Only need count
+                page: 1
+            };
+
+            // Only fetch order count to minimize server load
+            axios.get(this.$apiUrl + '/orders', { params: param }).then(response => {
+                if (response.data.status === 1) {
+                    const newOrderCount = response.data.data.orders_total || 0;
+
+                    // If we have more orders than before, refresh the orders list
+                    if (newOrderCount > this.lastOrderCount) {
+                        console.log('New orders detected! Count:', this.lastOrderCount, '->', newOrderCount);
+                        this.playOrderNotificationSound();
+                        this.getLatestOrders(); // Refresh the orders list
+                        this.lastOrderCount = newOrderCount;
+                    }
+                }
+            }).catch(error => {
+                console.error('Error checking for new orders:', error);
+            });
+        },
+        playOrderNotificationSound() {
+            if (!this.notificationAudio) return;
+
+            // Try to play the sound
+            const playPromise = this.notificationAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Audio play failed:', error);
+                    // Browser might block autoplay, handle gracefully
+                });
+            }
         },
     },
 };

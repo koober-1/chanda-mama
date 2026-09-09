@@ -662,7 +662,8 @@ export default {
                 });
         },
         initializeNotificationSound() {
-            this.notificationAudio = new Audio(this.$baseUrl + '/assets/order_sound.wav');
+            // Change this to your custom audio filename
+            this.notificationAudio = new Audio(this.$baseUrl + '/assets/order_sound.mpeg');
             this.notificationAudio.preload = 'auto';
             this.notificationAudio.load();
             this.notificationSoundUnlockHandler = this.unlockNotificationSound.bind(this);
