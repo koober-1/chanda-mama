@@ -239,7 +239,12 @@ class ProductsApiController extends Controller
                         }
 
                         // Filter by exact category IDs only (no child categories)
-                        $where .= " AND s.`slug` = '$seller_slug' AND p.`category_id` IN (" . implode(",", $valid_category_ids) . ") ";
+                        // Include both primary category_id and additional categories from pivot table
+                        $where .= " AND s.`slug` = '$seller_slug' AND (p.`category_id` IN (" . implode(",", $valid_category_ids) . ") OR EXISTS (
+                            SELECT 1 FROM product_category pc 
+                            WHERE pc.product_id = p.id 
+                            AND pc.category_id IN (" . implode(",", $valid_category_ids) . ")
+                        ))";
                     } else {
                         return Response::json(array(
                             'status' => 1,
@@ -269,7 +274,11 @@ class ProductsApiController extends Controller
                         // Convert array of category IDs to comma-separated string
                         $category_ids = implode(",", $ids);
 
-                        $where .= " AND s.`slug` =  '$seller_slug' AND p.category_id IN (" . $category_ids . " )";
+                        $where .= " AND s.`slug` =  '$seller_slug' AND (p.category_id IN (" . $category_ids . ") OR EXISTS (
+                            SELECT 1 FROM product_category pc 
+                            WHERE pc.product_id = p.id 
+                            AND pc.category_id IN (" . $category_ids . ")
+                        ))";
                     } else {
                         return Response::json(array(
                             'status' => 1,
@@ -316,7 +325,12 @@ class ProductsApiController extends Controller
                         }
 
                         // Filter by exact category IDs only (no child categories)
-                        $where .= " AND p.`seller_id` = " . $seller_id . " AND p.`category_id` IN (" . implode(",", $valid_category_ids) . ") ";
+                        // Include both primary category_id and additional categories from pivot table
+                        $where .= " AND p.`seller_id` = " . $seller_id . " AND (p.`category_id` IN (" . implode(",", $valid_category_ids) . ") OR EXISTS (
+                            SELECT 1 FROM product_category pc 
+                            WHERE pc.product_id = p.id 
+                            AND pc.category_id IN (" . implode(",", $valid_category_ids) . ")
+                        ))";
                     } else {
                         return Response::json(array(
                             'status' => 1,
@@ -346,7 +360,11 @@ class ProductsApiController extends Controller
                         // Convert array of category IDs to comma-separated string
                         $category_ids = implode(",", $ids);
 
-                        $where .= " AND p.`seller_id` = " . $seller_id . " AND p.category_id IN (" . $category_ids . " )";
+                        $where .= " AND p.`seller_id` = " . $seller_id . " AND (p.category_id IN (" . $category_ids . ") OR EXISTS (
+                            SELECT 1 FROM product_category pc 
+                            WHERE pc.product_id = p.id 
+                            AND pc.category_id IN (" . $category_ids . ")
+                        ))";
                     } else {
                         return Response::json(array(
                             'status' => 1,
@@ -401,6 +419,7 @@ class ProductsApiController extends Controller
                 ->leftJoin("countries as co", "p.made_in", "=", "co.id")
                 ->leftJoin('sellers as s', 'p.seller_id', '=', 's.id')
                 ->leftJoin('categories as c', 'p.category_id', '=', 'c.id')
+                ->leftJoin('product_category as pc', 'p.id', '=', 'pc.product_id')
                 ->leftJoin('cities', 's.city_id', '=', 'cities.id')
                 ->Join("product_variants as pv", "pv.product_id", "=", "p.id")
                 ->leftJoin('product_tag as pt', 'p.id', '=', 'pt.product_id')

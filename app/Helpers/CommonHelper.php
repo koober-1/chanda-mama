@@ -1140,14 +1140,30 @@ class CommonHelper
             if (empty($cate_ids)) {
                 $sql = Product::select("id as product_id")->where("status", "=", 1)->orderBy("product_id", "DESC");
             } else {
-
-                $sql = Product::select("id as product_id")->whereIn("category_id", $cate_ids)->orderBy("product_id", "DESC");
+                // Include both primary category_id and additional categories from pivot table
+                $sql = Product::select("id as product_id")
+                    ->where(function($query) use ($cate_ids) {
+                        $query->whereIn("category_id", $cate_ids)
+                              ->orWhereHas('categories', function($q) use ($cate_ids) {
+                                  $q->whereIn('categories.id', $cate_ids);
+                              });
+                    })
+                    ->orderBy("product_id", "DESC");
             }
         } elseif ($section->product_type == 'new_added_products') {
             if (empty($cate_ids)) {
                 $sql = Product::select("id as product_id")->where("status", "=", 1)->orderBy("id", "DESC");
             } else {
-                $sql = Product::select("id as product_id")->where("status", "=", 1)->whereIn("category_id", $cate_ids)->orderBy("id", "DESC");
+                // Include both primary category_id and additional categories from pivot table
+                $sql = Product::select("id as product_id")
+                    ->where("status", "=", 1)
+                    ->where(function($query) use ($cate_ids) {
+                        $query->whereIn("category_id", $cate_ids)
+                              ->orWhereHas('categories', function($q) use ($cate_ids) {
+                                  $q->whereIn('categories.id', $cate_ids);
+                              });
+                    })
+                    ->orderBy("id", "DESC");
             }
         } elseif ($section->product_type == 'products_on_sale') {
             if (empty($cate_ids)) {
@@ -1158,10 +1174,19 @@ class CommonHelper
                     ->where("pv.price", "=", "pv.discounted_price")
                     ->orderBy("p.id", "DESC");
             } else {
+                // Include both primary category_id and additional categories from pivot table
                 $sql = Product::select("p.id as product_id")->from("products as p")
                     ->leftJoin('product_variants as pv', 'pv.product_id', '=', 'p.id')
                     ->where("p.status", "=", 1)
-                    ->whereIn("category_id", $cate_ids)
+                    ->where(function($query) use ($cate_ids) {
+                        $query->whereIn("p.category_id", $cate_ids)
+                              ->orWhereExists(function($q) use ($cate_ids) {
+                                  $q->select(DB::raw(1))
+                                    ->from('product_category as pc')
+                                    ->whereColumn('pc.product_id', 'p.id')
+                                    ->whereIn('pc.category_id', $cate_ids);
+                              });
+                    })
                     ->where("pv.discounted_price", ">", 0)
                     ->where("pv.price", "=", "pv.discounted_price")
                     ->orderBy("p.id", "DESC");
@@ -1179,13 +1204,22 @@ class CommonHelper
                     ->groupBy("p.id")
                     ->orderByRaw("total DESC");
             } else {
+                // Include both primary category_id and additional categories from pivot table
                 $sql = OrderItem::select("p.id as product_id", DB::raw("COUNT(oi.id) AS total"))
                     ->from("order_items as oi")
                     ->leftJoin("product_variants as pv", "oi.product_variant_id", "=", "pv.id")
                     ->leftJoin("products as p", "pv.product_id", "=", "p.id")
                     ->where("oi.product_variant_id", "!=", 0)
                     ->whereNotNull("p.id")
-                    ->whereIn("p.category_id", $cate_ids)
+                    ->where(function($query) use ($cate_ids) {
+                        $query->whereIn("p.category_id", $cate_ids)
+                              ->orWhereExists(function($q) use ($cate_ids) {
+                                  $q->select(DB::raw(1))
+                                    ->from('product_category as pc')
+                                    ->whereColumn('pc.product_id', 'p.id')
+                                    ->whereIn('pc.category_id', $cate_ids);
+                              });
+                    })
                     ->groupBy("p.id")
                     ->orderByRaw("total DESC");
             }

@@ -1298,6 +1298,22 @@ class ProductApisController extends Controller
                 $product->tags()->sync($allTagIds);
             }
 
+            // Handle multi-category support
+            $additionalCategoryIds = [];
+            if ($request->has('additional_category_ids')) {
+                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) {
+                    return $value !== '' && is_numeric($value) && $value != $request->category_id;
+                });
+            }
+
+            // Sync additional categories (excluding the primary category_id)
+            if (!empty($additionalCategoryIds)) {
+                $product->categories()->sync($additionalCategoryIds);
+            } else {
+                // If no additional categories, clear any existing ones
+                $product->categories()->detach();
+            }
+
             // Save translations using HasTranslations trait
             if ($request->has('translations')) {
                 $translations = $request->translations;
@@ -1394,6 +1410,7 @@ class ProductApisController extends Controller
             'variants.barcodes',
             'variants.unit',
             'category',
+            'categories', // Include additional categories for multi-category support
             'tax',
             'madeInCountry',
             'brand',
@@ -1412,6 +1429,10 @@ class ProductApisController extends Controller
         if (isset($product->description)) {
             $product->description = CommonHelper::fixAdminImagePaths($product->description);
         }
+
+        // Add additional category IDs as a comma-separated string for the frontend
+        $additionalCategoryIds = $product->categories->pluck('id')->toArray();
+        $product->additional_category_ids = implode(',', $additionalCategoryIds);
 
         $product->translations = $this->buildProductTranslationsForEdit($product);
 
@@ -1841,6 +1862,22 @@ class ProductApisController extends Controller
 
                 // Sync the tags with the product
                 $product->tags()->sync($allTagIds);
+            }
+
+            // Handle multi-category support
+            $additionalCategoryIds = [];
+            if ($request->has('additional_category_ids')) {
+                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) {
+                    return $value !== '' && is_numeric($value) && $value != $request->category_id;
+                });
+            }
+
+            // Sync additional categories (excluding the primary category_id)
+            if (!empty($additionalCategoryIds)) {
+                $product->categories()->sync($additionalCategoryIds);
+            } else {
+                // If no additional categories, clear any existing ones
+                $product->categories()->detach();
             }
 
             // Save/update translations using HasTranslations trait

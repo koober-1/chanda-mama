@@ -105,10 +105,18 @@ class SellerController extends BaseController
             $finalCategoryIds = array_values(array_unique(array_merge($categoryIdsArray, $childCategoryIds)));
 
             $countRows = DB::table('categories')
-                ->join('products', 'products.category_id', '=', 'categories.id')
+                ->leftJoin('products', 'products.category_id', '=', 'categories.id')
+                ->leftJoin('product_category', function($join) {
+                    $join->on('product_category.product_id', '=', 'products.id')
+                         ->on('product_category.category_id', '=', 'categories.id');
+                })
                 ->whereIn('categories.id', $finalCategoryIds)
                 ->where('products.seller_id', $seller_id)
-                ->select('categories.id', DB::raw('COUNT(products.id) AS product_count'))
+                ->where(function($query) {
+                    $query->where('products.category_id', '=', DB::raw('categories.id'))
+                          ->orWhere('product_category.category_id', '=', DB::raw('categories.id'));
+                })
+                ->select('categories.id', DB::raw('COUNT(DISTINCT products.id) AS product_count'))
                 ->groupBy('categories.id')
                 ->orderBy('categories.id')
                 ->get();
@@ -290,7 +298,7 @@ class SellerController extends BaseController
     public function countProductCategoryWise()
     {
         $sellerCategoryIds = auth()->user()->seller->categories;
-        $categories = Category::select('name', DB::raw('(SELECT count(id) from `products` WHERE products.category_id = categories.id) AS product_count'))
+        $categories = Category::select('name', DB::raw('(SELECT COUNT(DISTINCT p.id) FROM products p LEFT JOIN product_category pc ON p.id = pc.product_id WHERE (p.category_id = categories.id OR pc.category_id = categories.id)) AS product_count'))
             ->whereIn('id', explode(',', $sellerCategoryIds))
             ->orderBy('id', 'ASC')->get();
         return CommonHelper::responseWithData($categories);
@@ -862,7 +870,12 @@ class SellerController extends BaseController
         }
 
         if (isset($request->category) && $request->category != "") {
-            $SalesReports = $SalesReports->where('products.category_id', $request->category);
+            $SalesReports = $SalesReports->where(function($query) use ($request) {
+                $query->where('products.category_id', $request->category)
+                      ->orWhereHas('categories', function($q) use ($request) {
+                          $q->where('categories.id', $request->category);
+                      });
+            });
         }
 
         $SalesReports = $SalesReports->orderBy('order_items.id', 'DESC')->get();

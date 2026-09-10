@@ -55,6 +55,28 @@ class Product extends Model
         return $this->belongsTo(Category::class,'category_id','id');
     }
 
+    // Many-to-many relationship for multiple categories
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
+    }
+
+    // Helper method to get all category IDs (both single and multiple)
+    public function getAllCategoryIdsAttribute()
+    {
+        // Get the primary category ID
+        $categoryIds = [$this->category_id];
+
+        // Get additional category IDs from the pivot table
+        $additionalCategories = $this->categories()->pluck('category_id')->toArray();
+        $categoryIds = array_merge($categoryIds, $additionalCategories);
+
+        // Remove duplicates and filter out zeros/nulls
+        return array_values(array_filter(array_unique($categoryIds), function($id) {
+            return !empty($id) && $id > 0;
+        }));
+    }
+
     public function variants(){
 
         return $this->hasMany(ProductVariant::class,'product_id','id');

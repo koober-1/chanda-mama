@@ -1194,6 +1194,31 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-3">
+                                            <label>{{ __('additional_categories') }} <span class="text-muted small">({{ __('optional') }})</span></label>
+                                            <multiselect
+                                                v-model="additional_category_ids"
+                                                :options="allCategoryOptions"
+                                                :placeholder="__('select_additional_categories')"
+                                                label="name"
+                                                track-by="id"
+                                                :multiple="true"
+                                                :searchable="true">
+                                                <template slot="singleLabel" slot-scope="props">
+                                                    <span class="option__desc">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </span>
+                                                </template>
+                                                <template slot="option" slot-scope="props">
+                                                    <div class="option__desc">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </div>
+                                                </template>
+                                            </multiselect>
+                                            <small class="text-muted">{{ __('select_multiple_categories_to_show_product_in') }}</small>
+                                        </div>
+                                    </div>
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label>{{ __('product_type') }} </label>
@@ -1371,6 +1396,7 @@ export default {
             product_subcategory_id: '',
             product_sub_subcategory_id: '',
             product_sub_sub_subcategory_id: '',
+            additional_category_ids: [], // For multi-category support
             product_type: '',
             made_in: '',
             tag: '',
@@ -1675,6 +1701,13 @@ export default {
         subSubSubCategoryOptions() {
             return this.productCategoryList.filter(category => {
                 return Number(category.parent_id) === Number(this.product_sub_subcategory_id);
+            });
+        },
+        allCategoryOptions() {
+            // Return all categories for multi-select, excluding the primary category
+            const primaryCategoryId = this.selectedProductCategoryId;
+            return this.productCategoryList.filter(category => {
+                return Number(category.id) !== Number(primaryCategoryId);
             });
         },
         selectedProductCategoryId() {
@@ -2594,6 +2627,16 @@ export default {
 
                         this.category_id = this.record.category_id;
 
+                        // Load additional categories for multi-category support
+                        if (this.record.additional_category_ids) {
+                            const additionalIds = this.record.additional_category_ids.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+                            this.additional_category_ids = this.productCategoryList.filter(cat => 
+                                additionalIds.includes(cat.id)
+                            );
+                        } else {
+                            this.additional_category_ids = [];
+                        }
+
                         this.product_type = this.record.indicator ?? "";
 
                         // Load translations
@@ -2836,6 +2879,11 @@ export default {
 
             this.category_id = this.selectedProductCategoryId;
             formData.append('category_id', this.category_id);
+            
+            // Add additional category IDs for multi-category support
+            const additionalCategoryIds = this.additional_category_ids.map(cat => cat.id).join(',');
+            formData.append('additional_category_ids', additionalCategoryIds);
+            
             formData.append('product_type', this.product_type);
 
             formData.append('made_in', this.made_in ? this.made_in.id : 0);
