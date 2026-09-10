@@ -1306,11 +1306,16 @@ class ProductApisController extends Controller
                 });
             }
 
-            // Sync additional categories (excluding the primary category_id)
-            if (!empty($additionalCategoryIds)) {
-                $product->categories()->sync($additionalCategoryIds);
+            // Sync all categories including the primary one
+            $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
+            $allCategoryIds = array_unique(array_filter($allCategoryIds, function($value) {
+                return !empty($value) && is_numeric($value);
+            }));
+
+            if (!empty($allCategoryIds)) {
+                $product->categories()->sync($allCategoryIds);
             } else {
-                // If no additional categories, clear any existing ones
+                // If no categories, clear any existing ones
                 $product->categories()->detach();
             }
 
@@ -1430,9 +1435,13 @@ class ProductApisController extends Controller
             $product->description = CommonHelper::fixAdminImagePaths($product->description);
         }
 
-        // Add additional category IDs as a comma-separated string for the frontend
-        $additionalCategoryIds = $product->categories->pluck('id')->toArray();
-        $product->additional_category_ids = implode(',', $additionalCategoryIds);
+        // Get all category IDs (primary + additional) for the frontend
+        $allCategoryIds = $product->categories->pluck('id')->toArray();
+        // Include the primary category_id if it's not already in the list
+        if ($product->category_id && !in_array($product->category_id, $allCategoryIds)) {
+            $allCategoryIds[] = $product->category_id;
+        }
+        $product->additional_category_ids = implode(',', $allCategoryIds);
 
         $product->translations = $this->buildProductTranslationsForEdit($product);
 
@@ -1872,11 +1881,16 @@ class ProductApisController extends Controller
                 });
             }
 
-            // Sync additional categories (excluding the primary category_id)
-            if (!empty($additionalCategoryIds)) {
-                $product->categories()->sync($additionalCategoryIds);
+            // Sync all categories including the primary one
+            $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
+            $allCategoryIds = array_unique(array_filter($allCategoryIds, function($value) {
+                return !empty($value) && is_numeric($value);
+            }));
+
+            if (!empty($allCategoryIds)) {
+                $product->categories()->sync($allCategoryIds);
             } else {
-                // If no additional categories, clear any existing ones
+                // If no categories, clear any existing ones
                 $product->categories()->detach();
             }
 

@@ -1151,60 +1151,19 @@
                             <div class="card-body">
                                 <div class="row">
                                     <!-- Row: Category, Product type, Product status -->
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>{{ __('category') }} <i class="text-danger">*</i></label>
-                                            <select class="form-control" v-model="product_category_id" required>
-                                                <option value="">{{ __('select_category') }}</option>
-                                                <option v-for="category in mainCategoryOptions" :key="category.id"
-                                                    :value="category.id">{{ category.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>SubCategory</label>
-                                            <select class="form-control" v-model="product_subcategory_id"
-                                                :disabled="!product_category_id">
-                                                <option value="">Select SubCategory</option>
-                                                <option v-for="category in subCategoryOptions" :key="category.id"
-                                                    :value="category.id">{{ category.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>Sub SubCategory</label>
-                                            <select class="form-control" v-model="product_sub_subcategory_id"
-                                                :disabled="!product_subcategory_id">
-                                                <option value="">Select Sub SubCategory</option>
-                                                <option v-for="category in subSubCategoryOptions" :key="category.id"
-                                                    :value="category.id">{{ category.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>Sub Sub SubCategory</label>
-                                            <select class="form-control" v-model="product_sub_sub_subcategory_id"
-                                                :disabled="!product_sub_subcategory_id">
-                                                <option value="">Select Sub Sub SubCategory</option>
-                                                <option v-for="category in subSubSubCategoryOptions" :key="category.id"
-                                                    :value="category.id">{{ category.name }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group mb-3">
-                                            <label>{{ __('additional_categories') }} <span class="text-muted small">({{ __('optional') }})</span></label>
+                                            <label>{{ __('categories') }} <i class="text-danger">*</i></label>
                                             <multiselect
-                                                v-model="additional_category_ids"
-                                                :options="allCategoryOptions"
-                                                :placeholder="__('select_additional_categories')"
+                                                v-model="selected_categories"
+                                                :options="allCategoriesFlat"
+                                                :placeholder="__('select_categories')"
                                                 label="name"
                                                 track-by="id"
                                                 :multiple="true"
-                                                :searchable="true">
+                                                :searchable="true"
+                                                :close-on-select="false"
+                                                :taggable="false">
                                                 <template slot="singleLabel" slot-scope="props">
                                                     <span class="option__desc">
                                                         <span class="option__title">{{ props.option.name }}</span>
@@ -1216,7 +1175,7 @@
                                                     </div>
                                                 </template>
                                             </multiselect>
-                                            <small class="text-muted">{{ __('select_multiple_categories_to_show_product_in') }}</small>
+                                            <small class="text-muted">{{ __('select_one_or_more_categories_for_product') }}</small>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -1396,7 +1355,7 @@ export default {
             product_subcategory_id: '',
             product_sub_subcategory_id: '',
             product_sub_sub_subcategory_id: '',
-            additional_category_ids: [], // For multi-category support
+            selected_categories: [], // For multi-category selection
             product_type: '',
             made_in: '',
             tag: '',
@@ -1685,32 +1644,16 @@ export default {
         categoryOptionsHtml: function () {
             return this.categoryOptions;
         },
-        mainCategoryOptions() {
-            return this.productCategoryList.filter(category => Number(category.parent_id) === 0);
-        },
-        subCategoryOptions() {
-            return this.productCategoryList.filter(category => {
-                return Number(category.parent_id) === Number(this.product_category_id);
-            });
-        },
-        subSubCategoryOptions() {
-            return this.productCategoryList.filter(category => {
-                return Number(category.parent_id) === Number(this.product_subcategory_id);
-            });
-        },
-        subSubSubCategoryOptions() {
-            return this.productCategoryList.filter(category => {
-                return Number(category.parent_id) === Number(this.product_sub_subcategory_id);
-            });
-        },
-        allCategoryOptions() {
-            // Return all categories for multi-select, excluding the primary category
-            const primaryCategoryId = this.selectedProductCategoryId;
-            return this.productCategoryList.filter(category => {
-                return Number(category.id) !== Number(primaryCategoryId);
-            });
+        allCategoriesFlat() {
+            // Return all categories as a flat list for multi-select
+            return this.productCategoryList.map(category => ({
+                id: category.id,
+                name: category.name,
+                parent_id: category.parent_id
+            }));
         },
         selectedProductCategoryId() {
+            // Fallback for backward compatibility
             return this.product_sub_sub_subcategory_id || this.product_sub_subcategory_id || this.product_subcategory_id || this.product_category_id || '';
         },
     },
@@ -2627,14 +2570,24 @@ export default {
 
                         this.category_id = this.record.category_id;
 
-                        // Load additional categories for multi-category support
+                        // Load all categories (primary + additional) for multi-category selection
+                        this.selected_categories = [];
+                        
+                        // Add primary category
+                        if (this.record.category_id) {
+                            const primaryCategory = this.productCategoryList.find(cat => cat.id === this.record.category_id);
+                            if (primaryCategory) {
+                                this.selected_categories.push(primaryCategory);
+                            }
+                        }
+                        
+                        // Add additional categories
                         if (this.record.additional_category_ids) {
                             const additionalIds = this.record.additional_category_ids.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
-                            this.additional_category_ids = this.productCategoryList.filter(cat => 
-                                additionalIds.includes(cat.id)
+                            const additionalCategories = this.productCategoryList.filter(cat => 
+                                additionalIds.includes(cat.id) && cat.id !== this.record.category_id
                             );
-                        } else {
-                            this.additional_category_ids = [];
+                            this.selected_categories = this.selected_categories.concat(additionalCategories);
                         }
 
                         this.product_type = this.record.indicator ?? "";
@@ -2774,6 +2727,12 @@ export default {
                 return;
             }
 
+            // Validate category selection
+            if (!this.selected_categories || this.selected_categories.length === 0) {
+                this.showError(__('please_select_at_least_one_category'));
+                return;
+            }
+
             // Validate stock vs measurement
             if (!this.validateStockWithMeasurement()) {
                 return;
@@ -2877,12 +2836,21 @@ export default {
             formData.append('loose_stock_unit_id', (this.loose_stock_unit_id != undefined) ? this.loose_stock_unit_id : 0);
             formData.append('status', (this.status != undefined) ? this.status : 0);
 
-            this.category_id = this.selectedProductCategoryId;
-            formData.append('category_id', this.category_id);
-            
-            // Add additional category IDs for multi-category support
-            const additionalCategoryIds = this.additional_category_ids.map(cat => cat.id).join(',');
-            formData.append('additional_category_ids', additionalCategoryIds);
+            // Handle multi-category selection
+            if (this.selected_categories && this.selected_categories.length > 0) {
+                // Use the first selected category as the primary category_id
+                this.category_id = this.selected_categories[0].id;
+                formData.append('category_id', this.category_id);
+                
+                // Send all selected categories as additional_category_ids
+                const allCategoryIds = this.selected_categories.map(cat => cat.id).join(',');
+                formData.append('additional_category_ids', allCategoryIds);
+            } else {
+                // Fallback to original logic if no categories selected
+                this.category_id = this.selectedProductCategoryId;
+                formData.append('category_id', this.category_id);
+                formData.append('additional_category_ids', '');
+            }
             
             formData.append('product_type', this.product_type);
 
