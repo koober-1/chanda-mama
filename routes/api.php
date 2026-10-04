@@ -45,6 +45,7 @@ Route::get('seller/seller_commission', [\App\Http\Controllers\API\SellerApiContr
 Route::get('role', [\App\Http\Controllers\API\RoleApiController::class, 'index']);
 
 Route::get('categories', [\App\Http\Controllers\API\CategoryApiController::class, 'getCategories']);
+Route::get('categories/tree/{id}', [\App\Http\Controllers\API\CategoryApiController::class, 'getCategoryTree']);
 
 Route::get('cities', [\App\Http\Controllers\API\CityApiController::class, 'getCities']);
 
@@ -143,7 +144,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('product_info', [\App\Http\Controllers\API\ProductApisController::class, 'getProducts']);
         Route::get('order_list', [\App\Http\Controllers\API\ProductApisController::class, 'getProductsOrderList']);
         Route::post('updateOrder', [\App\Http\Controllers\API\ProductApisController::class, 'updateProductsOrder'])->name('products.updateOrder');
-
+        Route::post('google_gemini', [\App\Http\Controllers\API\ProductApisController::class, 'googleGeminiAI'])->name('products.google_gemini');
         Route::post('bulk_upload', [\App\Http\Controllers\API\ProductApisController::class, 'bulkUpload'])->name('products.bulk_upload');
         Route::get('download_sample_file_excel', [\App\Http\Controllers\API\ProductApisController::class, 'downloadSampleFileExcel']);
         Route::get('download_product_data_excel', [\App\Http\Controllers\API\ProductApisController::class, 'downloadProductDataExcel']);
@@ -626,6 +627,7 @@ Route::middleware('auth:api')->group(function () {
             Route::post('bulk_update', [\App\Http\Controllers\API\ProductApisController::class, 'bulkUpdate'])->name('seller.products.bulk_update');
             Route::get('get_product_variants', [\App\Http\Controllers\API\ProductApisController::class, 'getProductVariants']);
             Route::post('update_variant_stock', [\App\Http\Controllers\API\ProductApisController::class, 'updateVariantStock']);
+            Route::post('google_gemini', [\App\Http\Controllers\API\ProductApisController::class, 'googleGeminiAI'])->name('seller.products.google_gemini');
         });
         Route::get('/seller_wallet_transactions', [\App\Http\Controllers\API\SellerWalletTransactionsApiController::class, 'getSellerWalletTransactions']);
         Route::get('/delete_seller_account', [\App\Http\Controllers\API\Customer\BasicApiController::class, 'deleteSellerAccount'])->name('seller.delete_seller_account');

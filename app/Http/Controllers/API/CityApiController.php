@@ -73,11 +73,16 @@ class CityApiController extends Controller
                 return CommonHelper::responseError('Please create city in default language first');
             }
 
+            if (!$request->formatted_address || trim($request->formatted_address) === '') {
+                $request->merge([
+                    'formatted_address' => trim($request->name . ', ' . ($request->state ?? '') . ', India')
+                ]);
+            }
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'latitude' => 'required',
                 'longitude' => 'required',
-                'formatted_address' => 'required',
                 'zone' => 'required',
             ]);
 

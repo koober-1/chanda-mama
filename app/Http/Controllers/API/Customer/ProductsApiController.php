@@ -88,29 +88,17 @@ class ProductsApiController extends Controller
 
             // Get seller IDs deliverable to this lat/long and fetch min/max price range first (before any early returns)
             $seller_ids = CommonHelper::getSellerIds($request->latitude, $request->longitude);
+            if (is_object($seller_ids) && method_exists($seller_ids, 'toArray')) {
+                $seller_ids = $seller_ids->toArray();
+            }
             if (empty($seller_ids)) {
-                $lat = (float) $request->latitude;
-                $lng = (float) $request->longitude;
-                $seller_ids = Seller::query()
-                    ->select('sellers.id')
-                    ->leftJoin('cities', 'sellers.city_id', '=', 'cities.id')
-                    ->where('sellers.status', 1)
-                    ->whereExists(function ($q) {
-                        $q->select(DB::raw(1))
-                            ->from('products')
-                            ->whereColumn('products.seller_id', 'sellers.id');
-                    })
-                    ->whereNotNull('sellers.latitude')
-                    ->whereNotNull('sellers.longitude')
-                    ->whereRaw('cities.max_deliverable_distance > 0')
-                    ->whereRaw(
-                        '(6371 * acos(cos(radians(?)) * cos(radians(sellers.latitude)) * cos(radians(sellers.longitude) - radians(?)) + sin(radians(?)) * sin(radians(sellers.latitude)))) <= cities.max_deliverable_distance',
-                        [$lat, $lng, $lat]
-                    )
-                    ->pluck('id')
-                    ->toArray();
-            } else {
-                $seller_ids = is_array($seller_ids) ? $seller_ids : $seller_ids->toArray();
+                $seller_ids = Seller::where('status', 1)->pluck('id')->toArray();
+                if (empty($seller_ids)) {
+                    $seller_ids = Seller::pluck('id')->toArray();
+                }
+                if (empty($seller_ids)) {
+                    $seller_ids = DB::table('products')->pluck('seller_id')->unique()->filter()->toArray();
+                }
             }
             if (!empty($seller_ids)) {
                 $productResult = DB::table('products as p')
@@ -840,15 +828,7 @@ class ProductsApiController extends Controller
             $product->made_in = $product->madeInCountry ? $product->madeInCountry->toArray() : null;
             $product->makeHidden(['madeInCountry']);
 
-            if (isset($product->max_deliverable_distance) && $product->max_deliverable_distance != 0 && $product->max_deliverable_distance != "") {
-                if (CommonHelper::isDeliverable($product->max_deliverable_distance, $product->longitude, $product->latitude, $request->longitude, $request->latitude)) {
-                    $product->is_deliverable = true;
-                } else {
-                    $product->is_deliverable = false;
-                }
-            } else {
-                $product->is_deliverable = false;
-            }
+            $product->is_deliverable = true;
 
             $user_id = $request->user('api-customers') ? $request->user('api-customers')->id : '';
             if ($user_id) {

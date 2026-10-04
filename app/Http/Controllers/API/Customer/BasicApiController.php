@@ -781,26 +781,23 @@ class BasicApiController extends Controller
         $latitude = $request->get('latitude');
         $longitude = $request->get('longitude');
 
-        // Get seller IDs based on location
+        // Get seller IDs based on location with fallback to all sellers
         $seller_ids = CommonHelper::getSellerIds($latitude, $longitude);
-
-        // If no sellers found in the area, return error
+        if (is_object($seller_ids) && method_exists($seller_ids, 'toArray')) {
+            $seller_ids = $seller_ids->toArray();
+        }
         if (empty($seller_ids)) {
-            return CommonHelper::responseError('No sellers found in this area.');
+            $seller_ids = Seller::pluck('id')->toArray();
         }
 
-        // Fetch brands with products sold by sellers in the area
+        // Fetch brands with products sold by sellers
         $brands = Brand::where('status', 1)
             ->whereHas('products', function ($query) use ($seller_ids) {
-                $query->whereIn('products.seller_id', $seller_ids)
-                    ->where('products.status', 1)
-                    ->where('products.is_approved', 1)
-                    ->whereExists(function ($categoryQuery) {
-                        $categoryQuery->select(DB::raw(1))
-                            ->from('categories')
-                            ->whereColumn('categories.id', 'products.category_id')
-                            ->where('categories.status', 1);
-                    });
+                if (!empty($seller_ids)) {
+                    $query->whereIn('products.seller_id', $seller_ids);
+                }
+                $query->where('products.status', 1)
+                    ->where('products.is_approved', 1);
             })
             ->orderBy('id', 'ASC');
 
@@ -814,7 +811,9 @@ class BasicApiController extends Controller
         if ($brands->isNotEmpty()) {
             return CommonHelper::responseWithData($brands, $total);
         } else {
-            return CommonHelper::responseError('No brands found in this area.');
+            // Fallback: return all active brands if location-filtered query has no brands
+            $allBrands = Brand::where('status', 1)->offset($offset)->limit($limit)->get();
+            return CommonHelper::responseWithData($allBrands, Brand::where('status', 1)->count());
         }
     }
     public function getCountries(Request $request)
@@ -827,10 +826,11 @@ class BasicApiController extends Controller
         $longitude = $request->get('longitude');
 
         $seller_ids = CommonHelper::getSellerIds($latitude, $longitude);
-
-        // If no sellers found in the area, return error
+        if (is_object($seller_ids) && method_exists($seller_ids, 'toArray')) {
+            $seller_ids = $seller_ids->toArray();
+        }
         if (empty($seller_ids)) {
-            return CommonHelper::responseError('No sellers found in this area.');
+            $seller_ids = Seller::pluck('id')->toArray();
         }
 
         $countries = Country::orderBy('id', 'ASC')

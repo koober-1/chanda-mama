@@ -11,15 +11,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
-/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mixins/DateRangePickerMixin */ "./resources/js/mixins/DateRangePickerMixin.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
+/* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mixins/DateRangePickerMixin */ "./resources/js/mixins/DateRangePickerMixin.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -34,10 +33,10 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Dashboard',
-  mixins: [_mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_4__["default"]],
+  mixins: [_mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_3__["default"]],
   components: {
-    apexcharts: (vue_apexcharts__WEBPACK_IMPORTED_MODULE_2___default()),
-    DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_3___default())
+    apexcharts: (vue_apexcharts__WEBPACK_IMPORTED_MODULE_1___default()),
+    DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_2___default())
   },
   data: function data() {
     return {
@@ -79,6 +78,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       isModalLoading: false,
       selectedOrder: null,
       orders: [],
+      // Real-time updates
+      pollingInterval: null,
+      knownOrderIds: [],
+      lastOrderCount: 0,
+      notificationAudio: null,
       orderFields: [{
         key: 'id',
         label: __('Order ID') || 'Order ID',
@@ -126,8 +130,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       seller: "",
       filterSellers: [],
       dateRange: {
-        startDate: moment__WEBPACK_IMPORTED_MODULE_1___default()().subtract(30, 'days').toDate(),
-        endDate: moment__WEBPACK_IMPORTED_MODULE_1___default()().toDate()
+        startDate: moment__WEBPACK_IMPORTED_MODULE_0___default()().subtract(30, 'days').toDate(),
+        endDate: moment__WEBPACK_IMPORTED_MODULE_0___default()().toDate()
       },
       deliveryDateRange: {
         startDate: null,
@@ -602,11 +606,29 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     }
   },
   created: function created() {
+    var _this5 = this;
     this.getRecord();
     this.getSalesData();
     this.getPieChartData();
     this.setSellerWalletTransaction();
-    this.getLatestOrders();
+    this.getLatestOrders().then(function () {
+      // Initialize tracking after orders are loaded
+      _this5.knownOrderIds = _this5.orders.map(function (order) {
+        return order.id;
+      });
+      _this5.lastOrderCount = _this5.orders.length;
+    });
+  },
+  mounted: function mounted() {
+    var _this6 = this;
+    this.initializeNotificationSound();
+    // Start polling after component is mounted and orders are loaded
+    setTimeout(function () {
+      _this6.startOrderPolling();
+    }, 1000);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.stopOrderPolling();
   },
   methods: {
     getDisplayName: function getDisplayName(name) {
@@ -657,27 +679,27 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return total;
     },
     getRecord: function getRecord() {
-      var _this5 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/dashboard').then(function (res) {
-        console.log('Total Users:', _this5.totalUsers);
+      var _this7 = this;
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/dashboard').then(function (res) {
+        console.log('Total Users:', _this7.totalUsers);
         var data = res.data;
         if (data.status === 1) {
-          _this5.record = data.data;
-          _this5.sellers = data.data.top_sellers || [];
-          _this5.categories = data.data.top_categories || [];
-          _this5.statusOrderCount = data.data.status_order_count || [];
-          _this5.totalUsers = data.data.customer_count || 0;
+          _this7.record = data.data;
+          _this7.sellers = data.data.top_sellers || [];
+          _this7.categories = data.data.top_categories || [];
+          _this7.statusOrderCount = data.data.status_order_count || [];
+          _this7.totalUsers = data.data.customer_count || 0;
 
           // Compute total revenue from top_sellers
-          if (!_this5.record.total_revenue && _this5.sellers.length) {
-            _this5.record.total_revenue = _this5.sellers.reduce(function (sum, s) {
+          if (!_this7.record.total_revenue && _this7.sellers.length) {
+            _this7.record.total_revenue = _this7.sellers.reduce(function (sum, s) {
               return sum + parseFloat(s.total_revenue || 0);
             }, 0);
           }
 
           // Build top_selling_products from top_categories data
-          if (_this5.categories.length) {
-            _this5.topSellingProducts = _this5.categories.slice(0, 10).map(function (c) {
+          if (_this7.categories.length) {
+            _this7.topSellingProducts = _this7.categories.slice(0, 10).map(function (c) {
               return {
                 name: c.product_name,
                 sold_count: Math.round(parseFloat(c.total_revenue || 0) / 100),
@@ -688,8 +710,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           }
 
           // Build top_rated_products from top_categories data (mock ratings)
-          if (_this5.categories.length) {
-            _this5.topRatedProducts = _this5.categories.slice(0, 10).reverse().map(function (c) {
+          if (_this7.categories.length) {
+            _this7.topRatedProducts = _this7.categories.slice(0, 10).reverse().map(function (c) {
               return {
                 name: c.product_name,
                 review_count: Math.round(parseFloat(c.total_revenue || 0) / 50),
@@ -704,11 +726,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
     },
     getSalesData: function getSalesData() {
-      var _this6 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders/weekly_sales').then(function (response) {
+      var _this8 = this;
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/orders/weekly_sales').then(function (response) {
         var orders = response.data.data || [];
         // For yearly view, generate month-based data
-        if (_this6.salesPeriod === 'yearly') {
+        if (_this8.salesPeriod === 'yearly') {
           var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
           var monthData = {};
           months.forEach(function (m) {
@@ -718,32 +740,32 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             };
           });
           orders.forEach(function (o) {
-            var m = moment__WEBPACK_IMPORTED_MODULE_1___default()(o.order_date).format('MMM');
+            var m = moment__WEBPACK_IMPORTED_MODULE_0___default()(o.order_date).format('MMM');
             if (monthData[m]) {
               monthData[m].orders += 1;
               monthData[m].revenue += parseFloat(o.total_sale || 0);
             }
           });
           // Fill with sample data if weekly_sales only returns 7 days
-          _this6.salesChartCategories = months.map(function (m) {
-            return _this6.__(m);
+          _this8.salesChartCategories = months.map(function (m) {
+            return _this8.__(m);
           });
-          _this6.salesOrdersData = months.map(function (m) {
+          _this8.salesOrdersData = months.map(function (m) {
             return monthData[m].orders || Math.round(Math.random() * 400 + 100);
           });
-          _this6.salesRevenueData = months.map(function (m) {
+          _this8.salesRevenueData = months.map(function (m) {
             return monthData[m].revenue || Math.round(Math.random() * 12000 + 2000);
           });
         } else {
-          _this6.salesChartCategories = orders.map(function (o) {
-            var day = moment__WEBPACK_IMPORTED_MODULE_1___default()(o.order_date).format('DD');
-            var month = moment__WEBPACK_IMPORTED_MODULE_1___default()(o.order_date).format('MMM');
-            return day + '-' + _this6.__(month);
+          _this8.salesChartCategories = orders.map(function (o) {
+            var day = moment__WEBPACK_IMPORTED_MODULE_0___default()(o.order_date).format('DD');
+            var month = moment__WEBPACK_IMPORTED_MODULE_0___default()(o.order_date).format('MMM');
+            return day + '-' + _this8.__(month);
           });
-          _this6.salesOrdersData = orders.map(function () {
+          _this8.salesOrdersData = orders.map(function () {
             return Math.round(Math.random() * 50 + 10);
           });
-          _this6.salesRevenueData = orders.map(function (o) {
+          _this8.salesRevenueData = orders.map(function (o) {
             return parseFloat(o.total_sale || 0);
           });
         }
@@ -752,17 +774,17 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
     },
     getPieChartData: function getPieChartData() {
-      var _this7 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/categories/product_count').then(function (response) {
+      var _this9 = this;
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/categories/product_count').then(function (response) {
         var cats = response.data.data || [];
         var filtered = cats.filter(function (c) {
           return c.product_count > 0;
         }).slice(0, 5);
-        _this7.categoryChartLabels = filtered.map(function (c) {
-          return _this7.getDisplayName(c.name);
+        _this9.categoryChartLabels = filtered.map(function (c) {
+          return _this9.getDisplayName(c.name);
         });
         // Use product_count as revenue proxy for donut chart
-        _this7.categoryChartSeries = filtered.map(function (c) {
+        _this9.categoryChartSeries = filtered.map(function (c) {
           return c.product_count * 1000 + Math.round(Math.random() * 50000);
         });
       })["catch"](function (err) {
@@ -770,13 +792,13 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
     },
     setSellerWalletTransaction: function setSellerWalletTransaction() {
-      var _this8 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/set_seller_wallet_transaction').then(function (res) {
+      var _this0 = this;
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/set_seller_wallet_transaction').then(function (res) {
         var data = res.data;
         if (data.status === 1) {
           // Refresh data if needed
           if (data.data && data.data.top_sellers) {
-            _this8.sellers = data.data.top_sellers;
+            _this0.sellers = data.data.top_sellers;
           }
         }
       })["catch"](function () {});
@@ -809,37 +831,45 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
     },
     getLatestOrders: function getLatestOrders() {
-      var _this9 = this;
+      var _this1 = this;
       this.isLoading = true;
       var param = {
-        "startDate": this.dateRange.startDate != null ? moment__WEBPACK_IMPORTED_MODULE_1___default()(this.dateRange.startDate).format('YYYY-MM-DD') : "",
-        "endDate": this.dateRange.endDate != null ? moment__WEBPACK_IMPORTED_MODULE_1___default()(this.dateRange.endDate).format('YYYY-MM-DD') : "",
+        "startDate": this.dateRange.startDate != null ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateRange.startDate).format('YYYY-MM-DD') : "",
+        "endDate": this.dateRange.endDate != null ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateRange.endDate).format('YYYY-MM-DD') : "",
         "seller": this.seller,
         "status": this.status,
-        startDeliveryDate: this.deliveryDateRange.startDate ? moment__WEBPACK_IMPORTED_MODULE_1___default()(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
-        endDeliveryDate: this.deliveryDateRange.endDate ? moment__WEBPACK_IMPORTED_MODULE_1___default()(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : ''
+        startDeliveryDate: this.deliveryDateRange.startDate ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
+        endDeliveryDate: this.deliveryDateRange.endDate ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : ''
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders', {
+      return axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/orders', {
         params: param
       }).then(function (response) {
         var data = response.data;
         if (data.status === 1) {
-          _this9.filterSellers = response.data.data.sellers;
-          _this9.orders = response.data.data.orders.map(function (o) {
+          _this1.filterSellers = response.data.data.sellers;
+          _this1.orders = response.data.data.orders.map(function (o) {
             o.order_items = [];
             o.itemsLoading = false;
             return o;
           });
-          _this9.orderTotalRows = _this9.orders.length;
-          _this9.isLoading = false;
+          _this1.orderTotalRows = _this1.orders.length;
+
+          // Update tracking for real-time updates
+          _this1.knownOrderIds = _this1.orders.map(function (order) {
+            return order.id;
+          });
+          _this1.lastOrderCount = response.data.data.orders_total || _this1.orders.length;
+          _this1.isLoading = false;
+          return response;
         }
       })["catch"](function (error) {
-        _this9.isLoading = false;
+        _this1.isLoading = false;
         console.error(error);
+        throw error;
       });
     },
     deleteOrder: function deleteOrder(index, id) {
-      var _this0 = this;
+      var _this10 = this;
       this.$swal.fire({
         title: __('are_you_sure'),
         text: __('you_want_be_able_to_revert_this'),
@@ -851,27 +881,27 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         cancelButtonColor: '#d33'
       }).then(function (result) {
         if (result.value) {
-          _this0.isLoading = true;
+          _this10.isLoading = true;
           var postData = {
             id: id
           };
-          axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this0.$apiUrl + '/orders/delete', postData).then(function (response) {
-            _this0.isLoading = false;
+          axios__WEBPACK_IMPORTED_MODULE_4__["default"].post(_this10.$apiUrl + '/orders/delete', postData).then(function (response) {
+            _this10.isLoading = false;
             var data = response.data;
-            _this0.orders.splice(index, 1);
-            _this0.showSuccess(data.message);
+            _this10.orders.splice(index, 1);
+            _this10.showSuccess(data.message);
           });
         }
       });
     },
     toggleOrder: function toggleOrder(itemOrRow) {
-      var _this1 = this;
+      var _this11 = this;
       var item = itemOrRow.item || itemOrRow;
       var isRow = !!itemOrRow.toggleDetails;
       var isShowing = isRow ? itemOrRow.detailsShowing : !!item._showDetails;
       if (!isShowing) {
         this.orders.forEach(function (order) {
-          _this1.$set(order, '_showDetails', false);
+          _this11.$set(order, '_showDetails', false);
         });
       }
       if (isRow) {
@@ -883,7 +913,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         return;
       }
       item.itemsLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders/view/' + item.id).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/orders/view/' + item.id).then(function (res) {
         item.order_items = res.data.data.order_items || [];
         item.itemsLoading = false;
       })["catch"](function () {
@@ -891,16 +921,16 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       });
     },
     openOrderModal: function openOrderModal(order) {
-      var _this10 = this;
+      var _this12 = this;
       this.selectedOrder = order;
       this.$bvModal.show('order-details-modal');
       if (this.selectedOrder.order_items && this.selectedOrder.order_items.length === 0) {
         this.isModalLoading = true;
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders/view/' + order.id).then(function (res) {
-          _this10.selectedOrder.order_items = res.data.data.order_items || [];
-          _this10.isModalLoading = false;
+        axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/orders/view/' + order.id).then(function (res) {
+          _this12.selectedOrder.order_items = res.data.data.order_items || [];
+          _this12.isModalLoading = false;
         })["catch"](function () {
-          _this10.isModalLoading = false;
+          _this12.isModalLoading = false;
         });
       }
     },
@@ -932,11 +962,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return classMap[id] || 'status-default';
     },
     formatDateBold: function formatDateBold(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('DD MMM YYYY');
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('DD/MM/YYYY');
     },
     getPeriodLabel: function getPeriodLabel(date) {
       if (!date) return '';
-      var hour = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).hour();
+      var hour = moment__WEBPACK_IMPORTED_MODULE_0___default()(date).hour();
       if (hour >= 5 && hour < 12) {
         return this.__('Morning') || 'Morning';
       } else if (hour >= 12 && hour < 17) {
@@ -948,7 +978,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
     },
     formatTimeLight: function formatTimeLight(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('hh:mm A');
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('hh:mm A');
     },
     getStatusLabelById: function getStatusLabelById(val) {
       if (val == null || val === '') return '';
@@ -971,6 +1001,93 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         return key ? this.__(key) : String(val);
       }
       return String(val);
+    },
+    // Real-time order updates
+    initializeNotificationSound: function initializeNotificationSound() {
+      // Change this to your custom audio filename
+      this.notificationAudio = new Audio(this.$baseUrl + '/assets/order_sound.mpeg');
+      this.notificationAudio.preload = 'auto';
+      this.notificationAudio.load();
+    },
+    startOrderPolling: function startOrderPolling() {
+      var _this13 = this;
+      // Only start if we have orders data
+      if (this.orders.length === 0) {
+        console.log('No orders loaded yet, skipping polling start');
+        return;
+      }
+
+      // Store initial order IDs if not already set
+      if (this.knownOrderIds.length === 0) {
+        this.knownOrderIds = this.orders.map(function (order) {
+          return order.id;
+        });
+      }
+      if (this.lastOrderCount === 0) {
+        this.lastOrderCount = this.orders.length;
+      }
+
+      // Clear any existing interval
+      this.stopOrderPolling();
+
+      // Poll every 30 seconds for new orders
+      this.pollingInterval = setInterval(function () {
+        _this13.checkForNewOrders();
+      }, 30000); // 30 seconds
+
+      console.log('Order polling started');
+    },
+    stopOrderPolling: function stopOrderPolling() {
+      if (this.pollingInterval) {
+        clearInterval(this.pollingInterval);
+        this.pollingInterval = null;
+      }
+    },
+    checkForNewOrders: function checkForNewOrders() {
+      var _this14 = this;
+      // Use the same date parameters as getLatestOrders for consistency
+      var param = {
+        "startDate": this.dateRange.startDate != null ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateRange.startDate).format('YYYY-MM-DD') : "",
+        "endDate": this.dateRange.endDate != null ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.dateRange.endDate).format('YYYY-MM-DD') : "",
+        "seller": this.seller,
+        "status": this.status,
+        startDeliveryDate: this.deliveryDateRange.startDate ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
+        endDeliveryDate: this.deliveryDateRange.endDate ? moment__WEBPACK_IMPORTED_MODULE_0___default()(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : '',
+        per_page: 1,
+        // Only need count
+        page: 1
+      };
+
+      // Only fetch order count to minimize server load
+      axios__WEBPACK_IMPORTED_MODULE_4__["default"].get(this.$apiUrl + '/orders', {
+        params: param
+      }).then(function (response) {
+        if (response.data.status === 1) {
+          var newOrderCount = response.data.data.orders_total || 0;
+
+          // If we have more orders than before, refresh the orders list
+          if (newOrderCount > _this14.lastOrderCount) {
+            console.log('New orders detected! Count:', _this14.lastOrderCount, '->', newOrderCount);
+            _this14.playOrderNotificationSound();
+            _this14.getLatestOrders(); // Refresh the orders list
+            _this14.lastOrderCount = newOrderCount;
+          }
+        }
+      })["catch"](function (error) {
+        console.error('Error checking for new orders:', error);
+      });
+    },
+    playOrderNotificationSound: function playOrderNotificationSound() {
+      if (!this.notificationAudio) return;
+
+      // Try to play the sound
+      var playPromise = this.notificationAudio.play();
+      if (playPromise !== undefined) {
+        playPromise["catch"](function (error) {
+          console.log('Audio play failed:', error);
+          // Browser might block autoplay, handle gracefully
+        });
+      }
     }
   }
 });
@@ -986,14 +1103,14 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "p-2"
+    staticClass: "p-2 dashboard-content"
   }, [_c("div", {
     staticClass: "page-heading mb-4"
   }, [_c("h2", {
@@ -1001,7 +1118,7 @@ var render = function render() {
   }, [_vm._v(_vm._s(_vm.__("Welcome")) + ", " + _vm._s(_vm.userName))]), _vm._v(" "), _c("p", {
     staticClass: "text-muted small mb-0"
   }, [_vm._v(_vm._s(_vm.greetingMessage) + " • " + _vm._s(_vm.formattedDate))])]), _vm._v(" "), _c("div", {
-    staticClass: "row g-3 mb-4 row-cols-1 row-cols-sm-2 row-cols-md-4"
+    staticClass: "row g-3 mb-4 row-cols-1 row-cols-sm-2 row-cols-md-4 dashboard-stat-cards"
   }, _vm._l(_vm.todayStats, function (stat, index) {
     return _c("div", {
       key: "today-" + index,
@@ -1693,7 +1810,7 @@ var render = function render() {
       expression: "sellingPage"
     }
   })], 1) : _vm._e()])])])]), _vm._v(" "), _c("div", {
-    staticClass: "card figma-card text-dark mt-4"
+    staticClass: "card figma-card text-dark mt-4 dashboard-recent-orders"
   }, [_c("div", {
     staticClass: "card-header"
   }, [_c("h4", {
@@ -2143,7 +2260,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n/* Modernized styles are now central in global SCSS */\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.dashboard-content[data-v-1f79daf6] {\r\n    display: flex;\r\n    flex-direction: column;\n}\n.dashboard-content > *[data-v-1f79daf6] {\r\n    order: 3;\n}\n.dashboard-content > .page-heading[data-v-1f79daf6] {\r\n    order: 0;\n}\n.dashboard-content > .dashboard-recent-orders[data-v-1f79daf6] {\r\n    order: 1;\n}\n.dashboard-content > .dashboard-stat-cards[data-v-1f79daf6] {\r\n    order: 2;\n}\r\n\r\n/* Modernized styles are now central in global SCSS */\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2246,8 +2363,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_1f79daf6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_1f79daf6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_1f79daf6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_1f79daf6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_1f79daf6_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=template&id=1f79daf6&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Dashboard.vue?vue&type=template&id=1f79daf6&scoped=true");
 

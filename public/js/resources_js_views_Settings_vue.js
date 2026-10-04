@@ -11,9 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Auth.js */ "./resources/js/Auth.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Auth.js */ "./resources/js/Auth.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
@@ -36,7 +35,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       mobile_statuses: [],
       sms_statuses: [],
       settings: {
-        username: _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.username,
+        username: _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.username,
         current_password: "",
         password: "",
         confirm_password: ""
@@ -45,7 +44,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   },
   computed: {
     isSellerOrDeliveryBoy: function isSellerOrDeliveryBoy() {
-      return _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.role_id === 3 || _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.role_id === 4;
+      return _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.role_id === 3 || _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.role_id === 4;
     }
   },
   created: function created() {
@@ -79,7 +78,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var vm = this;
       var orderStatusesUrl = this.$apiUrl + '/order_statuses';
       var selfPickStatusesUrl = this.$apiUrl + '/order_statuses/self_pickup';
-      Promise.all([axios__WEBPACK_IMPORTED_MODULE_0___default().get(orderStatusesUrl), axios__WEBPACK_IMPORTED_MODULE_0___default().get(selfPickStatusesUrl)]).then(function (_ref) {
+      Promise.all([axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(orderStatusesUrl), axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(selfPickStatusesUrl)]).then(function (_ref) {
         var _ref2 = _slicedToArray(_ref, 2),
           orderResponse = _ref2[0],
           selfPickResponse = _ref2[1];
@@ -109,7 +108,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     getMailSetting: function getMailSetting() {
       var _this2 = this;
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/mail_settings').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/mail_settings').then(function (response) {
         _this2.isLoading = false;
         var data = response.data.data;
         data.forEach(function (status) {
@@ -157,7 +156,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           formData.append('sms_statuses[]', "0");
         }
       });
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post(this.$apiUrl + '/mail_settings/save', formData).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(this.$apiUrl + '/mail_settings/save', formData).then(function (res) {
         var data = res.data;
         vm.isLoading = false;
         if (data.status === 1) {
@@ -181,15 +180,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var _this4 = this;
       var vm = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post(this.$apiUrl + '/system_users/change_password', this.settings).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(this.$apiUrl + '/system_users/change_password', this.settings).then(function (res) {
         var data = res.data;
         vm.isLoading = false;
         if (data.status === 1) {
           vm.showMessage("success", data.message);
           // Update Auth.user.username in memory and localStorage so the header reflects immediately
-          _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.username = vm.settings.username;
-          window.localStorage.setItem('user', JSON.stringify(_Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user));
-          var role_id = _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.role_id;
+          _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.username = vm.settings.username;
+          window.localStorage.setItem('user', JSON.stringify(_Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user));
+          var role_id = _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.role_id;
           if (role_id === 3) {
             _this4.$router.push('/seller');
           } else if (role_id === 4) {
@@ -240,7 +239,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }).then(function (secondResult) {
             if (secondResult.isConfirmed) {
               vm.isLoading = true;
-              var role_id = _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user.role_id;
+              var role_id = _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user.role_id;
               var deleteUrl = '';
               if (role_id === 3) {
                 deleteUrl = _this5.$sellerApiUrl + '/delete_seller_account';
@@ -248,12 +247,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 deleteUrl = _this5.$deliveryBoyApiUrl + '/delete_delivery_boy_account';
               }
               if (deleteUrl) {
-                axios__WEBPACK_IMPORTED_MODULE_0___default().get(deleteUrl).then(function (response) {
+                axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(deleteUrl).then(function (response) {
                   vm.isLoading = false;
                   var data = response.data;
                   if (data.status === 1) {
                     vm.showSuccess(data.message);
-                    _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].logout();
+                    _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].logout();
                     setTimeout(function () {
                       vm.$router.push('/login');
                     }, 1500);
@@ -289,8 +288,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -681,8 +680,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_6af1f6c2__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_6af1f6c2__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_6af1f6c2__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_6af1f6c2__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_6af1f6c2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Settings.vue?vue&type=template&id=6af1f6c2 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Settings.vue?vue&type=template&id=6af1f6c2");
 

@@ -11,9 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/TranslationHelper.js */ "./resources/js/mixins/TranslationHelper.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/TranslationHelper.js */ "./resources/js/mixins/TranslationHelper.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -27,7 +26,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mixins: [_mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  mixins: [_mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
   name: 'Subscriptions',
   data: function data() {
     return {
@@ -153,7 +152,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     loadPlanWithTranslations: function loadPlanWithTranslations() {
       var _this3 = this;
       this.isLoadingData = true;
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/subscription_plans', {
+      return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/subscription_plans', {
         params: {
           id: this.id
         }
@@ -228,7 +227,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     fetchActiveLanguages: function fetchActiveLanguages() {
       var _this4 = this;
       this.isLoadingLanguages = true;
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/active_languages').then(function (res) {
+      return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/active_languages').then(function (res) {
         _this4.languages = res.data.data || [];
         var appLocale = window.appLocale || 'en';
         var current = _this4.languages.find(function (l) {
@@ -273,7 +272,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 search: _this5.filter
               };
               _context2.n = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().get(_this5.$apiUrl + '/subscription_plans/', {
+              return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(_this5.$apiUrl + '/subscription_plans/', {
                 params: params
               });
             case 2:
@@ -346,7 +345,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 0:
               _context3.p = 0;
               _context3.n = 1;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().get(_this6.$apiUrl + '/subscription_plans/check_free_delivery_time_slots');
+              return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(_this6.$apiUrl + '/subscription_plans/check_free_delivery_time_slots');
             case 1:
               response = _context3.v;
               if (!(response.data.status === 1)) {
@@ -419,7 +418,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 url = _this7.$apiUrl + '/subscription_plans/update/' + _this7.form.id;
               }
               _this7.isSubmitting = true;
-              axios__WEBPACK_IMPORTED_MODULE_0___default().post(url, payload).then(function (res) {
+              axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(url, payload).then(function (res) {
                 if (res.data.status === 1) {
                   _this7.showMessage('success', res.data.message);
                   _this7.create_new = false;
@@ -524,7 +523,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               }).then(function (result) {
                 if (result.value) {
                   _this9.isLoading = true;
-                  axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this9.$apiUrl + "/subscription_plans/delete/".concat(id)).then(function (response) {
+                  axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(_this9.$apiUrl + "/subscription_plans/delete/".concat(id)).then(function (response) {
                     _this9.isLoading = false;
                     if (response.data.status === 1) {
                       _this9.showMessage('success', response.data.message);
@@ -625,7 +624,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               _this1.isUpdatingName = true;
               _context8.p = 2;
               _context8.n = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this1.$apiUrl + '/subscription_plans/update_setting', {
+              return axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(_this1.$apiUrl + '/subscription_plans/update_setting', {
                 subscription_name: _this1.subscriptionName.trim()
               });
             case 3:
@@ -675,8 +674,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -1357,8 +1356,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -1528,7 +1526,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         this.showError(_errorMsg);
         return Promise.reject(new Error(_errorMsg));
       }
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/languages/translate-empty", {
+      return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/api/languages/translate-empty", {
         target_language: language.code,
         data: dataToSend
       }).then(function (res) {
@@ -1605,7 +1603,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         this.showError(_errorMsg2);
         return Promise.reject(new Error(_errorMsg2));
       }
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/languages/translate-overwrite", {
+      return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/api/languages/translate-overwrite", {
         target_language: language.code,
         data: dataToSend
       }).then(function (res) {
@@ -1707,8 +1705,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscriptions_vue_vue_type_template_id_23e12aae__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscriptions_vue_vue_type_template_id_23e12aae__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscriptions_vue_vue_type_template_id_23e12aae__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscriptions_vue_vue_type_template_id_23e12aae__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Subscriptions_vue_vue_type_template_id_23e12aae__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Subscriptions.vue?vue&type=template&id=23e12aae */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Subscriptions/Subscriptions.vue?vue&type=template&id=23e12aae");
 

@@ -87,8 +87,6 @@ export default {
     mounted() {
         if (this.loggedUser) {
             this.$router.push('/dashboard');
-        } else {
-            this.$router.push('/login').catch(() => { });
         }
         let user_theme = sessionStorage.getItem("user-theme");
         this.userTheme = user_theme;

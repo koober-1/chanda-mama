@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="page-heading">
-            <div class="page-title mb-2">
+            <div class="page-title mb-2" v-if="!isModal">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="modern-page-title mb-0">Sub Category</h3>
                     <nav aria-label="breadcrumb">
@@ -114,6 +114,12 @@
 
 import EditRecord from './EditSubcategory.vue';
 export default {
+    props: {
+        isModal: {
+            type: Boolean,
+            default: false
+        }
+    },
     components: {
         'app-edit-record': EditRecord,
     },
@@ -344,7 +350,9 @@ export default {
         hideModal() {
             this.create_new = false
             this.edit_record = false
-            this.$router.push({ path: '/manage_subcategories' });
+            if (!this.isModal && this.$route.name !== 'manage_categories') {
+                this.$router.push({ path: '/manage_subcategories' });
+            }
         },
         onCategorySaved(message) {
             this.showMessage('success', message);

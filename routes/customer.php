@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, x-access-key, X-Auth-Token');
+if (!headers_sent()) {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, x-access-key, X-Auth-Token');
+}
 
 // Google Places API routes (public - no authentication required)
 Route::get('/google_places_autocomplete', [\App\Http\Controllers\API\StoreSettingsApiController::class, 'googlePlacesAutocomplete']);

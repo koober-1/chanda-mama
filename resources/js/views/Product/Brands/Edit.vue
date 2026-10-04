@@ -345,7 +345,6 @@ export default {
 
     this.loadLanguages();
     this.resetForm(); // here change 2 
-    this.showModal();
   }
 };
 </script>

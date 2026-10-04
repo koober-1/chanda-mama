@@ -256,7 +256,7 @@ var appName = window.appName;
 router.beforeEach((to, from, next) => {
     window.dispatchEvent(new CustomEvent('app-route-loading', { detail: true }));
     //if (to.matched.some(record => record.meta.requiresAuth) ) {
-    if (isInstalled) {
+    if (window.isInstalled == 1 || window.isInstalled === true || window.isInstalled === 'true') {
         if (to.name == 'install') {
             router.push('/404').catch(() => { });
         }
@@ -362,20 +362,20 @@ function configRoutes() {
     async function fetchData() {
         try {
             const response = await axios.get(window.baseUrl + '/api/role');
-            const data = response.data.data.map(role => role.name);
-            const roles = data;
-            return roles; // Return adminRoles if needed
+            if (response && response.data && Array.isArray(response.data.data)) {
+                return response.data.data.map(role => role.name);
+            }
+            return [roleSuperAdmin, roleAdmin];
         } catch (error) {
-            // Handle error
-            console.error('Error fetching roles:', error);
+            return [roleSuperAdmin, roleAdmin];
         }
     }
-    let adminRoles;
-    fetchData();
+    let adminRoles = adminSuperadminRoles;
     fetchData().then(result => {
-        const otherroles = result.filter(role => role !== 'Seller' && role !== 'Delivery Boy');
-        const adminRoles = otherroles;
-
+        if (Array.isArray(result)) {
+            const otherroles = result.filter(role => role !== 'Seller' && role !== 'Delivery Boy');
+            adminRoles = otherroles;
+        }
     });
     return [
         {

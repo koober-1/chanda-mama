@@ -42,6 +42,15 @@ class ShopApiController extends Controller
         }
 
         $seller_ids = CommonHelper::getSellerIds($request->latitude, $request->longitude);
+        if (is_object($seller_ids) && method_exists($seller_ids, 'toArray')) {
+            $seller_ids = $seller_ids->toArray();
+        }
+        if (empty($seller_ids)) {
+            $seller_ids = Seller::where('status', 1)->pluck('id')->toArray();
+            if (empty($seller_ids)) {
+                $seller_ids = Seller::pluck('id')->toArray();
+            }
+        }
 
         $user_id = $request->user('api-customers') ? $request->user('api-customers')->id : 0;
 

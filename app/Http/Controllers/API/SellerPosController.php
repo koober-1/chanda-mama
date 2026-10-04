@@ -281,7 +281,7 @@ class SellerPosController extends Controller
             try {
                 CommonHelper::sendLowStockNotification($updatedVariants);
             } catch (\Exception $e) {
-                Log::channel('low_stock_mail')->info("Low stock notification error: " . $e->getMessage());
+                Log::info("Low stock notification error: " . $e->getMessage());
             }
 
             DB::commit();

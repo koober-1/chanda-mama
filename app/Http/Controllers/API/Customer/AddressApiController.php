@@ -58,7 +58,22 @@ class AddressApiController extends Controller
             return CommonHelper::responseError($validator->errors()->first());
         }
 
-        $city = CommonHelper::getDeliverableCity($request->latitude, $request->longitude);
+        $lat = $request->latitude ?? 0;
+        $lng = $request->longitude ?? 0;
+        if (empty($lat) || floatval($lat) == 0) {
+            $matchedCity = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+            if ($matchedCity) {
+                $lat = $matchedCity->latitude;
+                $lng = $matchedCity->longitude;
+                $input['latitude'] = $lat;
+                $input['longitude'] = $lng;
+            }
+        }
+
+        $city = CommonHelper::getDeliverableCity($lat, $lng);
+        if (!$city) {
+            $city = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+        }
         
         $user_id = auth()->user()->id;
         $count = UserAddress::where('user_id',$user_id)->count();
@@ -97,7 +112,22 @@ class AddressApiController extends Controller
             return CommonHelper::responseError($validator->errors()->first());
         }
 
-        $city = CommonHelper::getDeliverableCity($request->latitude, $request->longitude);
+        $lat = $request->latitude ?? 0;
+        $lng = $request->longitude ?? 0;
+        if (empty($lat) || floatval($lat) == 0) {
+            $matchedCity = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+            if ($matchedCity) {
+                $lat = $matchedCity->latitude;
+                $lng = $matchedCity->longitude;
+                $input['latitude'] = $lat;
+                $input['longitude'] = $lng;
+            }
+        }
+
+        $city = CommonHelper::getDeliverableCity($lat, $lng);
+        if (!$city) {
+            $city = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+        }
 
         if(isset($request->is_default) && $request->is_default == 1 ){
             $user_id = auth()->user()->id;

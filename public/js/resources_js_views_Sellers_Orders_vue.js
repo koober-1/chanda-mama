@@ -16,8 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/DateRangePickerMixin */ "./resources/js/mixins/DateRangePickerMixin.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -335,7 +334,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     getOrderStatus: function getOrderStatus() {
       var _this = this;
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/order_statuses').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/order_statuses').then(function (response) {
         _this.isLoading = false;
         _this.statuses = response.data.data;
       })["catch"](function (error) {
@@ -417,7 +416,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         item_limit: this.itemPerPage,
         search: this.search
       };
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$sellerApiUrl + '/orders', {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$sellerApiUrl + '/orders', {
         params: param
       }).then(function (response) {
         _this2.isLoading = false;
@@ -463,7 +462,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         if (row.item.order_items.length === 0) {
           row.item.itemsLoading = true;
-          axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$sellerApiUrl + '/order_by_id', {
+          axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$sellerApiUrl + '/order_by_id', {
             params: {
               order_id: row.item.id
             }
@@ -482,7 +481,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       this.$set(field, 'hidden', !field.hidden);
     },
     formatDateBold: function formatDateBold(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_2___default()(date).format('DD, MMM YYYY');
+      return moment__WEBPACK_IMPORTED_MODULE_2___default()(date).format('DD/MM/YYYY');
     },
     getPeriodLabel: function getPeriodLabel(date) {
       if (!date) return '';
@@ -514,8 +513,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -1438,8 +1437,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_3bbeeb7f_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_3bbeeb7f_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_3bbeeb7f_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_3bbeeb7f_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_3bbeeb7f_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Orders.vue?vue&type=template&id=3bbeeb7f&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Sellers/Orders.vue?vue&type=template&id=3bbeeb7f&scoped=true");
 

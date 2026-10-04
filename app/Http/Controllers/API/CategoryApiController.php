@@ -569,4 +569,22 @@ class CategoryApiController extends Controller
             return response()->json(['error' => __('an_error_occurred_while_checking_slug_uniqueness')], 500);
         }
     }
+
+    public function getCategoryTree($id)
+    {
+        try {
+            $category = Category::where('id', $id)
+                ->with(['allChilds.allChilds.allChilds', 'translations'])
+                ->first();
+
+            if (!$category) {
+                return CommonHelper::responseError('category_not_found');
+            }
+
+            return CommonHelper::responseWithData($category);
+        } catch (\Throwable $e) {
+            return CommonHelper::responseError($e->getMessage());
+        }
+    }
 }
+

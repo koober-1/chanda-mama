@@ -13,8 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -80,7 +79,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     fetchActiveLanguages: function fetchActiveLanguages() {
       var _this4 = this;
-      return axios__WEBPACK_IMPORTED_MODULE_1___default().get(this.$apiUrl + '/active_languages').then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/active_languages').then(function (response) {
         if (response.data.data && Array.isArray(response.data.data)) {
           _this4.activeLanguages = response.data.data;
           var appLocale = window.appLocale || 'en';
@@ -140,7 +139,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getCategories: function getCategories() {
       var _this6 = this;
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get(this.$apiUrl + '/categories/row_order').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/categories/row_order').then(function (response) {
         var data = response.data;
         _this6.list = data.data.map(function (category, index) {
           return {
@@ -161,7 +160,7 @@ __webpack_require__.r(__webpack_exports__);
       this.isLoading = true;
       var formData = this.list;
       var url = this.$apiUrl + '/categories/updateOrder';
-      axios__WEBPACK_IMPORTED_MODULE_1___default().post(url, formData).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(url, formData).then(function (res) {
         var data = res.data;
         if (data.status === 1) {
           _this7.showMessage("success", data.message);
@@ -196,8 +195,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -404,7 +403,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.flip-list-move[data-v-150fb500] {\n    transition: transform 0.5s;\n}\n.no-move[data-v-150fb500] {\n    transition: transform 0s;\n}\n.ghost[data-v-150fb500] {\n    opacity: 0.5;\n    background: #c8ebfb;\n}\n.list-group[data-v-150fb500] {\n    min-height: 20px;\n}\n.list-group-item[data-v-150fb500] {\n    cursor: move;\n    margin-bottom: 8px;\n    border-radius: 8px !important;\n    transition: background-color 0.2s ease;\n}\n.list-group-item i[data-v-150fb500] {\n    cursor: pointer;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.flip-list-move[data-v-150fb500] {\r\n    transition: transform 0.5s;\n}\n.no-move[data-v-150fb500] {\r\n    transition: transform 0s;\n}\n.ghost[data-v-150fb500] {\r\n    opacity: 0.5;\r\n    background: #c8ebfb;\n}\n.list-group[data-v-150fb500] {\r\n    min-height: 20px;\n}\n.list-group-item[data-v-150fb500] {\r\n    cursor: move;\r\n    margin-bottom: 8px;\r\n    border-radius: 8px !important;\r\n    transition: background-color 0.2s ease;\n}\n.list-group-item i[data-v-150fb500] {\r\n    cursor: pointer;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -507,8 +506,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriesOrder_vue_vue_type_template_id_150fb500_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriesOrder_vue_vue_type_template_id_150fb500_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriesOrder_vue_vue_type_template_id_150fb500_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriesOrder_vue_vue_type_template_id_150fb500_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoriesOrder_vue_vue_type_template_id_150fb500_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CategoriesOrder.vue?vue&type=template&id=150fb500&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Category/CategoriesOrder.vue?vue&type=template&id=150fb500&scoped=true");
 
@@ -1982,13 +1981,13 @@ module.exports = function (IS_INCLUDES) {
 /***/ }),
 
 /***/ "c649":
-/***/ (function(module, __webpack_exports__, __nested_webpack_require_42729__) {
+/***/ (function(module, __nested_webpack_exports__, __nested_webpack_require_42729__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __nested_webpack_require_42729__.d(__webpack_exports__, "c", function() { return insertNodeAt; });
-/* harmony export (binding) */ __nested_webpack_require_42729__.d(__webpack_exports__, "a", function() { return camelize; });
-/* harmony export (binding) */ __nested_webpack_require_42729__.d(__webpack_exports__, "b", function() { return console; });
-/* harmony export (binding) */ __nested_webpack_require_42729__.d(__webpack_exports__, "d", function() { return removeNode; });
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __nested_webpack_require_42729__.d(__nested_webpack_exports__, "c", function() { return insertNodeAt; });
+/* harmony export (binding) */ __nested_webpack_require_42729__.d(__nested_webpack_exports__, "a", function() { return camelize; });
+/* harmony export (binding) */ __nested_webpack_require_42729__.d(__nested_webpack_exports__, "b", function() { return console; });
+/* harmony export (binding) */ __nested_webpack_require_42729__.d(__nested_webpack_exports__, "d", function() { return removeNode; });
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_0__ = __nested_webpack_require_42729__("a481");
 /* harmony import */ var core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nested_webpack_require_42729__.n(core_js_modules_es6_regexp_replace__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -2316,11 +2315,11 @@ module.exports = document && document.documentElement;
 /***/ }),
 
 /***/ "fb15":
-/***/ (function(module, __webpack_exports__, __nested_webpack_require_51548__) {
+/***/ (function(module, __nested_webpack_exports__, __nested_webpack_require_51548__) {
 
 "use strict";
 // ESM COMPAT FLAG
-__nested_webpack_require_51548__.r(__webpack_exports__);
+__nested_webpack_require_51548__.r(__nested_webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 // This file is imported into lib/wc client bundles.
@@ -2980,7 +2979,7 @@ if (typeof window !== "undefined" && "Vue" in window) {
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
 
-/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (vuedraggable);
+/* harmony default export */ var entry_lib = __nested_webpack_exports__["default"] = (vuedraggable);
 
 
 
@@ -3001,9 +3000,9 @@ if (typeof window !== "undefined" && "Vue" in window) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MultiDrag": () => (/* binding */ MultiDragPlugin),
-/* harmony export */   "Sortable": () => (/* binding */ Sortable),
-/* harmony export */   "Swap": () => (/* binding */ SwapPlugin),
+/* harmony export */   MultiDrag: () => (/* binding */ MultiDragPlugin),
+/* harmony export */   Sortable: () => (/* binding */ Sortable),
+/* harmony export */   Swap: () => (/* binding */ SwapPlugin),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /**!

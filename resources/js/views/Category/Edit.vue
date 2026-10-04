@@ -1,121 +1,227 @@
 <template>
-    <b-modal ref="my-modal" :title="modal_title" @hidden="$emit('modalClose')" scrollable no-close-on-backdrop no-fade
-        static size="xl">
-        <div slot="modal-footer">
-            <b-button variant="primary" @click="$refs['dummy_submit'].click()" :disabled="isLoading">{{ __('save') }}
-                <b-spinner v-if="isLoading" small label="Spinning"></b-spinner>
-            </b-button>
-            <b-button variant="secondary" @click="hideModal">{{ __('cancel') }}</b-button>
-        </div>
-
-        <!-- Loading overlay while fetching translation data -->
-        <div v-if="isLoadingData" class="text-center p-5">
-            <b-spinner label="Loading..."></b-spinner>
-            <p class="mt-2">{{ __('loading') }}</p>
-        </div>
-
-        <form v-else ref="my-form" @submit.prevent="saveRecord" novalidate>
-            <div v-if="defaultLanguage">
-                <template v-for="language in [defaultLanguage]">
-                    <div class="row">
-                        <div class="form-group" :class="{ required: language.is_default }">
-                            <label>{{ parent_id > 0 ? __('sub category name') : __('category name') }}</label>
-                            <i class="text-danger" v-if="language.is_default">*</i>
-                            <input type="text" class="form-control"
-                                v-model="translations[language.id].name" :placeholder="parent_id > 0 ? __('enter sub category name') : __('enter_category_name')">
-                        </div>
-
-                        <div class="form-group" v-if="language.is_default">
-                            <label>{{ __('image') }}</label><i class="text-danger">*</i>
-                            <p class="text-muted">{{ __('please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px') }}</p>
-                            <span v-if="error" class="error">{{ error }}</span>
-
-                            <input type="file" name="category_image" accept="image/*" v-on:change="handleFileUpload"
-                                ref="file_image" class="file-input" style="display: none;">
-                            <div class="file-input-div bg-gray-100" @click="triggerFileInput" @drop="dropFile"
-                                @dragover="handleDragOver" @dragleave="handleDragLeave">
-                                <template v-if="image && image.name !== ''">
-                                    <label>{{ __('selected_file_name') }} {{ image.name }}</label>
-                                </template>
-                                <template v-else>
-                                    <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
-                                    <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
-                                </template>
+    <div>
+        <!-- INLINE MODE -->
+        <div v-if="inlineMode" class="category-inline-form p-3">
+            <div class="d-flex justify-content-between mb-4 border-bottom pb-2">
+                <h5 class="mb-0 fw-bold">{{ modal_title }}</h5>
+                <button class="btn btn-sm btn-outline-secondary" @click="$emit('modalClose')"><i class="fa fa-times"></i></button>
+            </div>
+            <div v-if="isLoadingData" class="text-center p-5">
+                <b-spinner label="Loading..."></b-spinner>
+                <p class="mt-2">{{ __('loading') }}</p>
+            </div>
+            <form v-else ref="my-form" @submit.prevent="saveRecord" novalidate>
+                <div v-if="defaultLanguage">
+                    <template v-for="language in [defaultLanguage]">
+                        <div class="row">
+                            <div class="form-group" :class="{ required: language.is_default }">
+                                <label>{{ dynamicNameLabel }}</label>
+                                <i class="text-danger" v-if="language.is_default">*</i>
+                                <input type="text" class="form-control"
+                                    v-model="translations[language.id].name" :placeholder="dynamicNamePlaceholder">
                             </div>
-                            <div class="row" v-if="image_url">
-                                <div class="col-md-4">
-                                    <img class="custom-image" :src="image_url" title='Category Image'
-                                        alt='Category Image' />
+
+                            <div class="form-group" v-if="language.is_default">
+                                <label>{{ __('image') }}</label><i class="text-danger">*</i>
+                                <p class="text-muted">{{ __('please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px') }}</p>
+                                <span v-if="error" class="error">{{ error }}</span>
+
+                                <input type="file" name="category_image" accept="image/*" v-on:change="handleFileUpload"
+                                    ref="file_image" class="file-input" style="display: none;">
+                                <div class="file-input-div bg-gray-100" @click="triggerFileInput" @drop="dropFile"
+                                    @dragover="handleDragOver" @dragleave="handleDragLeave">
+                                    <template v-if="image && image.name !== ''">
+                                        <label>{{ __('selected_file_name') }} {{ image.name }}</label>
+                                    </template>
+                                    <template v-else>
+                                        <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
+                                        <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
+                                    </template>
+                                </div>
+                                <div class="row" v-if="image_url">
+                                    <div class="col-md-4">
+                                        <img class="custom-image" :src="image_url" title='Category Image'
+                                            alt='Category Image' />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('meta_title') }}</label>
+                                <input type="text" class="form-control" v-model="translations[language.id].meta_title"
+                                    :placeholder="__('enter_meta_title')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('meta_keywords') }}</label>
+                                <input type="text" class="form-control" v-model="translations[language.id].meta_keywords"
+                                    :placeholder="__('enter_meta_keywords')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('schema_markup') }}
+                                    <small :id="'schema_markup_inline_' + language.id"
+                                        class="d-inline-flex mb-3 px-2 py-1 text-muted bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2">
+                                        <i class="fa fa-info-circle"></i>
+                                    </small>
+                                    <b-popover :target="'schema_markup_inline_' + language.id" triggers="hover" placement="left">
+                                        <p>Schema markup helps search engines read and understand content.</p>
+                                    </b-popover>
+                                </label>
+                                <input type="text" class="form-control" v-model="translations[language.id].schema_markup"
+                                    :placeholder="__('enter_schema_markup')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('meta_description') }}</label>
+                                <textarea type="text" class="form-control"
+                                    v-model="translations[language.id].meta_description"
+                                    :placeholder="__('enter_meta_description')" rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group" v-if="id && language.is_default">
+                                <label>{{ __('status') }}</label>
+                                <div class="col-md-9 text-left mt-1">
+                                    <b-form-radio-group v-model="status" :options="[
+                                        { text: __('deactivate'), 'value': 0 },
+                                        { text: __('activate'), 'value': 1 },
+                                    ]" buttons button-variant="outline-primary"></b-form-radio-group>
                                 </div>
                             </div>
                         </div>
+                    </template>
+                </div>
+                <div v-else class="text-center p-5">
+                    <b-spinner label="Loading languages..."></b-spinner>
+                    <p class="mt-2">{{ __('loading_languages') }}</p>
+                </div>
+                
+                <div class="text-end mt-4">
+                     <b-button variant="secondary" class="me-2" @click="$emit('modalClose')">{{ __('cancel') }}</b-button>
+                     <b-button variant="primary" @click="saveRecord" :disabled="isLoading">{{ __('save') }}
+                         <b-spinner v-if="isLoading" small label="Spinning"></b-spinner>
+                     </b-button>
+                </div>
+            </form>
+        </div>
 
-                        <!-- Meta Title (Translatable - Optional) -->
-                        <div class="form-group">
-                            <label>{{ __('meta_title') }}</label>
-                            <input type="text" class="form-control" v-model="translations[language.id].meta_title"
-                                :placeholder="__('enter_meta_title')">
-                        </div>
+        <!-- MODAL MODE -->
+        <b-modal v-else ref="my-modal" :title="modal_title" @hidden="$emit('modalClose')" scrollable no-close-on-backdrop no-fade
+            static size="xl">
+            <div slot="modal-footer">
+                <b-button variant="primary" @click="$refs['dummy_submit'].click()" :disabled="isLoading">{{ __('save') }}
+                    <b-spinner v-if="isLoading" small label="Spinning"></b-spinner>
+                </b-button>
+                <b-button variant="secondary" @click="hideModal">{{ __('cancel') }}</b-button>
+            </div>
 
-                        <div class="form-group">
-                            <label>{{ __('meta_keywords') }}</label>
-                            <input type="text" class="form-control" v-model="translations[language.id].meta_keywords"
-                                :placeholder="__('enter_meta_keywords')">
-                        </div>
+            <!-- Loading overlay while fetching translation data -->
+            <div v-if="isLoadingData" class="text-center p-5">
+                <b-spinner label="Loading..."></b-spinner>
+                <p class="mt-2">{{ __('loading') }}</p>
+            </div>
 
-                        <div class="form-group">
-                            <label>{{ __('schema_markup') }}
-                                <small :id="'schema_markup_' + language.id"
-                                    class="d-inline-flex mb-3 px-2 py-1 text-muted bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2">
-                                    <i class="fa fa-info-circle"></i>
-                                </small>
-                                <b-popover :target="'schema_markup_' + language.id" triggers="hover" placement="left">
-                                    <p>Schema markup, also known as structured data, is the language search engines use
-                                        to read and
-                                        understand the content on your pages. By language, we mean a semantic vocabulary
-                                        (code) that helps
-                                        search engines characterize and categorize the content of web pages. Learn more
-                                        about schema markup
-                                        and generate it for your website using the <a
-                                            href="https://www.rankranger.com/schema-markup-generator"
-                                            target="_blank">Rank Ranger Schema
-                                            Markup Generator</a></p>
-                                </b-popover>
-                            </label>
-                            <input type="text" class="form-control" v-model="translations[language.id].schema_markup"
-                                :placeholder="__('enter_schema_markup')">
-                        </div>
+            <form v-else ref="my-form" @submit.prevent="saveRecord" novalidate>
+                <div v-if="defaultLanguage">
+                    <template v-for="language in [defaultLanguage]">
+                        <div class="row">
+                            <div class="form-group" :class="{ required: language.is_default }">
+                                <label>{{ dynamicNameLabel }}</label>
+                                <i class="text-danger" v-if="language.is_default">*</i>
+                                <input type="text" class="form-control"
+                                    v-model="translations[language.id].name" :placeholder="dynamicNamePlaceholder">
+                            </div>
 
-                        <div class="form-group">
-                            <label>{{ __('meta_description') }}</label>
-                            <textarea type="text" class="form-control"
-                                v-model="translations[language.id].meta_description"
-                                :placeholder="__('enter_meta_description')" rows="4"></textarea>
-                        </div>
+                            <div class="form-group" v-if="language.is_default">
+                                <label>{{ __('image') }}</label><i class="text-danger">*</i>
+                                <p class="text-muted">{{ __('please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px') }}</p>
+                                <span v-if="error" class="error">{{ error }}</span>
 
-                        <div class="form-group" v-if="id && language.is_default">
-                            <label>{{ __('status') }}</label>
-                            <div class="col-md-9 text-left mt-1">
-                                <b-form-radio-group v-model="status" :options="[
-                                    { text: __('deactivate'), 'value': 0 },
-                                    { text: __('activate'), 'value': 1 },
-                                ]" buttons button-variant="outline-primary"></b-form-radio-group>
+                                <input type="file" name="category_image" accept="image/*" v-on:change="handleFileUpload"
+                                    ref="file_image" class="file-input" style="display: none;">
+                                <div class="file-input-div bg-gray-100" @click="triggerFileInput" @drop="dropFile"
+                                    @dragover="handleDragOver" @dragleave="handleDragLeave">
+                                    <template v-if="image && image.name !== ''">
+                                        <label>{{ __('selected_file_name') }} {{ image.name }}</label>
+                                    </template>
+                                    <template v-else>
+                                        <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
+                                        <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
+                                    </template>
+                                </div>
+                                <div class="row" v-if="image_url">
+                                    <div class="col-md-4">
+                                        <img class="custom-image" :src="image_url" title='Category Image'
+                                            alt='Category Image' />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Meta Title (Translatable - Optional) -->
+                            <div class="form-group">
+                                <label>{{ __('meta_title') }}</label>
+                                <input type="text" class="form-control" v-model="translations[language.id].meta_title"
+                                    :placeholder="__('enter_meta_title')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('meta_keywords') }}</label>
+                                <input type="text" class="form-control" v-model="translations[language.id].meta_keywords"
+                                    :placeholder="__('enter_meta_keywords')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('schema_markup') }}
+                                    <small :id="'schema_markup_' + language.id"
+                                        class="d-inline-flex mb-3 px-2 py-1 text-muted bg-secondary bg-opacity-10 border border-secondary border-opacity-10 rounded-2">
+                                        <i class="fa fa-info-circle"></i>
+                                    </small>
+                                    <b-popover :target="'schema_markup_' + language.id" triggers="hover" placement="left">
+                                        <p>Schema markup, also known as structured data, is the language search engines use
+                                            to read and
+                                            understand the content on your pages. By language, we mean a semantic vocabulary
+                                            (code) that helps
+                                            search engines characterize and categorize the content of web pages. Learn more
+                                            about schema markup
+                                            and generate it for your website using the <a
+                                                href="https://www.rankranger.com/schema-markup-generator"
+                                                target="_blank">Rank Ranger Schema
+                                                Markup Generator</a></p>
+                                    </b-popover>
+                                </label>
+                                <input type="text" class="form-control" v-model="translations[language.id].schema_markup"
+                                    :placeholder="__('enter_schema_markup')">
+                            </div>
+
+                            <div class="form-group">
+                                <label>{{ __('meta_description') }}</label>
+                                <textarea type="text" class="form-control"
+                                    v-model="translations[language.id].meta_description"
+                                    :placeholder="__('enter_meta_description')" rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group" v-if="id && language.is_default">
+                                <label>{{ __('status') }}</label>
+                                <div class="col-md-9 text-left mt-1">
+                                    <b-form-radio-group v-model="status" :options="[
+                                        { text: __('deactivate'), 'value': 0 },
+                                        { text: __('activate'), 'value': 1 },
+                                    ]" buttons button-variant="outline-primary"></b-form-radio-group>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </template>
-            </div>
+                    </template>
+                </div>
 
-            <!-- Loading state -->
-            <div v-else class="text-center p-5">
-                <b-spinner label="Loading languages..."></b-spinner>
-                <p class="mt-2">{{ __('loading_languages') }}</p>
-            </div>
-            <button ref="dummy_submit" style="display:none;"></button>
-
-
-        </form>
-    </b-modal>
+                <!-- Loading state -->
+                <div v-else class="text-center p-5">
+                    <b-spinner label="Loading languages..."></b-spinner>
+                    <p class="mt-2">{{ __('loading_languages') }}</p>
+                </div>
+                <button ref="dummy_submit" style="display:none;"></button>
+            </form>
+        </b-modal>
+    </div>
 </template>
 
 <script>
@@ -125,9 +231,17 @@ import TranslationHelper from '../../mixins/TranslationHelper.js';
 
 export default {
     props: {
+        inlineMode: {
+            type: Boolean,
+            default: false
+        },
         record: {
             type: Object,
             default: null
+        },
+        categoryLevel: {
+            type: Number,
+            default: 0
         }
     },
     data: function () {
@@ -167,8 +281,24 @@ export default {
 
     computed: {
         modal_title: function () {
-            let title = this.id ? __('edit_category') : __('add_category');
-            return title;
+            let label = 'Category';
+            if (this.categoryLevel === 1) label = 'Sub Category';
+            else if (this.categoryLevel === 2) label = 'Sub Sub Category';
+            else if (this.categoryLevel >= 3) label = 'Sub Sub Sub Category';
+            
+            return this.id ? `Edit ${label}` : `Add ${label}`;
+        },
+        dynamicNameLabel() {
+            if (this.categoryLevel === 1) return 'Sub Category Name';
+            if (this.categoryLevel === 2) return 'Sub Sub Category Name';
+            if (this.categoryLevel >= 3) return 'Sub Sub Sub Category Name';
+            return 'Category Name';
+        },
+        dynamicNamePlaceholder() {
+            if (this.categoryLevel === 1) return 'Enter Sub Category Name';
+            if (this.categoryLevel === 2) return 'Enter Sub Sub Category Name';
+            if (this.categoryLevel >= 3) return 'Enter Sub Sub Sub Category Name';
+            return 'Enter Category Name';
         },
         defaultLanguage() {
             return this.languages.find(language => Number(language.id) === Number(this.defaultLanguageId)) || null;
@@ -348,11 +478,17 @@ export default {
         },
 
         showModal() {
-            this.$refs['my-modal'].show()
+            if (!this.inlineMode && this.$refs['my-modal']) {
+                this.$refs['my-modal'].show();
+            }
         },
 
         hideModal() {
-            this.$refs['my-modal'].hide()
+            if (this.inlineMode) {
+                this.$emit('modalClose');
+            } else if (this.$refs['my-modal']) {
+                this.$refs['my-modal'].hide();
+            }
         },
 
         handleDragOver(event) {

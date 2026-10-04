@@ -515,50 +515,71 @@ class OrderApiController extends Controller
                 throw $e;
                 return CommonHelper::responseError(__('could_not_place_order_try_again'));
             }
-            if (!empty($order) && $payment_method == Transaction::$paymentTypeCod || $payment_method == Transaction::$paymentTypeWallet) {
-                try {
-                    dispatch(function () use ($order) {
-                        //push notification 
-                        CommonHelper::sendNotificationOrderStatus($order);
-                        // Send notifications to super admin (role_id=1) and sellers (role_id=3) whose items are in the order
-                        CommonHelper::sendOrderNotificationsToAdmins($order, 'new_order', $order->delivery_boy_id ?? null);
-                    })->afterResponse();
-                } catch (\Exception $e) {
-                    Log::error("Place orderNotification error :", [$e->getMessage()]);
-                }
-                try {
-
-                    Log::info("Place order send mail :", [$order]);
-                    dispatch(new SendEmailJob($order))->afterResponse();
-                } catch (\Exception $e) {
-                    Log::error("Place order Send mail error :", [$e->getMessage()]);
-                }
-
-                //Place Order Send SMS
-                try {
-                    CommonHelper::sendSmsOrderStatus($order, $order->active_status);
-                } catch (\Exception $e) {
-                    Log::error("Place order SMS error :", [$e->getMessage()]);
-                }
-            }
-
             try {
-                CommonHelper::sendLowStockNotification($updatedVariants);
-            } catch (\Exception $e) {
-                Log::channel('low_stock_mail')->info("Low stock notification error: " . $e->getMessage());
-            }
+                if (!empty($order) && ($payment_method == Transaction::$paymentTypeCod || $payment_method == Transaction::$paymentTypeWallet)) {
+                    try {
+                        dispatch(function () use ($order) {
+                            //push notification 
+                            CommonHelper::sendNotificationOrderStatus($order);
+                            // Send notifications to super admin (role_id=1) and sellers (role_id=3) whose items are in the order
+                            CommonHelper::sendOrderNotificationsToAdmins($order, 'new_order', $order->delivery_boy_id ?? null);
+                        })->afterResponse();
+                    } catch (\Throwable $e) {
+                        Log::error("Place orderNotification error :", [$e->getMessage()]);
+                    }
+                    try {
 
-            if ($payment_method == Transaction::$paymentTypeCod || $payment_method == Transaction::$paymentTypeWallet) {
-                $order_status = array();
-                $order_status['order_id'] = $order->id;
-                $order_status['order_item_id'] = 0;
-                $order_status['status'] = ($order_type == 'selfpickup') ? OrderStatusList::$selfPickupPending : OrderStatusList::$received;
-                $order_status['created_by'] = $user_id;
-                $order_status['user_type'] = OrderStatus::$userTypeUser;
-                CommonHelper::setOrderStatus($order_status);
-                return CommonHelper::responseSuccess(__('order_placed_successfully'));
-            } else {
-                return CommonHelper::responseWithData(['order_id' => $order->id]);
+                        Log::info("Place order send mail :", [$order]);
+                        dispatch(new SendEmailJob($order))->afterResponse();
+                    } catch (\Throwable $e) {
+                        Log::error("Place order Send mail error :", [$e->getMessage()]);
+                    }
+
+                    //Place Order Send SMS
+                    try {
+                        CommonHelper::sendSmsOrderStatus($order, $order->active_status);
+                    } catch (\Throwable $e) {
+                        Log::error("Place order SMS error :", [$e->getMessage()]);
+                    }
+                }
+
+                try {
+                    CommonHelper::sendLowStockNotification($updatedVariants);
+                } catch (\Throwable $e) {
+                    Log::info("Low stock notification error: " . $e->getMessage());
+                }
+
+                if ($payment_method == Transaction::$paymentTypeCod || $payment_method == Transaction::$paymentTypeWallet) {
+                    // Delete user's active cart items upon successful order placement
+                    Cart::where('user_id', $user_id)->where('save_for_later', 0)->delete();
+
+                    try {
+                        $order_status = array();
+                        $order_status['order_id'] = $order->id;
+                        $order_status['order_item_id'] = 0;
+                        $order_status['status'] = ($order_type == 'selfpickup') ? OrderStatusList::$selfPickupPending : OrderStatusList::$received;
+                        $order_status['created_by'] = $user_id;
+                        $order_status['user_type'] = OrderStatus::$userTypeUser;
+                        CommonHelper::setOrderStatus($order_status);
+                    } catch (\Throwable $e) {
+                        Log::error("Set order status error :", [$e->getMessage()]);
+                    }
+
+                    $orderData = [
+                        'order_id' => $order->id,
+                    ];
+                    return CommonHelper::responseWithData($orderData, __('order_placed_successfully'));
+                } else {
+                    return CommonHelper::responseWithData(['order_id' => $order->id]);
+                }
+            } catch (\Throwable $e) {
+                Log::error("Post-commit place order processing error :", [$e->getMessage()]);
+                // Order was already committed to DB, ensure active cart items are cleared and return success
+                Cart::where('user_id', $user_id)->where('save_for_later', 0)->delete();
+                $orderData = [
+                    'order_id' => $order->id ?? 0,
+                ];
+                return CommonHelper::responseWithData($orderData, __('order_placed_successfully'));
             }
         } catch (\Exception $e) {
             Log::error("Place order error :", [$e->getMessage()]);

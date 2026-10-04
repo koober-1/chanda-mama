@@ -311,6 +311,8 @@ class ProductApisController extends Controller
             'p.return_status',
             'p.cancelable_status',
             'p.till_status',
+            'pc.sub_category_id',
+            'pc.sub_sub_category_id',
         ];
 
         if ($groupByProduct) {
@@ -356,7 +358,11 @@ class ProductApisController extends Controller
         $products = DB::table('products as p')->select($selectColumns)
             ->join('sellers as s', 'p.seller_id', '=', 's.id')
             ->join('product_variants as pv', 'p.id', '=', 'pv.product_id')
-            ->join('units as u', 'pv.stock_unit_id', '=', 'u.id');
+            ->join('units as u', 'pv.stock_unit_id', '=', 'u.id')
+            ->leftJoin('product_category as pc', function ($join) {
+                $join->on('p.id', '=', 'pc.product_id')
+                     ->on('p.category_id', '=', 'pc.category_id');
+            });
 
         // Add where conditions if any
         if (!empty($where)) {
@@ -438,7 +444,9 @@ class ProductApisController extends Controller
                 'p.made_in',
                 'p.return_status',
                 'p.cancelable_status',
-                'p.till_status'
+                'p.till_status',
+                'pc.sub_category_id',
+                'pc.sub_sub_category_id'
             )->orderBy('p.id', 'desc');
         } else {
             $total = $products->count();
@@ -469,23 +477,9 @@ class ProductApisController extends Controller
                     $product->translations = [];
                 }
 
-                $categoryTrail = [];
-                $category = $categoryMap->get($product->category_id ?? null);
-
-                while ($category) {
-                    array_unshift($categoryTrail, $category);
-
-                    if (empty($category->parent_id) || (int) $category->parent_id === 0) {
-                        break;
-                    }
-
-                    $category = $categoryMap->get($category->parent_id);
-                }
-
-                $product->category_name = $categoryTrail[0]->name ?? '-';
-                $product->subcategory_name = $categoryTrail[1]->name ?? '-';
-                $product->sub_subcategory_name = $categoryTrail[2]->name ?? '-';
-                $product->sub_sub_subcategory_name = $categoryTrail[3]->name ?? '-';
+                $product->category_name = $categoryMap->get($product->category_id)?->name ?? '-';
+                $product->subcategory_name = $categoryMap->get($product->sub_category_id)?->name ?? '-';
+                $product->sub_subcategory_name = $categoryMap->get($product->sub_sub_category_id)?->name ?? '-';
 
                 return $product;
             });
@@ -923,6 +917,8 @@ class ProductApisController extends Controller
 
     private function normalizeProductVariantStockStatus(Request $request): void
     {
+        $hasAnyStock = false;
+
         if ($request->input('type') === 'packet') {
             $stocks = $request->input('packet_stock', []);
             $statuses = $request->input('packet_status', []);
@@ -930,19 +926,23 @@ class ProductApisController extends Controller
             foreach ($stocks as $index => $stock) {
                 if ((int) $request->input('is_unlimited_stock') === 0 && (float) $stock <= 0) {
                     $statuses[$index] = 0;
-                } elseif (!isset($statuses[$index]) || $statuses[$index] === '') {
+                } else {
                     $statuses[$index] = 1;
+                    $hasAnyStock = true;
                 }
             }
 
             $request->merge(['packet_status' => $statuses]);
+            $request->merge(['status' => $hasAnyStock ? 1 : 0]);
         }
 
         if ($request->input('type') === 'loose') {
             $looseStock = $request->input('loose_stock');
 
-            if ((int) $request->input('is_unlimited_stock') === 0 && (float) $looseStock <= 0 && !$request->filled('status')) {
+            if ((int) $request->input('is_unlimited_stock') === 0 && (float) $looseStock <= 0) {
                 $request->merge(['status' => 0]);
+            } else {
+                $request->merge(['status' => 1]);
             }
         }
     }
@@ -1073,7 +1073,7 @@ class ProductApisController extends Controller
             foreach ($request->packet_measurement as $index => $item) {
                 $data = array();
                 $data['variant_name'] = $request->packet_variant_name[$index] ?? null;
-                $data['color_variant'] = $request->packet_color_variant[$index] ?? null;
+                $data['color_variant'] = $this->formatColorVariant($request->packet_color_variant[$index] ?? null, $request->packet_color_name[$index] ?? null);
                 $data['expiry_date_from'] = $request->packet_expiry_date_from[$index] ?? null;
                 $data['expiry_date_to'] = $request->packet_expiry_date_to[$index] ?? null;
                 $data['measurement'] = $request->packet_measurement[$index];
@@ -1089,7 +1089,7 @@ class ProductApisController extends Controller
             foreach ($request->loose_measurement as $index => $item) {
                 $data = array();
                 $data['variant_name'] = $request->loose_variant_name[$index] ?? null;
-                $data['color_variant'] = $request->loose_color_variant[$index] ?? null;
+                $data['color_variant'] = $this->formatColorVariant($request->loose_color_variant[$index] ?? null, $request->loose_color_name[$index] ?? null);
                 $data['expiry_date_from'] = $request->loose_expiry_date_from[$index] ?? null;
                 $data['expiry_date_to'] = $request->loose_expiry_date_to[$index] ?? null;
                 $data['measurement'] = $request->loose_measurement[$index];
@@ -1147,6 +1147,7 @@ class ProductApisController extends Controller
             $product->total_allowed_quantity = $max_allowed_quantity;
             $product->description = $request->description;
             $product->highlights = $request->highlights;
+            $product->has_variant = $request->has_variant ?? (count($variations) > 1 ? 1 : 0);
             $product->is_unlimited_stock = $request->is_unlimited_stock;
             $require_products_approval = Seller::where('id', $product->seller_id)->pluck('require_products_approval')->first();
             if ($require_products_approval == 1) {
@@ -1154,7 +1155,7 @@ class ProductApisController extends Controller
             } elseif ($require_products_approval == 0) {
                 $product->is_approved = 1;
             }
-            $product->status = 1;
+            $product->status = $request->status ?? 1;
             $product->brand_id = $request->brand_id;
             $product->fssai_lic_no = $request->fssai_lic_no ?? "";
             if ($request->fssai_lic_no != null) {
@@ -1201,7 +1202,7 @@ class ProductApisController extends Controller
                     $data['product_id'] = $product->id;
                     $data['type'] = $request->type;
                     $data['variant_name'] = $request->packet_variant_name[$index] ?? null;
-                    $data['color_variant'] = $request->packet_color_variant[$index] ?? null;
+                    $data['color_variant'] = $this->formatColorVariant($request->packet_color_variant[$index] ?? null, $request->packet_color_name[$index] ?? null);
                     $data['expiry_date_from'] = $request->packet_expiry_date_from[$index] ?? null;
                     $data['expiry_date_to'] = $request->packet_expiry_date_to[$index] ?? null;
                     $data['measurement'] = $request->packet_measurement[$index];
@@ -1235,7 +1236,7 @@ class ProductApisController extends Controller
                     $data['product_id'] = $product->id;
                     $data['type'] = $request->type;
                     $data['variant_name'] = $request->loose_variant_name[$index] ?? null;
-                    $data['color_variant'] = $request->loose_color_variant[$index] ?? null;
+                    $data['color_variant'] = $this->formatColorVariant($request->loose_color_variant[$index] ?? null, $request->loose_color_name[$index] ?? null);
                     $data['expiry_date_from'] = $request->loose_expiry_date_from[$index] ?? null;
                     $data['expiry_date_to'] = $request->loose_expiry_date_to[$index] ?? null;
                     $looseStock = $request->loose_stock ?? 0;
@@ -1301,7 +1302,7 @@ class ProductApisController extends Controller
             // Handle multi-category support
             $additionalCategoryIds = [];
             if ($request->has('additional_category_ids')) {
-                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) {
+                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) use ($request) {
                     return $value !== '' && is_numeric($value) && $value != $request->category_id;
                 });
             }
@@ -1313,7 +1314,22 @@ class ProductApisController extends Controller
             }));
 
             if (!empty($allCategoryIds)) {
-                $product->categories()->sync($allCategoryIds);
+                $syncData = [];
+                foreach ($allCategoryIds as $catId) {
+                    // Only attach sub_category_id and sub_sub_category_id to the primary category record
+                    if ($catId == $request->category_id) {
+                        $syncData[$catId] = [
+                            'sub_category_id' => $request->sub_category_id ?? null,
+                            'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
+                        ];
+                    } else {
+                        $syncData[$catId] = [
+                            'sub_category_id' => null,
+                            'sub_sub_category_id' => null,
+                        ];
+                    }
+                }
+                $product->categories()->sync($syncData);
             } else {
                 // If no categories, clear any existing ones
                 $product->categories()->detach();
@@ -1430,6 +1446,17 @@ class ProductApisController extends Controller
         if ($product->relationLoaded('category') && $product->category) {
             $product->category->makeHidden(['catActiveChilds', 'cat_active_childs']);
         }
+
+        $categoryTrail = [];
+        $cat = Category::with('translations')->find($product->category_id);
+        while ($cat) {
+            array_unshift($categoryTrail, $cat);
+            if (empty($cat->parent_id) || (int) $cat->parent_id === 0) {
+                break;
+            }
+            $cat = Category::with('translations')->find($cat->parent_id);
+        }
+        $product->category_trail = $categoryTrail;
 
         if (isset($product->description)) {
             $product->description = CommonHelper::fixAdminImagePaths($product->description);
@@ -1624,7 +1651,7 @@ class ProductApisController extends Controller
             foreach ($request->packet_measurement as $index => $item) {
                 $data = array();
                 $data['variant_name'] = $request->packet_variant_name[$index] ?? null;
-                $data['color_variant'] = $request->packet_color_variant[$index] ?? null;
+                $data['color_variant'] = $this->formatColorVariant($request->packet_color_variant[$index] ?? null, $request->packet_color_name[$index] ?? null);
                 $data['expiry_date_from'] = $request->packet_expiry_date_from[$index] ?? null;
                 $data['expiry_date_to'] = $request->packet_expiry_date_to[$index] ?? null;
                 $data['measurement'] = $request->packet_measurement[$index];
@@ -1642,7 +1669,7 @@ class ProductApisController extends Controller
                 }
                 $data = array();
                 $data['variant_name'] = $request->loose_variant_name[$index] ?? null;
-                $data['color_variant'] = $request->loose_color_variant[$index] ?? null;
+                $data['color_variant'] = $this->formatColorVariant($request->loose_color_variant[$index] ?? null, $request->loose_color_name[$index] ?? null);
                 $data['expiry_date_from'] = $request->loose_expiry_date_from[$index] ?? null;
                 $data['expiry_date_to'] = $request->loose_expiry_date_to[$index] ?? null;
                 $data['measurement'] = $request->loose_measurement[$index];
@@ -1717,7 +1744,9 @@ class ProductApisController extends Controller
             $product->total_allowed_quantity = $max_allowed_quantity;
             $product->description = $request->description;
             $product->highlights = $request->highlights;
+            $product->has_variant = $request->has_variant ?? (count($variations) > 1 ? 1 : 0);
             $product->is_unlimited_stock = $request->is_unlimited_stock;
+            $product->status = $request->status ?? 1;
             if (isset($request->is_approved)) {
                 $product->is_approved = $request->is_approved;
             }
@@ -1779,7 +1808,7 @@ class ProductApisController extends Controller
                     $variant->product_id = $product->id;
                     $variant->type = $request->type;
                     $variant->variant_name = $request->packet_variant_name[$index] ?? null;
-                    $variant->color_variant = $request->packet_color_variant[$index] ?? null;
+                    $variant->color_variant = $this->formatColorVariant($request->packet_color_variant[$index] ?? null, $request->packet_color_name[$index] ?? null);
                     $variant->expiry_date_from = $request->packet_expiry_date_from[$index] ?? null;
                     $variant->expiry_date_to = $request->packet_expiry_date_to[$index] ?? null;
                     $variant->measurement = $request->packet_measurement[$index];
@@ -1809,7 +1838,7 @@ class ProductApisController extends Controller
                     $variant->product_id = $product->id;
                     $variant->type = $request->type;
                     $variant->variant_name = $request->loose_variant_name[$index] ?? null;
-                    $variant->color_variant = $request->loose_color_variant[$index] ?? null;
+                    $variant->color_variant = $this->formatColorVariant($request->loose_color_variant[$index] ?? null, $request->loose_color_name[$index] ?? null);
                     $variant->expiry_date_from = $request->loose_expiry_date_from[$index] ?? null;
                     $variant->expiry_date_to = $request->loose_expiry_date_to[$index] ?? null;
                     $looseStock = $request->loose_stock ?? 0;
@@ -1876,7 +1905,7 @@ class ProductApisController extends Controller
             // Handle multi-category support
             $additionalCategoryIds = [];
             if ($request->has('additional_category_ids')) {
-                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) {
+                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) use ($request) {
                     return $value !== '' && is_numeric($value) && $value != $request->category_id;
                 });
             }
@@ -1888,7 +1917,22 @@ class ProductApisController extends Controller
             }));
 
             if (!empty($allCategoryIds)) {
-                $product->categories()->sync($allCategoryIds);
+                $syncData = [];
+                foreach ($allCategoryIds as $catId) {
+                    // Only attach sub_category_id and sub_sub_category_id to the primary category record
+                    if ($catId == $request->category_id) {
+                        $syncData[$catId] = [
+                            'sub_category_id' => $request->sub_category_id ?? null,
+                            'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
+                        ];
+                    } else {
+                        $syncData[$catId] = [
+                            'sub_category_id' => null,
+                            'sub_sub_category_id' => null,
+                        ];
+                    }
+                }
+                $product->categories()->sync($syncData);
             } else {
                 // If no categories, clear any existing ones
                 $product->categories()->detach();
@@ -4182,5 +4226,161 @@ class ProductApisController extends Controller
             'tax_name' => '',
             'tax_number' => '',
         ]);
+    }
+
+    /*------------------Google Gemini AI Content Generation---------------*/
+    public function googleGeminiAI(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_context' => 'required', // Can be array or JSON string
+            'custom_prompt' => 'nullable|string',
+            'source' => 'nullable|string|in:app,web',
+        ]);
+
+        if ($validator->fails()) {
+            return CommonHelper::responseError($validator->errors()->first());
+        }
+
+        try {
+            $productContext = is_string($request->product_context) 
+                ? json_decode($request->product_context, true) 
+                : $request->product_context;
+                
+            if (!is_array($productContext)) {
+                return CommonHelper::responseError('Invalid product context format.');
+            }
+
+            // Build the prompt using the specific Product Description Service
+            $productDescService = new \App\Services\ProductDescriptionService();
+            $prompt = $productDescService->buildPrompt($productContext, $request->custom_prompt);
+
+            // Call the generic Gemini AI Service
+            $aiService = new \App\Services\GeminiAIService();
+            $productData = $aiService->generateContent(
+                $prompt,
+                $request->source ?? 'web'
+            );
+
+            // Success response
+            return CommonHelper::responseWithData($productData);
+        } catch (\Exception $e) {
+            Log::error('Gemini Product AI Error: ' . $e->getMessage());
+            return CommonHelper::responseError('AI generation failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Format color variant to ensure it contains both color name and hex code (e.g. "Olive (#2EA117)" or "Red (#FF0000)").
+     *
+     * @param string|null $color
+     * @param string|null $customName
+     * @return string|null
+     */
+    private function formatColorVariant(?string $color, ?string $customName = null): ?string
+    {
+        $customName = $customName ? trim($customName) : '';
+        if (empty($color) && empty($customName)) {
+            return null;
+        }
+
+        $color = trim((string)$color);
+        if ($color === '__custom__') {
+            $color = '';
+        }
+
+        // 1. If it already matches "Name (#HEX)", normalize format
+        if (preg_match('/^(.+?)\s*\((#[0-9A-Fa-f]{3,6})\)$/', $color, $matches)) {
+            $name = trim($matches[1]);
+            $hex = strtoupper(trim($matches[2]));
+            if (!empty($customName)) {
+                $name = $customName;
+            }
+            return "{$name} ({$hex})";
+        }
+
+        // Color palette preset map
+        $presets = [
+            '#000000' => 'Black',
+            '#FFFFFF' => 'White',
+            '#FAF9F6' => 'Off White',
+            '#808080' => 'Grey',
+            '#D3D3D3' => 'Light Grey',
+            '#5A5A5A' => 'Dark Grey',
+            '#36454F' => 'Charcoal',
+            '#C0C0C0' => 'Silver',
+            '#FF0000' => 'Red',
+            '#DC143C' => 'Crimson',
+            '#800000' => 'Maroon',
+            '#800020' => 'Burgundy',
+            '#722F37' => 'Wine',
+            '#FFC0CB' => 'Pink',
+            '#F4C2C2' => 'Baby Pink',
+            '#FF66CC' => 'Rose Pink',
+            '#FF00FF' => 'Magenta',
+            '#FF69B4' => 'Hot Pink',
+            '#FFE5B4' => 'Peach',
+            '#FF7F50' => 'Coral',
+            '#FFA500' => 'Orange',
+            '#B7410E' => 'Rust',
+            '#FFFF00' => 'Yellow',
+            '#FFDB58' => 'Mustard',
+            '#FFF44F' => 'Lemon Yellow',
+            '#FFD700' => 'Gold',
+            '#0000FF' => 'Blue',
+            '#000080' => 'Navy Blue',
+            '#4169E1' => 'Royal Blue',
+            '#87CEEB' => 'Sky Blue',
+            '#89CFF0' => 'Baby Blue',
+            '#008080' => 'Teal',
+            '#00FFFF' => 'Cyan / Aqua',
+            '#008000' => 'Green',
+            '#006400' => 'Dark Green',
+            '#556B2F' => 'Olive Green',
+            '#98FF98' => 'Mint Green',
+            '#32CD32' => 'Lime Green',
+            '#004225' => 'Bottle Green',
+            '#800080' => 'Purple',
+            '#E6E6FA' => 'Lavender',
+            '#8F00FF' => 'Violet',
+            '#8B4513' => 'Brown',
+            '#3D1C02' => 'Chocolate Brown',
+            '#D2B48C' => 'Tan',
+            '#F5F5DC' => 'Beige',
+            '#FFFDD0' => 'Cream',
+            '#C3B091' => 'Khaki',
+            '#B87333' => 'Copper',
+            '#CD7F32' => 'Bronze',
+            '#4A90E2' => 'Multi Color',
+        ];
+
+        // 2. If color contains a HEX code
+        if (preg_match('/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/', $color, $hexMatch)) {
+            $hex = strtoupper($hexMatch[0]);
+            if (!empty($customName)) {
+                return "{$customName} ({$hex})";
+            }
+            foreach ($presets as $presetHex => $presetName) {
+                if (strtoupper($presetHex) === $hex) {
+                    return "{$presetName} ({$hex})";
+                }
+            }
+            return "Custom Color ({$hex})";
+        }
+
+        // 3. Check if color or customName is a preset name
+        $checkName = !empty($color) ? $color : $customName;
+        $lowerColor = strtolower(str_replace('_', ' ', $checkName));
+        foreach ($presets as $presetHex => $presetName) {
+            if (strtolower($presetName) === $lowerColor) {
+                return "{$presetName} (" . strtoupper($presetHex) . ")";
+            }
+        }
+
+        // 4. If customName is provided without HEX code
+        if (!empty($customName)) {
+            return $customName;
+        }
+
+        return $color ?: null;
     }
 }

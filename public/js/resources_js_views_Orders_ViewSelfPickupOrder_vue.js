@@ -11,9 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -29,7 +28,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return _defineProperty({
-      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user,
+      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user,
       isLoading: false,
       isLoadingUstatus: false,
       isLoadingCancel: false,
@@ -149,7 +148,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     getSelfPickupOrderStatus: function getSelfPickupOrderStatus() {
       var _this = this;
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/order_statuses/self_pickup').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/order_statuses/self_pickup').then(function (response) {
         _this.isLoading = false;
         var data = response.data;
         var statusesToRemoveIds = [7, 8];
@@ -172,12 +171,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var day = date.getDate().toString().padStart(2, '0');
       var month = (date.getMonth() + 1).toString().padStart(2, '0');
       var year = date.getFullYear();
-      return "".concat(day, "-").concat(month, "-").concat(year);
+      return "".concat(month, "/").concat(day, "/").concat(year);
     },
     getOrder: function getOrder() {
       var _this2 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders/view/' + this.id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/orders/view/' + this.id).then(function (response) {
         _this2.isLoading = false;
         var data = response.data;
         if (data.status === 1) {
@@ -256,7 +255,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             };
           }
           apiUrl = _this3.$apiUrl + '/orders/update_self_pickup_status';
-          axios__WEBPACK_IMPORTED_MODULE_0___default().post(apiUrl, postData).then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(apiUrl, postData).then(function (response) {
             _this3.isLoadingUstatus = false;
             var data = response.data;
             if (data.status === 1) {
@@ -285,7 +284,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var postData = {
         order_id: this.id
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+      (0,axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
         url: this.$apiUrl + '/orders/invoice_download',
         method: 'post',
         responseType: 'blob',
@@ -389,7 +388,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               ids: ids,
               status_id: _this6.status_id
             };
-            axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this6.$apiUrl + '/orders/update_items_status', postData).then(function (response) {
+            axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(_this6.$apiUrl + '/orders/update_items_status', postData).then(function (response) {
               _this6.isLoading = false;
               var data = response.data;
               if (data.status === 1) {
@@ -480,7 +479,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             order_item_id: item.id,
             cancellation_reason: reason
           };
-          return axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this7.$apiUrl + '/orders/cancel_order_item', postData).then(function (response) {
+          return axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(_this7.$apiUrl + '/orders/cancel_order_item', postData).then(function (response) {
             return response.data;
           })["catch"](function (error) {
             _this7.$swal.showValidationMessage('Something went wrong!');
@@ -511,8 +510,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -909,7 +908,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.th-width[data-v-794f4f14] {\n    width: 170px;\n    background-color: #F8F9FA !important;\n}\n.card[data-v-794f4f14] {\n    border: 1px solid #EDEDED !important;\n    border-radius: 12px !important;\n    overflow: hidden;\n    margin-bottom: 24px;\n}\n.card-header[data-v-794f4f14] {\n    border-bottom: 1px solid #EDEDED !important;\n    background-color: #FFFFFF !important;\n    padding: 1rem 1.25rem !important;\n}\n.card-body[data-v-794f4f14] {\n    padding: 1.5rem !important;\n}\n.table-responsive[data-v-794f4f14] {\n    border: none !important;\n    background: transparent !important;\n}\n.table[data-v-794f4f14] {\n    margin-bottom: 0 !important;\n}\n.table-bordered[data-v-794f4f14],\n.table-bordered th[data-v-794f4f14],\n.table-bordered td[data-v-794f4f14] {\n    border: 1px solid #EDEDED !important;\n}\n.table thead th[data-v-794f4f14] {\n    background-color: #F8F9FA !important;\n    border-bottom-width: 1px !important;\n}\n.cancel-item-btn[data-v-794f4f14] {\n    top: 5px;\n    right: 5px;\n    z-index: 2;\n    width: 28px;\n    height: 28px;\n    padding: 0;\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    opacity: 0.7;\n    transition: opacity 0.2s;\n}\n.cancel-item-btn[data-v-794f4f14]:hover {\n    opacity: 1;\n}\n\n/* Dark Mode Styles */\nbody.theme-dark .card[data-v-794f4f14] {\n    background-color: #1e293b !important;\n    border-color: #334155 !important;\n}\nbody.theme-dark .card-header[data-v-794f4f14] {\n    background-color: #1e293b !important;\n    border-bottom-color: #334155 !important;\n}\nbody.theme-dark .card-header h4[data-v-794f4f14] {\n    color: #f1f5f9 !important;\n}\nbody.theme-dark .table-bordered[data-v-794f4f14],\nbody.theme-dark .table-bordered th[data-v-794f4f14],\nbody.theme-dark .table-bordered td[data-v-794f4f14] {\n    border-color: #334155 !important;\n    background-color: #1e293b !important;\n    color: #f1f5f9 !important;\n}\nbody.theme-dark .th-width[data-v-794f4f14] {\n    background-color: #334155 !important;\n}\nbody.theme-dark .table thead th[data-v-794f4f14] {\n    background-color: #334155 !important;\n    color: #f1f5f9 !important;\n}\nbody.theme-dark h4[data-v-794f4f14],\nbody.theme-dark b[data-v-794f4f14] {\n    color: #f1f5f9 !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.th-width[data-v-794f4f14] {\r\n    width: 170px;\r\n    background-color: #F8F9FA !important;\n}\n.card[data-v-794f4f14] {\r\n    border: 1px solid #EDEDED !important;\r\n    border-radius: 12px !important;\r\n    overflow: hidden;\r\n    margin-bottom: 24px;\n}\n.card-header[data-v-794f4f14] {\r\n    border-bottom: 1px solid #EDEDED !important;\r\n    background-color: #FFFFFF !important;\r\n    padding: 1rem 1.25rem !important;\n}\n.card-body[data-v-794f4f14] {\r\n    padding: 1.5rem !important;\n}\n.table-responsive[data-v-794f4f14] {\r\n    border: none !important;\r\n    background: transparent !important;\n}\n.table[data-v-794f4f14] {\r\n    margin-bottom: 0 !important;\n}\n.table-bordered[data-v-794f4f14],\r\n.table-bordered th[data-v-794f4f14],\r\n.table-bordered td[data-v-794f4f14] {\r\n    border: 1px solid #EDEDED !important;\n}\n.table thead th[data-v-794f4f14] {\r\n    background-color: #F8F9FA !important;\r\n    border-bottom-width: 1px !important;\n}\n.cancel-item-btn[data-v-794f4f14] {\r\n    top: 5px;\r\n    right: 5px;\r\n    z-index: 2;\r\n    width: 28px;\r\n    height: 28px;\r\n    padding: 0;\r\n    border-radius: 50%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    opacity: 0.7;\r\n    transition: opacity 0.2s;\n}\n.cancel-item-btn[data-v-794f4f14]:hover {\r\n    opacity: 1;\n}\r\n\r\n/* Dark Mode Styles */\nbody.theme-dark .card[data-v-794f4f14] {\r\n    background-color: #1e293b !important;\r\n    border-color: #334155 !important;\n}\nbody.theme-dark .card-header[data-v-794f4f14] {\r\n    background-color: #1e293b !important;\r\n    border-bottom-color: #334155 !important;\n}\nbody.theme-dark .card-header h4[data-v-794f4f14] {\r\n    color: #f1f5f9 !important;\n}\nbody.theme-dark .table-bordered[data-v-794f4f14],\r\nbody.theme-dark .table-bordered th[data-v-794f4f14],\r\nbody.theme-dark .table-bordered td[data-v-794f4f14] {\r\n    border-color: #334155 !important;\r\n    background-color: #1e293b !important;\r\n    color: #f1f5f9 !important;\n}\nbody.theme-dark .th-width[data-v-794f4f14] {\r\n    background-color: #334155 !important;\n}\nbody.theme-dark .table thead th[data-v-794f4f14] {\r\n    background-color: #334155 !important;\r\n    color: #f1f5f9 !important;\n}\nbody.theme-dark h4[data-v-794f4f14],\r\nbody.theme-dark b[data-v-794f4f14] {\r\n    color: #f1f5f9 !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1008,8 +1007,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewSelfPickupOrder_vue_vue_type_template_id_794f4f14_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewSelfPickupOrder_vue_vue_type_template_id_794f4f14_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewSelfPickupOrder_vue_vue_type_template_id_794f4f14_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewSelfPickupOrder_vue_vue_type_template_id_794f4f14_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ViewSelfPickupOrder_vue_vue_type_template_id_794f4f14_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ViewSelfPickupOrder.vue?vue&type=template&id=794f4f14&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Orders/ViewSelfPickupOrder.vue?vue&type=template&id=794f4f14&scoped=true");
 

@@ -142,11 +142,28 @@
                                                     <span class='badge bg-success'
                                                         v-if="record.cancelable_status === 1">{{ __('allowed') }}</span>
                                                 </td>
-                                                <th class="th-width">{{ __('category') }}</th>
+                                                <th class="th-width">Has Variant</th>
                                                 <td>
-                                                    <template v-if="translatedRecord && translatedRecord.category">
-                                                        {{ translatedRecord.category.name }}
-                                                    </template>
+                                                    <span v-if="record.has_variant == 1" class="badge bg-success">Yes</span>
+                                                    <span v-else class="badge bg-danger">No</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="th-width">{{ __('category') }}</th>
+                                                <td colspan="3">
+                                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                                        <div v-if="primaryCategoryName">
+                                                            <i class="fa fa-folder text-primary"></i> <b>{{ primaryCategoryName }}</b>
+                                                        </div>
+                                                        <div v-if="subCategoryNames.length">
+                                                            <i class="fa fa-level-up-alt text-secondary" style="transform: rotate(90deg); margin-left: 10px;"></i>
+                                                            <span class="text-secondary" style="font-size: 0.85em;">{{ subCategoryNames.join(', ') }}</span>
+                                                        </div>
+                                                        <div v-if="subSubCategoryNames.length">
+                                                            <i class="fa fa-level-up-alt text-muted" style="transform: rotate(90deg); margin-left: 20px;"></i>
+                                                            <span class="text-muted" style="font-size: 0.8em;">{{ subSubCategoryNames.join(', ') }}</span>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -197,10 +214,10 @@
 
                                             <tr>
                                                 <th class="th-width">{{ __('product_name') }}</th>
-                                                <th class="th-width">{{ __('variant_id') }}</th>
+                                                <th class="th-width">Variant Name</th>
                                                 <th class="th-width">{{ __('measurement') }}</th>
                                                 <th class="th-width">{{ __('stock') }}</th>
-                                                <th class="th-width">{{ __('price') }}({{ $currency }})</th>
+                                                <th class="th-width">MRP({{ $currency }})</th>
                                                 <th class="th-width">{{ __('discounted_price') }}({{ $currency }})</th>
                                             </tr>
                                             <tr>
@@ -213,7 +230,7 @@
                                                         {{ record.name + " " + variant.measurement }}
                                                     </template>
                                                 </td>
-                                                <td>{{ variant.id }}</td>
+                                                <td>{{ variant.variant_name || '-' }}</td>
                                                 <td>
                                                     <template v-if="variant.unit">
                                                         {{ variant.measurement + " " + variant.unit.short_code }}
@@ -337,7 +354,52 @@ export default {
                 }
             }
 
+            // Category trail
+            if (this.record.category_trail) {
+                translated.category_trail = this.record.category_trail.map(cat => {
+                    const translatedCat = { ...cat };
+                    const catTr = pickTranslation(cat.translations);
+                    if (catTr && catTr.name && catTr.name.trim() !== '') {
+                        translatedCat.name = catTr.name;
+                    }
+                    return translatedCat;
+                });
+            }
+
+            // Categories (multi-category)
+            if (this.record.categories) {
+                translated.categories = this.record.categories.map(cat => {
+                    const translatedCat = { ...cat };
+                    const catTr = pickTranslation(cat.translations);
+                    if (catTr && catTr.name && catTr.name.trim() !== '') {
+                        translatedCat.name = catTr.name;
+                    }
+                    return translatedCat;
+                });
+            }
+
             return translated;
+        },
+        primaryCategoryName() {
+            if (!this.translatedRecord || !this.translatedRecord.categories) return '';
+            const cats = this.translatedRecord.categories;
+            const roots = cats.filter(c => !c.parent_id || parseInt(c.parent_id) === 0);
+            return roots.length ? roots.map(c => c.name).join(', ') : '';
+        },
+        subCategoryNames() {
+            if (!this.translatedRecord || !this.translatedRecord.categories) return [];
+            const cats = this.translatedRecord.categories;
+            const rootIds = cats.filter(c => !c.parent_id || parseInt(c.parent_id) === 0).map(c => c.id);
+            const subs = cats.filter(c => rootIds.includes(parseInt(c.parent_id)));
+            return subs.map(c => c.name);
+        },
+        subSubCategoryNames() {
+            if (!this.translatedRecord || !this.translatedRecord.categories) return [];
+            const cats = this.translatedRecord.categories;
+            const rootIds = cats.filter(c => !c.parent_id || parseInt(c.parent_id) === 0).map(c => c.id);
+            const subIds = cats.filter(c => rootIds.includes(parseInt(c.parent_id))).map(c => c.id);
+            const subSubs = cats.filter(c => subIds.includes(parseInt(c.parent_id)));
+            return subSubs.map(c => c.name);
         }
     },
     created: function () {

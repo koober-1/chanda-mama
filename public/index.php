@@ -1,7 +1,6 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization,x-access-key');
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -9,6 +8,12 @@ use Illuminate\Http\Request;
 ini_set('max_execution_time', 180000); 
 ini_set('upload_max_filesize ', 180000); 
 ini_set('post_max_size ', 180000); 
+
+if (!headers_sent()) {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization,x-access-key');
+}
 
 define('STDIN',fopen("php://stdin","r"));
 define('LARAVEL_START', microtime(true));

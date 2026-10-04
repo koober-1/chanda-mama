@@ -11,8 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -42,7 +41,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     checkSystemRegister: function checkSystemRegister() {
       var _this = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/store_settings/purchase_code_updater').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.$apiUrl + '/store_settings/purchase_code_updater').then(function (response) {
         console.log(response.data);
         if (response.data == 1) {
           _this.checkSystemUpdate();
@@ -51,7 +50,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     checkSystemUpdate: function checkSystemUpdate() {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$baseUrl + '/updater.check').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.$baseUrl + '/updater.check').then(function (response) {
         var result = JSON.stringify(response.data);
         _this2.updaterResult = JSON.parse(result);
       });
@@ -70,7 +69,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           _this3.isLoading = true;
-          axios__WEBPACK_IMPORTED_MODULE_0___default().get(_this3.$baseUrl + "/updater.update").then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(_this3.$baseUrl + "/updater.update").then(function (response) {
             if (response != '') {
               _this3.showMessage("success", "Congratulation System Updated Successfully");
               _this3.checkSystemUpdate();
@@ -100,8 +99,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -209,7 +208,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.page-content-wrapper[data-v-2fc7d8ec] {\n  min-height: calc(95vh - 200px);\n  display: flex;\n  flex-direction: column;\n}\n.page-content[data-v-2fc7d8ec] {\n  flex: 1;\n  padding-bottom: 2rem;\n}\n.card[data-v-2fc7d8ec] {\n  margin-bottom: 2rem;\n}\n\n/* Ensure proper spacing for footer */\n@media (min-height: 600px) {\n.page-content-wrapper[data-v-2fc7d8ec] {\n    min-height: calc(95vh - 150px);\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.page-content-wrapper[data-v-2fc7d8ec] {\r\n  min-height: calc(95vh - 200px);\r\n  display: flex;\r\n  flex-direction: column;\n}\n.page-content[data-v-2fc7d8ec] {\r\n  flex: 1;\r\n  padding-bottom: 2rem;\n}\n.card[data-v-2fc7d8ec] {\r\n  margin-bottom: 2rem;\n}\r\n\r\n/* Ensure proper spacing for footer */\n@media (min-height: 600px) {\n.page-content-wrapper[data-v-2fc7d8ec] {\r\n    min-height: calc(95vh - 150px);\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -308,8 +307,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SystemUpdater_vue_vue_type_template_id_2fc7d8ec_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SystemUpdater_vue_vue_type_template_id_2fc7d8ec_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SystemUpdater_vue_vue_type_template_id_2fc7d8ec_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SystemUpdater_vue_vue_type_template_id_2fc7d8ec_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_SystemUpdater_vue_vue_type_template_id_2fc7d8ec_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SystemUpdater.vue?vue&type=template&id=2fc7d8ec&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Setting/SystemUpdater.vue?vue&type=template&id=2fc7d8ec&scoped=true");
 

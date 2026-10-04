@@ -13,9 +13,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue2_dropzone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-dropzone */ "./node_modules/vue2-dropzone/dist/vue2Dropzone.js");
 /* harmony import */ var vue2_dropzone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue2_dropzone__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -31,7 +30,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   },
   data: function data() {
     return {
-      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_2__["default"].user,
+      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user,
       seller_id: 0,
       dropzoneOptions: {
         url: this.$apiUrl + '/media/save',
@@ -46,7 +45,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         uploadMultiple: true,
         headers: {
           "My-Awesome-Header": "header value",
-          "Authorization": 'Bearer ' + _Auth_js__WEBPACK_IMPORTED_MODULE_2__["default"].token
+          "Authorization": 'Bearer ' + _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].token
         },
         acceptedFiles: 'image/jpeg,image/png,image/jpg,image/gif,image/webp',
         // Specify allowed image formats
@@ -160,7 +159,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     getMedia: function getMedia() {
       var _this = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get(this.$apiUrl + '/media').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(this.$apiUrl + '/media').then(function (response) {
         _this.media = response.data.data;
         _this.totalRows = _this.media.length;
         _this.isLoading = false;
@@ -211,7 +210,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           var postData = {
             id: id
           };
-          axios__WEBPACK_IMPORTED_MODULE_1___default().post(_this3.$apiUrl + '/media/delete', postData).then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this3.$apiUrl + '/media/delete', postData).then(function (response) {
             _this3.isLoading = false;
             _this3.media.splice(index, 1);
             _this3.showMessage('success', response.data.message);
@@ -268,7 +267,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
             var postData = {
               ids: ids
             };
-            axios__WEBPACK_IMPORTED_MODULE_1___default().post(_this6.$apiUrl + '/media/multiple_delete', postData).then(function (response) {
+            axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this6.$apiUrl + '/media/multiple_delete', postData).then(function (response) {
               _this6.isLoading = false;
               var data = response.data;
               _this6.getMedia();
@@ -296,8 +295,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -732,7 +731,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.i(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue2_dropzone_dist_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -756,7 +755,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-dropzone>.dz-preview .dz-error-message {\n    top: 1px !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-dropzone>.dz-preview .dz-error-message {\r\n    top: 1px !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -915,8 +914,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Media_vue_vue_type_template_id_d1daa3d6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Media_vue_vue_type_template_id_d1daa3d6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Media_vue_vue_type_template_id_d1daa3d6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Media_vue_vue_type_template_id_d1daa3d6_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Media_vue_vue_type_template_id_d1daa3d6_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Media.vue?vue&type=template&id=d1daa3d6&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Media.vue?vue&type=template&id=d1daa3d6&scoped=true");
 

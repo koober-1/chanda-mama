@@ -116,6 +116,7 @@ class CartApiController extends Controller
 
                 $res[$key]->type = $item->type;
                 $res[$key]->measurement = $item->measurement;
+                $res[$key]->color_variant = $item->color_variant;
 
                 $taxed = ProductHelper::getTaxableAmount($item->id);
 
@@ -195,6 +196,7 @@ class CartApiController extends Controller
 
                     $result[$key]->type = $item->type;
                     $result[$key]->measurement = $item->measurement;
+                    $result[$key]->color_variant = $item->color_variant;
 
                     $taxed = ProductHelper::getTaxableAmount($item->id);
 
@@ -226,21 +228,21 @@ class CartApiController extends Controller
                 if (isset($request->is_checkout) && $request->is_checkout == 1) {
 
                     $cod_payment_method = Setting::get_value('cod_payment_method');
-                    if ($cod_payment_method == 1) {
+                    if ($cod_payment_method === "0" || $cod_payment_method === 0) {
+                        $response['cod_allowed'] = 0;
+                    } else {
                         $cod_mode = Setting::get_value('cod_mode');
-                        if ($cod_mode == Setting::$codModeGlobal) {
+                        if ($cod_mode == Setting::$codModeGlobal || empty($cod_mode)) {
                             $response['cod_allowed'] = 1;
                         } else {
                             $codArray = array_values(array_unique(array_column($res->toArray(), 'cod_allowed')));
                             $cod_allowed = implode(',', $codArray);
-                            if ($cod_allowed == 1) {
-                                $response['cod_allowed'] = intval($cod_allowed);
+                            if ($cod_allowed == 1 || $cod_allowed == "1" || empty($cod_allowed)) {
+                                $response['cod_allowed'] = 1;
                             } else {
                                 $response['cod_allowed'] = 0;
                             }
                         }
-                    } else {
-                        $response['cod_allowed'] = 0;
                     }
 
                     $response['product_variant_id'] = $total->product_variant_id;
@@ -400,9 +402,9 @@ class CartApiController extends Controller
                 $response['user_balance'] = $user_balance;
                 $response['sub_total'] = $sub_total;
                 $response['saved_amount'] = $saved_amount;
+                $response['cart'] = $res;
 
                 if ($request->is_checkout != 1) {
-                    $response['cart'] = $res;
                     $response['save_for_later'] = $result;
 
                     $global_self_pickup_mode = Setting::where('variable', 'self_pickup_mode')->value('value') ?? 0;

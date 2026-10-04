@@ -64,7 +64,13 @@
                                 </template>
 
                                 <template #cell(color_variant)="row">
-                                    {{ formatColor(row.item.color_variant) }}
+                                    <div v-if="row.item.color_variant" class="d-flex align-items-center gap-1">
+                                        <span v-if="getVariantColorHex(row.item.color_variant)" 
+                                              class="d-inline-block rounded-circle border shadow-sm" 
+                                              :style="{ width: '14px', height: '14px', minWidth: '14px', backgroundColor: getVariantColorHex(row.item.color_variant) }"></span>
+                                        <span>{{ formatColor(row.item.color_variant) }}</span>
+                                    </div>
+                                    <span v-else>-</span>
                                 </template>
 
                                 <template #cell(measurement)="row">
@@ -202,6 +208,20 @@ export default {
         },
         openLightbox(image) {
             window.open(image, '_blank', 'noopener');
+        },
+        getVariantColorHex(color) {
+            if (!color) return null;
+            const match = String(color).match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+            if (match) return match[0].toUpperCase();
+            const presets = {
+                'black': '#000000', 'white': '#FFFFFF', 'grey': '#808080', 'red': '#FF0000',
+                'crimson': '#DC143C', 'maroon': '#800000', 'pink': '#FFC0CB', 'orange': '#FFA500',
+                'yellow': '#FFFF00', 'blue': '#0000FF', 'navy blue': '#000080', 'green': '#008000',
+                'dark green': '#006400', 'olive green': '#556B2F', 'purple': '#800080',
+                'brown': '#8B4513', 'multi color': '#4A90E2'
+            };
+            const lower = String(color).toLowerCase().replace(/_/g, ' ').trim();
+            return presets[lower] || null;
         },
         formatColor(color) {
             if (!color) return '-';

@@ -644,7 +644,9 @@ export default {
                     vm.$eventBus.$emit('categorySaved');
 
                     vm.hideModal();
-                    vm.$router.push({ path: '/manage_sub_subcategories' });
+                    if (vm.$route.name !== 'manage_categories') {
+                        vm.$router.push({ path: '/manage_sub_subcategories' });
+                    }
                 })
                 .catch(error => {
                     vm.isLoading = false;

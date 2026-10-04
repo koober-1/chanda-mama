@@ -11,18 +11,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-print-nb */ "./node_modules/vue-print-nb/lib/print.umd.min.js");
-/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_print_nb__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-print-nb */ "./node_modules/vue-print-nb/lib/print.umd.min.js");
+/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_print_nb__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   directives: {
-    print: (vue_print_nb__WEBPACK_IMPORTED_MODULE_2___default())
+    print: (vue_print_nb__WEBPACK_IMPORTED_MODULE_1___default())
   },
   data: function data() {
     return {
@@ -48,12 +47,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   filters: {
     moment: function moment(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('D-MMMM-YYYY, h:mm:ss A');
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('DD/MM/YYYY, h:mm:ss A');
     }
   },
   methods: {
     moment: function moment() {
-      return moment__WEBPACK_IMPORTED_MODULE_1___default()();
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()();
     },
     getInvoice: function getInvoice() {
       var _this = this;
@@ -61,7 +60,7 @@ __webpack_require__.r(__webpack_exports__);
       var param = {
         "order_id": this.id
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/orders/invoice/', {
+      axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(this.$apiUrl + '/orders/invoice/', {
         params: param
       }).then(function (response) {
         _this.isLoading = false;
@@ -100,8 +99,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -257,7 +256,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n@page {\n    size: auto;\n    margin: 0mm;\n}\n.borderless td[data-v-c6971f48],\n.heading th[data-v-c6971f48] {\n    border: none !important;\n    padding: 0px !important;\n}\naddress[data-v-c6971f48] {\n    margin-bottom: 1px;\n    font-style: normal;\n    line-height: 1.42857143;\n}\np[data-v-c6971f48] {\n    margin: 0 0 0px;\n}\n.invoice[data-v-c6971f48] {\n    position: relative;\n    background: #fff;\n    border: 1px solid #f4f4f4;\n    padding: 20px;\n    margin: 10px 25px\n}\n.invoice-title[data-v-c6971f48] {\n    margin-top: 0\n}\n.well[data-v-c6971f48] {\n    min-height: 20px;\n    padding: 19px;\n    margin-bottom: 20px;\n    background-color: #f5f5f5;\n    border: 1px solid #e3e3e3;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)\n}\n.well blockquote[data-v-c6971f48] {\n    border-color: #ddd;\n    border-color: rgba(0, 0, 0, .15)\n}\n.well-lg[data-v-c6971f48] {\n    padding: 24px;\n    border-radius: 6px\n}\n.well-sm[data-v-c6971f48] {\n    padding: 9px;\n    border-radius: 3px\n}\n\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n@page {\r\n    size: auto;\r\n    margin: 0mm;\n}\n.borderless td[data-v-c6971f48],\r\n.heading th[data-v-c6971f48] {\r\n    border: none !important;\r\n    padding: 0px !important;\n}\naddress[data-v-c6971f48] {\r\n    margin-bottom: 1px;\r\n    font-style: normal;\r\n    line-height: 1.42857143;\n}\np[data-v-c6971f48] {\r\n    margin: 0 0 0px;\n}\n.invoice[data-v-c6971f48] {\r\n    position: relative;\r\n    background: #fff;\r\n    border: 1px solid #f4f4f4;\r\n    padding: 20px;\r\n    margin: 10px 25px\n}\n.invoice-title[data-v-c6971f48] {\r\n    margin-top: 0\n}\n.well[data-v-c6971f48] {\r\n    min-height: 20px;\r\n    padding: 19px;\r\n    margin-bottom: 20px;\r\n    background-color: #f5f5f5;\r\n    border: 1px solid #e3e3e3;\r\n    border-radius: 4px;\r\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05)\n}\n.well blockquote[data-v-c6971f48] {\r\n    border-color: #ddd;\r\n    border-color: rgba(0, 0, 0, .15)\n}\n.well-lg[data-v-c6971f48] {\r\n    padding: 24px;\r\n    border-radius: 6px\n}\n.well-sm[data-v-c6971f48] {\r\n    padding: 9px;\r\n    border-radius: 3px\n}\r\n\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -360,8 +359,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceOrder_vue_vue_type_template_id_c6971f48_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceOrder_vue_vue_type_template_id_c6971f48_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceOrder_vue_vue_type_template_id_c6971f48_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceOrder_vue_vue_type_template_id_c6971f48_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceOrder_vue_vue_type_template_id_c6971f48_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceOrder.vue?vue&type=template&id=c6971f48&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Orders/InvoiceOrder.vue?vue&type=template&id=c6971f48&scoped=true");
 

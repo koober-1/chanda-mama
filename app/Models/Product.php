@@ -21,6 +21,7 @@ class Product extends Model
         'description',
         'highlights',
         'image',
+        'has_variant',
         'seller_id',
         'is_approved',
         'brand_id',
@@ -55,10 +56,10 @@ class Product extends Model
         return $this->belongsTo(Category::class,'category_id','id');
     }
 
-    // Many-to-many relationship for multiple categories
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_id')
+            ->withPivot('sub_category_id', 'sub_sub_category_id');
     }
 
     // Helper method to get all category IDs (both single and multiple)

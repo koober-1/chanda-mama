@@ -16,8 +16,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/DateRangePickerMixin */ "./resources/js/mixins/DateRangePickerMixin.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 
@@ -196,7 +195,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return;
       }
       item.itemsLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/orders/view/' + item.id).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/orders/view/' + item.id).then(function (res) {
         // API returns: data.order_items
         item.order_items = res.data.data.order_items || [];
         item.itemsLoading = false;
@@ -211,7 +210,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       this.$bvModal.show('order-details-modal');
       if (this.selectedOrder.order_items && this.selectedOrder.order_items.length === 0) {
         this.isModalLoading = true;
-        axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/orders/view/' + order.id).then(function (res) {
+        axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/orders/view/' + order.id).then(function (res) {
           _this2.selectedOrder.order_items = res.data.data.order_items || [];
           _this2.isModalLoading = false;
         })["catch"](function () {
@@ -259,7 +258,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     getOrderStatus: function getOrderStatus(tabTitle) {
       var _this3 = this;
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/order_statuses').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/order_statuses').then(function (response) {
         _this3.isLoading = false;
         _this3.statuses = response.data.data;
       })["catch"](function (error) {
@@ -344,7 +343,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         item_per_page: this.itemPerPage,
         search: this.search
       };
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/orders', {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/orders', {
         params: param
       }).then(function (response) {
         _this4.sellers = response.data.data.sellers;
@@ -404,7 +403,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var postData = {
             id: id
           };
-          axios__WEBPACK_IMPORTED_MODULE_3___default().post(_this5.$apiUrl + '/orders/delete', postData).then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(_this5.$apiUrl + '/orders/delete', postData).then(function (response) {
             _this5.isLoading = false;
             var data = response.data;
             _this5.orders.splice(index, 1);
@@ -430,7 +429,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var postData = {
             id: id
           };
-          axios__WEBPACK_IMPORTED_MODULE_3___default().post(_this6.$apiUrl + '/orders/delete_item', postData).then(function (response) {
+          axios__WEBPACK_IMPORTED_MODULE_3__["default"].post(_this6.$apiUrl + '/orders/delete_item', postData).then(function (response) {
             _this6.isLoading = false;
             var data = response.data;
             _this6.order_items.splice(index, 1);
@@ -458,7 +457,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     },
     formatDateBold: function formatDateBold(date) {
       if (!date) return 'N/A';
-      return moment__WEBPACK_IMPORTED_MODULE_2___default()(date).format('DD, MMM YYYY');
+      return moment__WEBPACK_IMPORTED_MODULE_2___default()(date).format('DD/MM/YYYY');
     },
     getPeriodLabel: function getPeriodLabel(date) {
       if (!date) return '';
@@ -529,7 +528,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     },
     getDashboardStats: function getDashboardStats() {
       var _this8 = this;
-      axios__WEBPACK_IMPORTED_MODULE_3___default().get(this.$apiUrl + '/dashboard').then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_3__["default"].get(this.$apiUrl + '/dashboard').then(function (res) {
         if (res.data.status === 1) {
           _this8.statusOrderCount = res.data.data.status_order_count || [];
         }
@@ -578,8 +577,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -1385,7 +1384,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.i(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n/* Orders page styles migrated to global custom-egrocer.scss */\n.figma-total-label-cell[data-v-a392c140] {\n    background: #F7F7F7 !important;\n    border-top: 1px solid #EDEDED !important;\n    border-bottom: 1px solid #EDEDED !important;\n    padding: 16px 24px !important;\n    font-size: 14px !important;\n    font-weight: 700 !important;\n    color: #333333 !important;\n    height: 56px !important;\n    text-transform: uppercase !important;\n    letter-spacing: 0.5px;\n}\n.figma-total-amount-cell[data-v-a392c140] {\n    background: #F7F7F7 !important;\n    border-top: 1px solid #EDEDED !important;\n    border-bottom: 1px solid #EDEDED !important;\n    padding: 16px 16px !important;\n    font-size: 16px !important;\n    font-weight: 700 !important;\n    color: #333333 !important;\n    height: 56px !important;\n}\n.figma-total-empty-cell[data-v-a392c140] {\n    background: #F7F7F7 !important;\n    border-top: 1px solid #EDEDED !important;\n    border-bottom: 1px solid #EDEDED !important;\n    height: 56px !important;\n}\n.figma-table-footer[data-v-a392c140] {\n    height: 88px;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 0 24px !important;\n    border-top: 1px solid #EDEDED !important;\n    background-color: #FFFFFF !important;\n}\n.table-responsive[data-v-a392c140] {\n    margin-bottom: 0 !important;\n    border-bottom: none !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n/* Orders page styles migrated to global custom-egrocer.scss */\n.figma-total-label-cell[data-v-a392c140] {\r\n    background: #F7F7F7 !important;\r\n    border-top: 1px solid #EDEDED !important;\r\n    border-bottom: 1px solid #EDEDED !important;\r\n    padding: 16px 24px !important;\r\n    font-size: 14px !important;\r\n    font-weight: 700 !important;\r\n    color: #333333 !important;\r\n    height: 56px !important;\r\n    text-transform: uppercase !important;\r\n    letter-spacing: 0.5px;\n}\n.figma-total-amount-cell[data-v-a392c140] {\r\n    background: #F7F7F7 !important;\r\n    border-top: 1px solid #EDEDED !important;\r\n    border-bottom: 1px solid #EDEDED !important;\r\n    padding: 16px 16px !important;\r\n    font-size: 16px !important;\r\n    font-weight: 700 !important;\r\n    color: #333333 !important;\r\n    height: 56px !important;\n}\n.figma-total-empty-cell[data-v-a392c140] {\r\n    background: #F7F7F7 !important;\r\n    border-top: 1px solid #EDEDED !important;\r\n    border-bottom: 1px solid #EDEDED !important;\r\n    height: 56px !important;\n}\n.figma-table-footer[data-v-a392c140] {\r\n    height: 88px;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 0 24px !important;\r\n    border-top: 1px solid #EDEDED !important;\r\n    background-color: #FFFFFF !important;\n}\n.table-responsive[data-v-a392c140] {\r\n    margin-bottom: 0 !important;\r\n    border-bottom: none !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1512,8 +1511,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_a392c140_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_a392c140_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_a392c140_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_a392c140_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Orders_vue_vue_type_template_id_a392c140_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Orders.vue?vue&type=template&id=a392c140&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Orders/Orders.vue?vue&type=template&id=a392c140&scoped=true");
 

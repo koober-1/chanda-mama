@@ -1,5 +1,325 @@
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_views_Product_EditProduct_vue"],{
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js":
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js ***!
+  \********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../mixins/TranslationHelper.js */ "./resources/js/mixins/TranslationHelper.js");
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mixins: [_mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: ['record'],
+  data: function data() {
+    return {
+      id: null,
+      status: 1,
+      languages: [],
+      defaultLanguageId: null,
+      activeTab: 0,
+      form: {},
+      image: "",
+      image_url: "",
+      error: null,
+      isLoading: false,
+      tabsKey: 0,
+      // Translate buttons
+      translatableFields: ['name'],
+      loadingEmpty: false,
+      loadingOverwrite: false
+    };
+  },
+  watch: {
+    record: {
+      immediate: true,
+      deep: true,
+      handler: function handler(newVal) {
+        if (newVal && newVal.id) {
+          this.id = newVal.id;
+          this.resetForm();
+          // Only load brand data if languages are already loaded
+          if (this.languages.length > 0) {
+            this.loadBrandWithTranslations();
+          }
+        } else {
+          this.id = null;
+          this.resetForm();
+        }
+      }
+    }
+  },
+  computed: {
+    modal_title: function modal_title() {
+      return this.id ? __('edit_brand') : __('add_brand');
+    },
+    defaultLanguage: function defaultLanguage() {
+      var _this = this;
+      return this.languages.find(function (language) {
+        return Number(language.id) === Number(_this.defaultLanguageId);
+      }) || null;
+    }
+  },
+  methods: {
+    resetForm: function resetForm() {
+      var _this2 = this;
+      this.form = {};
+      this.image = "";
+      this.image_url = "";
+      this.status = 1;
+      this.activeTab = 0;
+
+      // re-init empty translations
+      this.languages.forEach(function (lang) {
+        _this2.$set(_this2.form, lang.id, {
+          name: ''
+        });
+      });
+    },
+    showModal: function showModal() {
+      this.$refs['my-modal'].show();
+    },
+    hideModal: function hideModal() {
+      this.$refs['my-modal'].hide();
+    },
+    dropFile: function dropFile(event) {
+      event.preventDefault();
+      this.$refs.file_image.files = event.dataTransfer.files;
+      this.handleFileUpload();
+      event.currentTarget.classList.add('bg-gray-100');
+      event.currentTarget.classList.remove('bg-green-300');
+    },
+    handleFileUpload: function handleFileUpload(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      this.error = null;
+      var validTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif", "image/webp"];
+      if (!validTypes.includes(file.type)) {
+        this.error = "Invalid image type";
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        this.error = "Image must be less than 2MB";
+        return;
+      }
+      this.image = file;
+      this.image_url = URL.createObjectURL(file);
+    },
+    initializeForm: function initializeForm() {
+      var _this3 = this;
+      this.languages.forEach(function (lang) {
+        if (!_this3.form[lang.id]) {
+          _this3.$set(_this3.form, lang.id, {
+            name: ''
+          });
+        }
+      });
+    },
+    loadLanguages: function loadLanguages() {
+      var _this4 = this;
+      return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/active_languages').then(function (res) {
+        _this4.languages = res.data.data;
+        var defaultLang = _this4.languages.find(function (l) {
+          return l.is_default;
+        });
+        _this4.defaultLanguageId = (defaultLang === null || defaultLang === void 0 ? void 0 : defaultLang.id) || null;
+
+        // Initialize form for all languages
+        _this4.initializeForm();
+
+        // Load brand data if id exists (after languages are loaded)
+        if (_this4.id) {
+          return _this4.loadBrandWithTranslations();
+        }
+      });
+    },
+    loadBrandWithTranslations: function loadBrandWithTranslations() {
+      var _this5 = this;
+      if (!this.id) return;
+
+      // Ensure languages are loaded first - if not, wait for them
+      if (!this.languages.length) {
+        return this.loadLanguages();
+      }
+      return axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(this.$apiUrl + '/products/brands', {
+        params: {
+          id: this.id
+        }
+      }).then(function (res) {
+        var brand = Array.isArray(res.data.data) ? res.data.data[0] : res.data.data;
+        if (!brand) {
+          console.error('Brand not found');
+          return;
+        }
+        _this5.status = brand.status;
+        _this5.image_url = brand.image_url || "";
+
+        // Ensure all languages are initialized first
+        _this5.initializeForm();
+
+        // Process translations with fallback logic
+        _this5.languages.forEach(function (lang) {
+          var translation = Array.isArray(brand.translations) ? brand.translations.find(function (t) {
+            return t.language_id === lang.id;
+          }) : null;
+          if (lang.is_default) {
+            // For default language, use translation if exists, otherwise fallback to main table data
+            _this5.$set(_this5.form, lang.id, {
+              name: translation && translation.name && translation.name.trim() !== '' ? translation.name : brand.name || ''
+            });
+          } else {
+            // For other languages, use translation if exists, otherwise empty
+            _this5.$set(_this5.form, lang.id, {
+              name: translation && translation.name ? translation.name : ''
+            });
+          }
+        });
+        _this5.tabsKey++;
+      });
+    },
+    validateDefaultLanguage: function validateDefaultLanguage() {
+      if (!this.defaultLanguageId) {
+        this.showError(__('default_language_not_found'));
+        return false;
+      }
+      var defaultForm = this.form[this.defaultLanguageId];
+
+      // Check required fields for default language
+      if (!defaultForm.name || defaultForm.name.trim() === '') {
+        this.showError(__('please_fill_name_in_default_language') || __('please_fill_name_in_default_language'));
+        this.switchToDefaultLanguageTab();
+        return false;
+      }
+
+      // Check image for new brands
+      if (!this.id && !this.image && !this.image_url) {
+        this.showError(__('please_upload_brand_image') || __('please_upload_image'));
+        this.switchToDefaultLanguageTab();
+        return false;
+      }
+      return true;
+    },
+    validateDefaultLanguageForTranslation: function validateDefaultLanguageForTranslation() {
+      var _this6 = this;
+      var form = this.$refs['my-form'];
+      if (form && !form.reportValidity()) {
+        this.$nextTick(function () {
+          return _this6.switchToDefaultLanguageTab();
+        });
+        return false;
+      }
+      return this.validateDefaultLanguage();
+    },
+    switchToDefaultLanguageTab: function switchToDefaultLanguageTab() {
+      var _this7 = this;
+      var defaultLangIndex = this.languages.findIndex(function (lang) {
+        return lang.id === _this7.defaultLanguageId;
+      });
+      if (defaultLangIndex !== -1) {
+        this.showError(__('please_fill_default_language_required_fields'));
+        this.activeTab = defaultLangIndex;
+      }
+    },
+    saveRecord: function saveRecord() {
+      var _this8 = this;
+      if (!this.validateDefaultLanguage()) return;
+      var isUpdate = !!this.id; // check before saving
+      this.isLoading = true;
+      var languagesToSave = [];
+      var defaultLang = this.languages.find(function (l) {
+        return l.is_default;
+      });
+      if (defaultLang) languagesToSave.push(defaultLang);
+      this.languages.forEach(function (lang) {
+        if (lang.is_default) return;
+        var name = _this8.form[lang.id].name;
+        if (name && name.trim() !== '') languagesToSave.push(lang);
+      });
+      var saveSequentially = /*#__PURE__*/function () {
+        var _ref = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+          var brandId, _i, _languagesToSave, _res$data$data, lang, fd, url, res;
+          return _regenerator().w(function (_context) {
+            while (1) switch (_context.n) {
+              case 0:
+                brandId = _this8.id;
+                _i = 0, _languagesToSave = languagesToSave;
+              case 1:
+                if (!(_i < _languagesToSave.length)) {
+                  _context.n = 4;
+                  break;
+                }
+                lang = _languagesToSave[_i];
+                fd = new FormData();
+                if (brandId) fd.append('id', brandId);
+                fd.append('language_id', lang.id);
+                fd.append('name', _this8.form[lang.id].name);
+                fd.append('status', _this8.status);
+                if (lang.is_default && _this8.image) fd.append('image', _this8.image);
+                url = brandId ? _this8.$apiUrl + '/products/brands/update' : _this8.$apiUrl + '/products/brands/save';
+                _context.n = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(url, fd);
+              case 2:
+                res = _context.v;
+                if (!brandId && (_res$data$data = res.data.data) !== null && _res$data$data !== void 0 && _res$data$data.id) brandId = res.data.data.id;
+              case 3:
+                _i++;
+                _context.n = 1;
+                break;
+              case 4:
+                return _context.a(2, brandId);
+            }
+          }, _callee);
+        }));
+        return function saveSequentially() {
+          return _ref.apply(this, arguments);
+        };
+      }();
+      saveSequentially().then(/*#__PURE__*/function () {
+        var _ref2 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(brandId) {
+          var message;
+          return _regenerator().w(function (_context2) {
+            while (1) switch (_context2.n) {
+              case 0:
+                message = isUpdate ? __('brand_updated_successfully') : __('brand_saved_successfully');
+                _this8.$emit('saved', message);
+                _this8.id = brandId;
+                _context2.n = 1;
+                return _this8.loadBrandWithTranslations();
+              case 1:
+                _this8.tabsKey++;
+                _this8.hideModal();
+              case 2:
+                return _context2.a(2);
+            }
+          }, _callee2);
+        }));
+        return function (_x) {
+          return _ref2.apply(this, arguments);
+        };
+      }())["finally"](function () {
+        return _this8.isLoading = false;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadLanguages();
+    this.resetForm(); // here change 2 
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=script&lang=js":
 /*!********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=script&lang=js ***!
@@ -11,20 +331,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
-/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tinymce/tinymce-vue */ "./node_modules/@tinymce/tinymce-vue/lib/es2015/main/ts/index.js");
-/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
-/* harmony import */ var _mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/TranslationHelper.js */ "./resources/js/mixins/TranslationHelper.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
+/* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @tinymce/tinymce-vue */ "./node_modules/@tinymce/tinymce-vue/lib/es2015/main/ts/index.js");
+/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Auth.js */ "./resources/js/Auth.js");
+/* harmony import */ var _mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/TranslationHelper.js */ "./resources/js/mixins/TranslationHelper.js");
+/* harmony import */ var _Brands_Edit_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Brands/Edit.vue */ "./resources/js/views/Product/Brands/Edit.vue");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); } r ? i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2)); }, _regeneratorDefine2(e, r, n, t); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -39,19 +363,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mixins: [_mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_4__["default"]],
+  mixins: [_mixins_TranslationHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"]],
   // register the component
   components: {
-    Multiselect: (vue_multiselect__WEBPACK_IMPORTED_MODULE_1___default()),
-    'editor': _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Multiselect: (vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default()),
+    'editor': _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    EditBrand: _Brands_Edit_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   data: function data() {
     return _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty({
-      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_3__["default"].user,
+      login_user: _Auth_js__WEBPACK_IMPORTED_MODULE_2__["default"].user,
       isLoading: false,
       isGeneratingAI: false,
       // Track AI content generation state
+      isGeneratingCustomAI: false,
+      // Track Custom Prompt AI generation state
+      aiDebugInfo: null,
+      showAiDebug: false,
       cacheTimer: null,
       cachedData: null,
       skipCache: false,
@@ -61,61 +391,278 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       brand: null,
       tax_id: 0,
       type: 'packet',
+      has_variant: true,
       category_id: '',
       product_category_id: '',
       product_subcategory_id: '',
       product_sub_subcategory_id: '',
       product_sub_sub_subcategory_id: '',
+      selected_categories: [],
+      // For multi-category selection
+      selected_sub_categories: [],
+      // For sub categories selection
+      selected_sub_sub_categories: [],
+      // For sub sub categories selection
       product_type: '',
       made_in: '',
       tag: '',
       allowedOtherMediaTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4'],
       maxOtherMediaSize: 3 * 1024 * 1024,
       colorVariantOptions: [{
-        value: 'black',
-        label: 'Black'
+        code: '#000000',
+        value: '#000000',
+        label: 'Black',
+        emoji: '⚫'
       }, {
-        value: 'white',
-        label: 'White'
+        code: '#FFFFFF',
+        value: '#FFFFFF',
+        label: 'White',
+        emoji: '⚪'
       }, {
-        value: 'red',
-        label: 'Red'
+        code: '#FAF9F6',
+        value: '#FAF9F6',
+        label: 'Off White',
+        emoji: '⚪'
       }, {
-        value: 'blue',
-        label: 'Blue'
+        code: '#808080',
+        value: '#808080',
+        label: 'Grey',
+        emoji: '🔘'
       }, {
-        value: 'green',
-        label: 'Green'
+        code: '#D3D3D3',
+        value: '#D3D3D3',
+        label: 'Light Grey',
+        emoji: '🔘'
       }, {
-        value: 'yellow',
-        label: 'Yellow'
+        code: '#5A5A5A',
+        value: '#5A5A5A',
+        label: 'Dark Grey',
+        emoji: '🔘'
       }, {
-        value: 'orange',
-        label: 'Orange'
+        code: '#36454F',
+        value: '#36454F',
+        label: 'Charcoal',
+        emoji: '⚫'
       }, {
-        value: 'pink',
-        label: 'Pink'
+        code: '#C0C0C0',
+        value: '#C0C0C0',
+        label: 'Silver',
+        emoji: '🪙'
       }, {
-        value: 'purple',
-        label: 'Purple'
+        code: '#FF0000',
+        value: '#FF0000',
+        label: 'Red',
+        emoji: '🔴'
       }, {
-        value: 'brown',
-        label: 'Brown'
+        code: '#DC143C',
+        value: '#DC143C',
+        label: 'Crimson',
+        emoji: '🔴'
       }, {
-        value: 'cream',
-        label: 'Cream'
+        code: '#800000',
+        value: '#800000',
+        label: 'Maroon',
+        emoji: '🍷'
       }, {
-        value: 'grey',
-        label: 'Grey'
+        code: '#800020',
+        value: '#800020',
+        label: 'Burgundy',
+        emoji: '🍷'
       }, {
-        value: 'gold',
-        label: 'Gold'
+        code: '#722F37',
+        value: '#722F37',
+        label: 'Wine',
+        emoji: '🍷'
       }, {
-        value: 'silver',
-        label: 'Silver'
+        code: '#FFC0CB',
+        value: '#FFC0CB',
+        label: 'Pink',
+        emoji: '🌸'
       }, {
-        value: 'multi_color',
-        label: 'Multi Color'
+        code: '#F4C2C2',
+        value: '#F4C2C2',
+        label: 'Baby Pink',
+        emoji: '🌸'
+      }, {
+        code: '#FF66CC',
+        value: '#FF66CC',
+        label: 'Rose Pink',
+        emoji: '🌸'
+      }, {
+        code: '#FF00FF',
+        value: '#FF00FF',
+        label: 'Magenta',
+        emoji: '🌺'
+      }, {
+        code: '#FF69B4',
+        value: '#FF69B4',
+        label: 'Hot Pink',
+        emoji: '🌺'
+      }, {
+        code: '#FFE5B4',
+        value: '#FFE5B4',
+        label: 'Peach',
+        emoji: '🍑'
+      }, {
+        code: '#FF7F50',
+        value: '#FF7F50',
+        label: 'Coral',
+        emoji: '🧡'
+      }, {
+        code: '#FFA500',
+        value: '#FFA500',
+        label: 'Orange',
+        emoji: '🟠'
+      }, {
+        code: '#B7410E',
+        value: '#B7410E',
+        label: 'Rust',
+        emoji: '🟫'
+      }, {
+        code: '#FFFF00',
+        value: '#FFFF00',
+        label: 'Yellow',
+        emoji: '🟡'
+      }, {
+        code: '#FFDB58',
+        value: '#FFDB58',
+        label: 'Mustard',
+        emoji: '🌾'
+      }, {
+        code: '#FFF44F',
+        value: '#FFF44F',
+        label: 'Lemon Yellow',
+        emoji: '🍋'
+      }, {
+        code: '#FFD700',
+        value: '#FFD700',
+        label: 'Gold',
+        emoji: '✨'
+      }, {
+        code: '#0000FF',
+        value: '#0000FF',
+        label: 'Blue',
+        emoji: '🔵'
+      }, {
+        code: '#000080',
+        value: '#000080',
+        label: 'Navy Blue',
+        emoji: '🫐'
+      }, {
+        code: '#4169E1',
+        value: '#4169E1',
+        label: 'Royal Blue',
+        emoji: '👑'
+      }, {
+        code: '#87CEEB',
+        value: '#87CEEB',
+        label: 'Sky Blue',
+        emoji: '🩵'
+      }, {
+        code: '#89CFF0',
+        value: '#89CFF0',
+        label: 'Baby Blue',
+        emoji: '🩵'
+      }, {
+        code: '#008080',
+        value: '#008080',
+        label: 'Teal',
+        emoji: '🩵'
+      }, {
+        code: '#00FFFF',
+        value: '#00FFFF',
+        label: 'Cyan / Aqua',
+        emoji: '🩵'
+      }, {
+        code: '#008000',
+        value: '#008000',
+        label: 'Green',
+        emoji: '🟢'
+      }, {
+        code: '#006400',
+        value: '#006400',
+        label: 'Dark Green',
+        emoji: '🌲'
+      }, {
+        code: '#556B2F',
+        value: '#556B2F',
+        label: 'Olive Green',
+        emoji: '🫒'
+      }, {
+        code: '#98FF98',
+        value: '#98FF98',
+        label: 'Mint Green',
+        emoji: '🌿'
+      }, {
+        code: '#32CD32',
+        value: '#32CD32',
+        label: 'Lime Green',
+        emoji: '🍋'
+      }, {
+        code: '#004225',
+        value: '#004225',
+        label: 'Bottle Green',
+        emoji: '🌲'
+      }, {
+        code: '#800080',
+        value: '#800080',
+        label: 'Purple',
+        emoji: '🟣'
+      }, {
+        code: '#E6E6FA',
+        value: '#E6E6FA',
+        label: 'Lavender',
+        emoji: '🪻'
+      }, {
+        code: '#8F00FF',
+        value: '#8F00FF',
+        label: 'Violet',
+        emoji: '🟣'
+      }, {
+        code: '#8B4513',
+        value: '#8B4513',
+        label: 'Brown',
+        emoji: '🟤'
+      }, {
+        code: '#3D1C02',
+        value: '#3D1C02',
+        label: 'Chocolate Brown',
+        emoji: '🍫'
+      }, {
+        code: '#D2B48C',
+        value: '#D2B48C',
+        label: 'Tan',
+        emoji: '🪵'
+      }, {
+        code: '#F5F5DC',
+        value: '#F5F5DC',
+        label: 'Beige',
+        emoji: '🪵'
+      }, {
+        code: '#FFFDD0',
+        value: '#FFFDD0',
+        label: 'Cream',
+        emoji: '🥛'
+      }, {
+        code: '#C3B091',
+        value: '#C3B091',
+        label: 'Khaki',
+        emoji: '🪵'
+      }, {
+        code: '#B87333',
+        value: '#B87333',
+        label: 'Copper',
+        emoji: '🪙'
+      }, {
+        code: '#CD7F32',
+        value: '#CD7F32',
+        label: 'Bronze',
+        emoji: '🪙'
+      }, {
+        code: '#4A90E2',
+        value: '#4A90E2',
+        label: 'Multi Color',
+        emoji: '🌈'
       }],
       return_status: 0,
       return_days: 1,
@@ -131,6 +678,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loose_stock_unit_id: "",
       status: 1,
       is_unlimited_stock: 0,
+      expiry_date_from: '',
+      expiry_date_to: '',
       loose_purchase_price: 0,
       loose_discount_percentage: 0,
       tax_included_in_price: 0,
@@ -144,6 +693,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       order_status: null,
       inputs: [{
         name: '',
+        variant_name: '',
         packet_status: 1,
         packet_stock: 0,
         packet_stock_unit_id: '',
@@ -157,6 +707,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         loose_sale_price: '',
         loose_discount_mode: 'percent',
         color_variant: '',
+        color_name: '',
+        color_custom_hex: '',
         expiry_date_from: '',
         expiry_date_to: '',
         barcodes: [''],
@@ -170,13 +722,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       other_images: null,
       images: [],
       variantImages: {},
+      draggedMedia: null,
       id: null,
       record: null,
       clone: false,
       categoryOptions: '<option value="">' + __('select_category') + '</option>',
       productCategoryList: [],
       deleteImageIds: [],
-      loggedUser: _Auth_js__WEBPACK_IMPORTED_MODULE_3__["default"].user,
+      loggedUser: _Auth_js__WEBPACK_IMPORTED_MODULE_2__["default"].user,
       isBarcodeValid: '',
       input: [],
       mainImageerror: null,
@@ -220,7 +773,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
     },
     canUseAIGenerate: function canUseAIGenerate() {
-      var user = _Auth_js__WEBPACK_IMPORTED_MODULE_3__["default"].user || this.login_user;
+      var user = _Auth_js__WEBPACK_IMPORTED_MODULE_2__["default"].user || this.login_user;
       return this.$isDemo != 1 && user && user.id == 1;
     },
     translatedSellers: function translatedSellers() {
@@ -343,54 +896,65 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     categoryOptionsHtml: function categoryOptionsHtml() {
       return this.categoryOptions;
     },
-    mainCategoryOptions: function mainCategoryOptions() {
-      return this.productCategoryList.filter(function (category) {
-        return Number(category.parent_id) === 0;
+    allCategoriesFlat: function allCategoriesFlat() {
+      // Return all categories as a flat list for multi-select
+      return this.productCategoryList.map(function (category) {
+        return {
+          id: category.id,
+          name: category.name,
+          parent_id: category.parent_id
+        };
       });
     },
-    subCategoryOptions: function subCategoryOptions() {
-      var _this5 = this;
-      return this.productCategoryList.filter(function (category) {
-        return Number(category.parent_id) === Number(_this5.product_category_id);
+    mainCategories: function mainCategories() {
+      return this.allCategoriesFlat.filter(function (c) {
+        return !c.parent_id || c.parent_id == 0;
       });
     },
-    subSubCategoryOptions: function subSubCategoryOptions() {
-      var _this6 = this;
-      return this.productCategoryList.filter(function (category) {
-        return Number(category.parent_id) === Number(_this6.product_subcategory_id);
+    filteredSubCategories: function filteredSubCategories() {
+      if (!this.selected_categories || this.selected_categories.length === 0) return [];
+      var selectedIds = this.selected_categories.map(function (c) {
+        return c.id;
+      });
+      return this.allCategoriesFlat.filter(function (c) {
+        return selectedIds.includes(c.parent_id);
       });
     },
-    subSubSubCategoryOptions: function subSubSubCategoryOptions() {
-      var _this7 = this;
-      return this.productCategoryList.filter(function (category) {
-        return Number(category.parent_id) === Number(_this7.product_sub_subcategory_id);
+    filteredSubSubCategories: function filteredSubSubCategories() {
+      if (!this.selected_sub_categories || this.selected_sub_categories.length === 0) return [];
+      var selectedIds = this.selected_sub_categories.map(function (c) {
+        return c.id;
+      });
+      return this.allCategoriesFlat.filter(function (c) {
+        return selectedIds.includes(c.parent_id);
       });
     },
     selectedProductCategoryId: function selectedProductCategoryId() {
+      // Fallback for backward compatibility
       return this.product_sub_sub_subcategory_id || this.product_sub_subcategory_id || this.product_subcategory_id || this.product_category_id || '';
     }
   },
   created: function created() {
-    var _this8 = this;
+    var _this5 = this;
     this.id = this.$route.params.id || null;
     this.clone = this.$route.params.clone || false;
     this.fetchActiveLanguages().then(function () {
-      _this8.getSellers();
-      _this8.getTaxes();
-      _this8.getUnits();
-      _this8.getBrands();
-      _this8.getCountries();
-      _this8.getOrderStatus();
-      _this8.getTextGenKey();
-      if (_this8.isSellerRole) {
-        _this8.seller_id = _this8.login_user.seller.id;
-        _this8.getSeller();
+      _this5.getSellers();
+      _this5.getTaxes();
+      _this5.getUnits();
+      _this5.getBrands();
+      _this5.getCountries();
+      _this5.getOrderStatus();
+      _this5.getTextGenKey();
+      if (_this5.isSellerRole) {
+        _this5.seller_id = _this5.login_user.seller.id;
+        _this5.getSeller();
       }
-      _this8.getCategories();
-      if (_this8.id) {
-        _this8.getProduct();
+      _this5.getCategories();
+      if (_this5.id) {
+        _this5.getProduct();
       } else {
-        _this8.restoreCache();
+        _this5.restoreCache();
       }
     });
   },
@@ -399,15 +963,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     if (this.cacheTimer) clearTimeout(this.cacheTimer);
   },
   methods: {
+    handleBrandCreated: function handleBrandCreated(message) {
+      // Re-fetch brands when a new one is created
+      this.getBrands();
+      this.showMessage("success", message);
+    },
     validateDefaultLanguageForTranslation: function validateDefaultLanguageForTranslation() {
-      var _this9 = this;
+      var _this6 = this;
       var form = this.$refs['my-form'];
 
       // Trigger native browser validation UI
       if (form && !form.reportValidity()) {
         // Switch to default language tab so error field is visible
         this.$nextTick(function () {
-          _this9.switchToDefaultLanguageTab();
+          _this6.switchToDefaultLanguageTab();
         });
         return false;
       }
@@ -416,37 +985,37 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return this.validateDefaultLanguage();
     },
     fetchActiveLanguages: function fetchActiveLanguages() {
-      var _this0 = this;
+      var _this7 = this;
       this.isLoadingLanguages = true;
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/active_languages').then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/active_languages').then(function (response) {
         if (response.data.data) {
-          _this0.languages = response.data.data;
-          _this0.activeLanguages = response.data.data;
-          var defaultLang = _this0.languages.find(function (lang) {
+          _this7.languages = response.data.data;
+          _this7.activeLanguages = response.data.data;
+          var defaultLang = _this7.languages.find(function (lang) {
             return lang.is_default === 1;
           });
           if (defaultLang) {
-            _this0.defaultLanguageId = defaultLang.id;
+            _this7.defaultLanguageId = defaultLang.id;
           }
 
           // Get current language ID from app_locale
           var appLocale = window.appLocale || 'en';
-          var currentLanguage = _this0.activeLanguages.find(function (lang) {
+          var currentLanguage = _this7.activeLanguages.find(function (lang) {
             return lang.code === appLocale;
           });
           if (currentLanguage) {
-            _this0.currentLanguageId = currentLanguage.id;
+            _this7.currentLanguageId = currentLanguage.id;
           } else if (defaultLang) {
-            _this0.currentLanguageId = defaultLang.id;
+            _this7.currentLanguageId = defaultLang.id;
           }
-          _this0.initializeTranslations();
-          _this0.isLoadingLanguages = false;
+          _this7.initializeTranslations();
+          _this7.isLoadingLanguages = false;
         } else {
-          _this0.isLoadingLanguages = false;
+          _this7.isLoadingLanguages = false;
         }
       })["catch"](function (error) {
         console.error('Error loading languages:', error);
-        _this0.isLoadingLanguages = false;
+        _this7.isLoadingLanguages = false;
       });
     },
     initializeTranslations: function initializeTranslations() {
@@ -489,10 +1058,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     // Helper method to safely trigger file input click (handles refs in v-for)
     triggerRefClick: function triggerRefClick(refName) {
-      var _this1 = this;
+      var _this8 = this;
       this.$nextTick(function () {
         try {
-          var ref = _this1.$refs[refName];
+          var ref = _this8.$refs[refName];
           if (!ref) {
             return;
           }
@@ -532,35 +1101,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         this.switchToDefaultLanguageTab();
         return false;
       }
-      if (!defaultTranslation.highlights || defaultTranslation.highlights.trim() === '') {
-        this.showError('Please fill Product Highlights in the default language.');
-        this.switchToDefaultLanguageTab();
-        return false;
-      }
-      if (!this.product_category_id) {
-        this.showError(__('please_select_category'));
-        this.switchToDefaultLanguageTab();
-        return false;
-      }
       return true;
     },
     switchToDefaultLanguageTab: function switchToDefaultLanguageTab() {
-      var _this10 = this;
+      var _this9 = this;
       var defaultLangIndex = this.languages.findIndex(function (lang) {
-        return lang.id === _this10.defaultLanguageId;
+        return lang.id === _this9.defaultLanguageId;
       });
       if (defaultLangIndex !== -1) {
         this.activeLanguageTab = defaultLangIndex;
       }
     },
     loadTranslations: function loadTranslations() {
-      var _this11 = this;
+      var _this0 = this;
       if (!this.id) return;
 
       // Wait for languages to be loaded first
       if (this.languages.length === 0) {
         this.fetchActiveLanguages().then(function () {
-          _this11.loadTranslationsData();
+          _this0.loadTranslationsData();
         });
         return;
       }
@@ -568,7 +1127,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     // Load translations from API response (translations array with all language records)
     loadTranslationsData: function loadTranslationsData() {
-      var _this12 = this;
+      var _this1 = this;
       if (!this.record || !this.record.translations || !Array.isArray(this.record.translations)) {
         return;
       }
@@ -578,90 +1137,330 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           return t.language_id === language.id;
         });
         if (translation) {
-          _this12.$set(_this12.translations[language.id], 'name', translation.name || '');
-          _this12.$set(_this12.translations[language.id], 'description', translation.description || '');
-          _this12.$set(_this12.translations[language.id], 'highlights', translation.highlights || '');
-          _this12.$set(_this12.translations[language.id], 'meta_title', translation.meta_title || '');
-          _this12.$set(_this12.translations[language.id], 'meta_keywords', translation.meta_keywords || '');
-          _this12.$set(_this12.translations[language.id], 'schema_markup', translation.schema_markup || '');
-          _this12.$set(_this12.translations[language.id], 'meta_description', translation.meta_description || '');
+          _this1.$set(_this1.translations[language.id], 'name', translation.name || '');
+          _this1.$set(_this1.translations[language.id], 'description', translation.description || '');
+          _this1.$set(_this1.translations[language.id], 'highlights', translation.highlights || '');
+          _this1.$set(_this1.translations[language.id], 'meta_title', translation.meta_title || '');
+          _this1.$set(_this1.translations[language.id], 'meta_keywords', translation.meta_keywords || '');
+          _this1.$set(_this1.translations[language.id], 'schema_markup', translation.schema_markup || '');
+          _this1.$set(_this1.translations[language.id], 'meta_description', translation.meta_description || '');
         }
       });
     },
     generateDescription: function generateDescription() {
-      var _this13 = this;
+      var _this10 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var prompt, _data$candidates, response, data, generatedText, _t;
+        var _this10$translations$;
+        var productName, isPacket, input0, mrp, measurement, stock, isUnlimitedStock, apiKey, variants, productContext, customPrompt, response, data, parsed, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
-              if (!(_this13.$isDemo == 1)) {
+              if (!(_this10.$isDemo == 1)) {
                 _context.n = 1;
                 break;
               }
-              _this13.showError("This function is not available in demo mode.");
+              _this10.showError("This function is not available in demo mode.");
               return _context.a(2);
             case 1:
-              if (_this13.name) {
+              productName = ((_this10$translations$ = _this10.translations[_this10.defaultLanguageId]) === null || _this10$translations$ === void 0 ? void 0 : _this10$translations$.name) || '';
+              isPacket = _this10.type === 'packet';
+              input0 = _this10.inputs && _this10.inputs.length > 0 ? _this10.inputs[0] : {};
+              mrp = isPacket ? input0.packet_price : input0.loose_price;
+              measurement = isPacket ? input0.packet_measurement : input0.loose_measurement;
+              stock = isPacket ? input0.packet_stock : _this10.loose_stock;
+              isUnlimitedStock = _this10.is_unlimited_stock == 1;
+              if (productName) {
                 _context.n = 2;
                 break;
               }
-              _this13.showMessage("error", "Please enter the product name.");
+              _this10.showMessage("error", "Please enter the product name.");
               return _context.a(2);
             case 2:
-              if (_this13.textGenKey) {
+              if (_this10.brand) {
                 _context.n = 3;
                 break;
               }
-              _this13.showMessage("error", "Text generation API key is not configured");
+              _this10.showMessage("error", "Please select a brand.");
               return _context.a(2);
             case 3:
-              prompt = _this13.useCustomPrompt && _this13.customPrompt.trim() ? "".concat(_this13.customPrompt, " for product: ").concat(_this13.name, ". Output raw HTML only, no explanatory text, no code blocks, no images.") : "Generate a detailed product description for ".concat(_this13.name, " formatted for TinyMCE editor.\n            Structure: Start with <strong>Product Overview</strong>, then multiple <p> paragraphs describing features and benefits.\n            Include <strong>Key Features</strong> with <ul><li> bullet points.\n            Add <strong>Benefits</strong> section with more <p> content.\n            Use <strong> for emphasis, <em> for highlights.\n            Important: no code blocks, no markdown syntax, no explanatory text.");
-              _context.p = 4;
-              _this13.isGeneratingAI = true; // Start AI processing state
-              _context.n = 5;
-              return fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + _this13.textGenKey, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  contents: [{
-                    parts: [{
-                      text: prompt
-                    }]
-                  }]
-                })
-              });
-            case 5:
-              response = _context.v;
-              _context.n = 6;
-              return response.json();
-            case 6:
-              data = _context.v;
-              if (data !== null && data !== void 0 && (_data$candidates = data.candidates) !== null && _data$candidates !== void 0 && (_data$candidates = _data$candidates[0]) !== null && _data$candidates !== void 0 && (_data$candidates = _data$candidates.content) !== null && _data$candidates !== void 0 && (_data$candidates = _data$candidates.parts) !== null && _data$candidates !== void 0 && (_data$candidates = _data$candidates[0]) !== null && _data$candidates !== void 0 && _data$candidates.text) {
-                generatedText = data.candidates[0].content.parts[0].text;
-                _this13.description = generatedText;
-                if (_this13.defaultLanguageId && _this13.translations[_this13.defaultLanguageId]) {
-                  _this13.$set(_this13.translations[_this13.defaultLanguageId], 'description', generatedText);
-                }
-              } else {
-                _this13.showMessage("error", "Failed to generate description.");
+              if (!(!_this10.image && !_this10.main_image_name && !_this10.main_image_path)) {
+                _context.n = 4;
+                break;
               }
-              _context.n = 8;
-              break;
+              _this10.showMessage("error", "Please upload a product main image.");
+              return _context.a(2);
+            case 4:
+              if (measurement) {
+                _context.n = 5;
+                break;
+              }
+              _this10.showMessage("error", "Please enter unit measurement.");
+              return _context.a(2);
+            case 5:
+              if (mrp) {
+                _context.n = 6;
+                break;
+              }
+              _this10.showMessage("error", "Please enter MRP.");
+              return _context.a(2);
+            case 6:
+              if (!(!isUnlimitedStock && (!stock || stock <= 0))) {
+                _context.n = 7;
+                break;
+              }
+              _this10.showMessage("error", "Please enter available quantity.");
+              return _context.a(2);
             case 7:
-              _context.p = 7;
-              _t = _context.v;
-              _this13.showMessage("error", "An error occurred while generating the description.");
+              if (!(!_this10.selected_categories || _this10.selected_categories.length === 0)) {
+                _context.n = 8;
+                break;
+              }
+              _this10.showMessage("error", "Please select at least one category.");
+              return _context.a(2);
             case 8:
-              _context.p = 8;
-              _this13.isGeneratingAI = false; // Stop AI processing state
-              return _context.f(8);
+              if (_this10.made_in) {
+                _context.n = 9;
+                break;
+              }
+              _this10.showMessage("error", "Please specify made in (country).");
+              return _context.a(2);
             case 9:
+              if (!(_this10.return_status === '' || _this10.return_status === null)) {
+                _context.n = 10;
+                break;
+              }
+              _this10.showMessage("error", "Please select if product is returnable.");
+              return _context.a(2);
+            case 10:
+              if (!(_this10.cancelable_status === '' || _this10.cancelable_status === null)) {
+                _context.n = 11;
+                break;
+              }
+              _this10.showMessage("error", "Please select if product is cancelable.");
+              return _context.a(2);
+            case 11:
+              apiKey = process.env.MIX_TEXT_GEN_KEY || 0;
+              if (apiKey) {
+                _context.n = 12;
+                break;
+              }
+              _this10.showMessage("error", "Text generation API key is not configured.");
+              return _context.a(2);
+            case 12:
+              variants = _this10.inputs.map(function (input) {
+                return {
+                  measurement: isPacket ? input.packet_measurement : input.loose_measurement,
+                  price: isPacket ? input.packet_price : input.loose_price,
+                  discounted_price: isPacket ? input.discounted_price : input.loose_discounted_price,
+                  available_stock_quantity: isUnlimitedStock ? 'Unlimited' : isPacket ? input.packet_stock : _this10.loose_stock
+                };
+              });
+              productContext = {
+                name: productName,
+                brand: _this10.brand.name || '',
+                category: _this10.selected_categories.map(function (c) {
+                  return c.name;
+                }).join(', '),
+                sub_category: _this10.selected_sub_categories ? _this10.selected_sub_categories.map(function (c) {
+                  return c.name;
+                }).join(', ') : '',
+                sub_sub_category: _this10.selected_sub_sub_categories ? _this10.selected_sub_sub_categories.map(function (c) {
+                  return c.name;
+                }).join(', ') : '',
+                made_in: _this10.made_in,
+                returnable: _this10.return_status == 1 ? 'Yes' : 'No',
+                cancelable: _this10.cancelable_status == 1 ? 'Yes' : 'No',
+                variants: variants
+              };
+              customPrompt = _this10.useCustomPrompt && _this10.customPrompt.trim() ? _this10.customPrompt.trim() : null;
+              _context.p = 13;
+              _this10.isGeneratingAI = true;
+              _this10.aiDebugInfo = "Sending request to Gemini API via backend...\nProduct Context:\n" + JSON.stringify(productContext, null, 2) + "\n\n";
+              _context.n = 14;
+              return axios__WEBPACK_IMPORTED_MODULE_5__["default"].post(_this10.$apiUrl + '/products/google_gemini', {
+                product_context: productContext,
+                custom_prompt: customPrompt,
+                source: 'web'
+              });
+            case 14:
+              response = _context.v;
+              data = response.data;
+              _this10.aiDebugInfo += "Response received from Backend:\n" + JSON.stringify(data, null, 2) + "\n\n";
+              if (data.status === 1 && data.data) {
+                parsed = data.data;
+                _this10.aiDebugInfo += "Successfully parsed JSON:\n" + JSON.stringify(parsed, null, 2);
+                if (_this10.defaultLanguageId && _this10.translations[_this10.defaultLanguageId]) {
+                  if (parsed.description) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'description', parsed.description);
+                  if (parsed.highlights) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'highlights', parsed.highlights);
+                  if (parsed.meta_title) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'meta_title', parsed.meta_title);
+                  if (parsed.meta_keywords) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'meta_keywords', parsed.meta_keywords);
+                  if (parsed.meta_description) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'meta_description', parsed.meta_description);
+                  if (parsed.schema_markup) _this10.$set(_this10.translations[_this10.defaultLanguageId], 'schema_markup', _typeof(parsed.schema_markup) === 'object' ? JSON.stringify(parsed.schema_markup) : parsed.schema_markup);
+                }
+                _this10.showMessage("success", "Content generated successfully!");
+              } else if (data.message) {
+                _this10.aiDebugInfo += "API ERROR:\n" + data.message;
+                _this10.showMessage("error", "API Error: " + data.message);
+              } else {
+                _this10.aiDebugInfo += "Failed to generate content: Unexpected response structure.";
+                _this10.showMessage("error", "Failed to generate content.");
+              }
+              _context.n = 16;
+              break;
+            case 15:
+              _context.p = 15;
+              _t = _context.v;
+              _this10.aiDebugInfo += "NETWORK/REQUEST ERROR:\n" + _t.message;
+              console.error(_t);
+              _this10.showMessage("error", "An error occurred while generating the content.");
+            case 16:
+              _context.p = 16;
+              _this10.isGeneratingAI = false;
+              return _context.f(16);
+            case 17:
               return _context.a(2);
           }
-        }, _callee, null, [[4, 7, 8, 9]]);
+        }, _callee, null, [[13, 15, 16, 17]]);
+      }))();
+    },
+    generateFromCustomPrompt: function generateFromCustomPrompt() {
+      var _this11 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var _this11$languages$fin, _this11$translations$;
+        var langId, productName, promptText, apiKey, hasVariants, isPacket, variantList, categoryNames, subCategoryNames, subSubCategoryNames, productContext, response, data, parsed, schemaStr, _error$response, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              if (!(_this11.$isDemo == 1)) {
+                _context2.n = 1;
+                break;
+              }
+              _this11.showError("This function is not available in demo mode.");
+              return _context2.a(2);
+            case 1:
+              // Determine active or default language ID
+              langId = _this11.defaultLanguageId || _this11.languages && ((_this11$languages$fin = _this11.languages.find(function (l) {
+                return l.is_default;
+              })) === null || _this11$languages$fin === void 0 ? void 0 : _this11$languages$fin.id) || (_this11.translations ? Object.keys(_this11.translations)[0] : null);
+              productName = langId && _this11.translations && ((_this11$translations$ = _this11.translations[langId]) === null || _this11$translations$ === void 0 ? void 0 : _this11$translations$.name) || _this11.name || '';
+              if (!(!productName || !productName.trim())) {
+                _context2.n = 2;
+                break;
+              }
+              _this11.showMessage("error", "Please enter the product name.");
+              return _context2.a(2);
+            case 2:
+              if (!(!_this11.selected_categories || _this11.selected_categories.length === 0)) {
+                _context2.n = 3;
+                break;
+              }
+              _this11.showMessage("error", "Please select at least one category.");
+              return _context2.a(2);
+            case 3:
+              promptText = _this11.customPrompt ? _this11.customPrompt.trim() : '';
+              if (promptText) {
+                _context2.n = 4;
+                break;
+              }
+              _this11.showMessage("error", "Please enter your custom prompt.");
+              return _context2.a(2);
+            case 4:
+              apiKey = process.env.MIX_TEXT_GEN_KEY || 0;
+              if (apiKey) {
+                _context2.n = 5;
+                break;
+              }
+              _this11.showMessage("error", "Text generation API key is not configured.");
+              return _context2.a(2);
+            case 5:
+              hasVariants = !!_this11.has_variant;
+              isPacket = _this11.type === 'packet';
+              variantList = [];
+              if (hasVariants && _this11.inputs && _this11.inputs.length > 0) {
+                variantList = _this11.inputs.map(function (input) {
+                  var item = {};
+                  if (input.variant_name) item.variant_name = input.variant_name;
+                  var meas = isPacket ? input.packet_measurement : input.loose_measurement;
+                  if (meas) item.measurement = meas;
+                  var price = isPacket ? input.packet_price : input.loose_price;
+                  if (price) item.price = price;
+                  var color = input.color_name || (input.color_variant && input.color_variant !== '__custom__' ? input.color_variant : '');
+                  if (color) item.color = color;
+                  return Object.keys(item).length > 0 ? item : null;
+                }).filter(Boolean);
+              }
+              categoryNames = _this11.selected_categories.map(function (c) {
+                return c.name;
+              }).join(', ');
+              subCategoryNames = _this11.selected_sub_categories ? _this11.selected_sub_categories.map(function (c) {
+                return c.name;
+              }).join(', ') : '';
+              subSubCategoryNames = _this11.selected_sub_sub_categories ? _this11.selected_sub_sub_categories.map(function (c) {
+                return c.name;
+              }).join(', ') : '';
+              productContext = {
+                name: productName.trim(),
+                category: categoryNames,
+                sub_category: subCategoryNames || undefined,
+                sub_sub_category: subSubCategoryNames || undefined,
+                brand: _this11.brand && _this11.brand.name ? _this11.brand.name : undefined,
+                has_variants: hasVariants,
+                product_structure: hasVariants ? 'Product with multiple variants' : 'Single product (no variants)',
+                variants: hasVariants && variantList.length > 0 ? variantList : hasVariants ? 'Variants enabled' : 'Single product'
+              };
+              _context2.p = 6;
+              _this11.isGeneratingCustomAI = true;
+              _context2.n = 7;
+              return axios__WEBPACK_IMPORTED_MODULE_5__["default"].post(_this11.$apiUrl + '/products/google_gemini', {
+                product_context: productContext,
+                custom_prompt: promptText,
+                source: 'web'
+              });
+            case 7:
+              response = _context2.v;
+              data = response.data;
+              if (data.status === 1 && data.data) {
+                parsed = data.data;
+                if (langId && _this11.translations && _this11.translations[langId]) {
+                  if (parsed.description) _this11.$set(_this11.translations[langId], 'description', parsed.description);
+                  if (parsed.highlights) _this11.$set(_this11.translations[langId], 'highlights', parsed.highlights);
+                  if (parsed.meta_title) _this11.$set(_this11.translations[langId], 'meta_title', parsed.meta_title);
+                  if (parsed.meta_keywords) _this11.$set(_this11.translations[langId], 'meta_keywords', parsed.meta_keywords);
+                  if (parsed.meta_description) _this11.$set(_this11.translations[langId], 'meta_description', parsed.meta_description);
+                  if (parsed.schema_markup) {
+                    schemaStr = _typeof(parsed.schema_markup) === 'object' ? JSON.stringify(parsed.schema_markup, null, 2) : parsed.schema_markup;
+                    _this11.$set(_this11.translations[langId], 'schema_markup', schemaStr);
+                  }
+                }
+                if (parsed.description) _this11.description = parsed.description;
+                if (parsed.highlights) _this11.highlights = parsed.highlights;
+                if (parsed.meta_title) _this11.meta_title = parsed.meta_title;
+                if (parsed.meta_keywords) _this11.meta_keywords = parsed.meta_keywords;
+                if (parsed.meta_description) _this11.meta_description = parsed.meta_description;
+                if (parsed.schema_markup) {
+                  _this11.schema_markup = _typeof(parsed.schema_markup) === 'object' ? JSON.stringify(parsed.schema_markup, null, 2) : parsed.schema_markup;
+                }
+                _this11.showMessage("success", "Description, highlights & meta settings generated successfully from custom prompt!");
+              } else if (data.message) {
+                _this11.showMessage("error", "API Error: " + data.message);
+              } else {
+                _this11.showMessage("error", "Failed to generate content.");
+              }
+              _context2.n = 9;
+              break;
+            case 8:
+              _context2.p = 8;
+              _t2 = _context2.v;
+              console.error(_t2);
+              _this11.showMessage("error", "An error occurred while generating content: " + (((_error$response = _t2.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _t2.message));
+            case 9:
+              _context2.p = 9;
+              _this11.isGeneratingCustomAI = false;
+              return _context2.f(9);
+            case 10:
+              return _context2.a(2);
+          }
+        }, _callee2, null, [[6, 8, 9, 10]]);
       }))();
     },
     createSlug: function createSlug() {
@@ -674,14 +1473,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
     },
     fetchTags: function fetchTags(query) {
-      var _this14 = this;
+      var _this12 = this;
       if (query.length > 1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/products/tags', {
+        axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/products/tags', {
           params: {
             search: query
           }
         }).then(function (response) {
-          _this14.tagSuggestions = response.data;
+          _this12.tagSuggestions = response.data;
         })["catch"](function (error) {
           console.error(error);
         });
@@ -690,6 +1489,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     getBlankVariantInput: function getBlankVariantInput() {
       return {
         name: '',
+        variant_name: '',
         packet_status: 1,
         packet_stock: 0,
         packet_stock_unit_id: '',
@@ -703,6 +1503,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         loose_sale_price: '',
         loose_discount_mode: 'percent',
         color_variant: '',
+        color_name: '',
+        color_custom_hex: '',
         expiry_date_from: '',
         expiry_date_to: '',
         barcodes: [''],
@@ -712,11 +1514,19 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       };
     },
     addRow: function addRow() {
-      this.inputs.push(this.getBlankVariantInput());
-      vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(this.variantImages, this.inputs.length - 1, []);
+      var previous = this.inputs.length ? JSON.parse(JSON.stringify(this.inputs[this.inputs.length - 1])) : this.getBlankVariantInput();
+      var duplicate = Object.assign(this.getBlankVariantInput(), previous, {
+        id: '',
+        barcodes: [''],
+        barcodeError: '',
+        images: [],
+        loose_images: []
+      });
+      this.inputs.push(duplicate);
+      vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(this.variantImages, this.inputs.length - 1, []);
     },
     remove: function remove(index) {
-      var _this15 = this;
+      var _this13 = this;
       var variant_id = this.inputs[index].id ? this.inputs[index].id : "";
       if (this.id && variant_id !== "") {
         this.$swal.fire({
@@ -733,10 +1543,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             var postData = {
               id: variant_id
             };
-            axios__WEBPACK_IMPORTED_MODULE_0___default().post(_this15.$apiUrl + '/products/delete', postData).then(function (response) {
+            axios__WEBPACK_IMPORTED_MODULE_5__["default"].post(_this13.$apiUrl + '/products/delete', postData).then(function (response) {
               var data = response.data;
-              _this15.inputs.splice(index, 1);
-              _this15.showSuccess(data.message);
+              _this13.inputs.splice(index, 1);
+              _this13.showSuccess(data.message);
             });
           }
         });
@@ -852,7 +1662,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var maxSizeInBytes = 5 * 1024 * 1024;
       var tempImages = [];
       this.variantImageerror = null;
-      vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(this.variantImages, index, []);
+      vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(this.variantImages, index, []);
       var _iterator = _createForOfIteratorHelper(files),
         _step;
       try {
@@ -871,7 +1681,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
           tempImages.push({
             url: URL.createObjectURL(file),
-            name: file.name
+            name: file.name,
+            file: file
           });
         }
       } catch (err) {
@@ -879,11 +1690,284 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       } finally {
         _iterator.f();
       }
-      vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(this.variantImages, index, tempImages);
+      vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(this.variantImages, index, tempImages);
+    },
+    getMediaList: function getMediaList(group) {
+      var variantIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      if (group === 'other-new') return this.images;
+      if (group === 'other-existing') return this.other_images || [];
+      if (group === 'packet-new' || group === 'loose-new') return this.variantImages[variantIndex] || [];
+      if (group === 'packet-existing') return this.inputs[variantIndex].images || [];
+      if (group === 'loose-existing') return this.inputs[variantIndex].loose_images || [];
+      return [];
+    },
+    getColorHex: function getColorHex(inputOrColor) {
+      if (!inputOrColor) return '#000000';
+      var color = '';
+      if (_typeof(inputOrColor) === 'object') {
+        if (inputOrColor.color_custom_hex) return String(inputOrColor.color_custom_hex).toUpperCase();
+        color = inputOrColor.color_variant;
+      } else {
+        color = inputOrColor;
+      }
+      if (!color || color === '__custom__') return '#000000';
+      var clean = String(color).trim();
+      var hexMatch = clean.match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+      if (hexMatch) return hexMatch[0].toUpperCase();
+      if (/^[0-9A-Fa-f]{6}$/.test(clean)) return ('#' + clean).toUpperCase();
+      if (/^[0-9A-Fa-f]{3}$/.test(clean)) {
+        return ('#' + clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2]).toUpperCase();
+      }
+      var lower = clean.toLowerCase();
+      var found = this.colorVariantOptions.find(function (opt) {
+        return opt.label && opt.label.toLowerCase() === lower || opt.code && opt.code.toLowerCase() === lower || opt.value && opt.value.toLowerCase() === lower || opt.label && opt.label.toLowerCase().replace(/\s+/g, '_') === lower;
+      });
+      if (found && found.code) return found.code.toUpperCase();
+      return '#000000';
+    },
+    getColorSelectValue: function getColorSelectValue(inputOrColor) {
+      if (!inputOrColor) return '';
+      var color = '';
+      var customName = '';
+      if (_typeof(inputOrColor) === 'object') {
+        color = inputOrColor.color_variant;
+        customName = inputOrColor.color_name;
+      } else {
+        color = inputOrColor;
+      }
+      if (!color && !customName) return '';
+      if (color === '__custom__') return '__custom__';
+      var clean = String(color).trim().toLowerCase();
+      var hexMatch = clean.match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+      var hex = hexMatch ? hexMatch[0].toLowerCase() : '';
+      var nameMatch = clean.match(/^(.*?)\s*\((#[0-9A-Fa-f]{3,6})\)$/);
+
+      // 1. If format is "Name (#HEX)"
+      if (nameMatch) {
+        var name = nameMatch[1].trim().toLowerCase();
+        var matchedHex = nameMatch[2].trim().toLowerCase();
+        // If a custom name is explicitly provided and doesn't match the preset name
+        if (customName && String(customName).trim().toLowerCase() !== name) {
+          return '__custom__';
+        }
+        var preset = this.colorVariantOptions.find(function (option) {
+          return option.label.toLowerCase() === name && option.code.toLowerCase() === matchedHex;
+        });
+        return preset ? preset.code : '__custom__';
+      }
+
+      // 2. If a custom name is explicitly provided, treat as custom unless exactly matching a preset
+      if (customName && String(customName).trim()) {
+        var trimmedCustomName = String(customName).trim().toLowerCase();
+        var _preset = this.colorVariantOptions.find(function (option) {
+          return option.label.toLowerCase() === trimmedCustomName && hex && option.code.toLowerCase() === hex;
+        });
+        return _preset ? _preset.code : '__custom__';
+      }
+
+      // 3. Match presets by hex or label
+      var found = this.colorVariantOptions.find(function (option) {
+        return hex && option.code && option.code.toLowerCase() === hex || option.code && option.code.toLowerCase() === clean || option.label && option.label.toLowerCase() === clean || option.value && option.value.toLowerCase() === clean;
+      });
+      if (found) return found.code;
+      return '__custom__';
+    },
+    isCustomColor: function isCustomColor(inputOrColor) {
+      if (!inputOrColor) return false;
+      var color = '';
+      var customName = '';
+      if (_typeof(inputOrColor) === 'object') {
+        color = inputOrColor.color_variant;
+        customName = inputOrColor.color_name;
+      } else {
+        color = inputOrColor;
+      }
+      if (color === '__custom__') return true;
+      if (customName && String(customName).trim()) return true;
+      if (!color) return false;
+      return this.getColorSelectValue(inputOrColor) === '__custom__';
+    },
+    getColorLabel: function getColorLabel(inputOrColor) {
+      if (!inputOrColor) return '';
+      var color = '';
+      var customName = '';
+      if (_typeof(inputOrColor) === 'object') {
+        color = inputOrColor.color_variant;
+        customName = inputOrColor.color_name;
+      } else {
+        color = inputOrColor;
+      }
+      if (!color && !customName) return '';
+      if (color === '__custom__') {
+        return customName ? "\uD83C\uDFA8 ".concat(customName) : '🎨 Custom Color';
+      }
+      var selectValue = this.getColorSelectValue(inputOrColor);
+      if (selectValue && selectValue !== '__custom__') {
+        var found = this.colorVariantOptions.find(function (opt) {
+          return opt.code === selectValue;
+        });
+        if (found) return "".concat(found.emoji, " ").concat(found.label);
+      }
+      if (customName && String(customName).trim()) {
+        return "\uD83C\uDFA8 ".concat(String(customName).trim());
+      }
+      var nameMatch = String(color).trim().match(/^(.*?)\s*\(#([0-9A-Fa-f]{3,6})\)$/);
+      if (nameMatch && nameMatch[1].trim()) {
+        return "\uD83C\uDFA8 ".concat(nameMatch[1].trim());
+      }
+      return '🎨 Custom Color';
+    },
+    getDisplayHex: function getDisplayHex(input) {
+      if (!input || !input.color_variant || input.color_variant === '__custom__') return '';
+      var hex = this.getColorHex(input);
+      return hex && hex !== '#000000' ? hex : String(input.color_variant).startsWith('#') ? input.color_variant : '';
+    },
+    extractColorName: function extractColorName(val) {
+      if (!val) return '';
+      var str = String(val).trim();
+      var match = str.match(/^(.*?)\s*\((#[0-9A-Fa-f]{3,6})\)$/);
+      if (match) {
+        var name = match[1].trim();
+        if (name.toLowerCase() === 'custom color' || name.toLowerCase() === 'custom') return '';
+        var _isPreset = this.colorVariantOptions.some(function (opt) {
+          return opt.label.toLowerCase() === name.toLowerCase();
+        });
+        return _isPreset ? '' : name;
+      }
+      if (str.startsWith('#')) return '';
+      var isPreset = this.colorVariantOptions.some(function (opt) {
+        return opt.label.toLowerCase() === str.toLowerCase() || opt.code.toLowerCase() === str.toLowerCase();
+      });
+      if (isPreset) return '';
+      return str;
+    },
+    handleColorChange: function handleColorChange(input, value) {
+      if (value === '__custom__') {
+        var currentHex = this.getColorHex(input);
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', '__custom__');
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_custom_hex', currentHex && currentHex !== '#000000' ? currentHex : '#4A90E2');
+      } else if (value) {
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', value);
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_name', '');
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_custom_hex', '');
+      } else {
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', '');
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_name', '');
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_custom_hex', '');
+      }
+    },
+    onColorPickerChange: function onColorPickerChange(input, hex) {
+      if (hex) {
+        var upperHex = hex.toUpperCase();
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_custom_hex', upperHex);
+        if (!input.color_name || !String(input.color_name).trim()) {
+          var preset = this.colorVariantOptions.find(function (opt) {
+            return opt.code.toUpperCase() === upperHex;
+          });
+          if (preset) {
+            vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', preset.code);
+            return;
+          }
+        }
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', upperHex);
+      }
+    },
+    onCustomTextInput: function onCustomTextInput(input, text) {
+      var val = text ? text.trim() : '';
+      vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', val ? val : '__custom__');
+    },
+    onCustomNameInput: function onCustomNameInput(input, name) {
+      vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_name', name);
+      if (!input.color_variant || input.color_variant === '__custom__') {
+        var hex = input.color_custom_hex || '#4A90E2';
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_custom_hex', hex);
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'color_variant', hex);
+      }
+    },
+    getColorForSave: function getColorForSave(input) {
+      if (!input) return '';
+      var color = input.color_variant;
+      if (!color && !input.color_name) return '';
+      var hex = this.getColorHex(input);
+      var selectValue = this.getColorSelectValue(input);
+      var isPreset = selectValue && selectValue !== '__custom__';
+      if (isPreset) {
+        var found = this.colorVariantOptions.find(function (opt) {
+          return opt.code === selectValue;
+        });
+        var label = found ? found.label : '';
+        if (label && hex && hex !== '#000000') {
+          return "".concat(label, " (").concat(hex, ")");
+        }
+        return label || hex;
+      }
+
+      // Custom color
+      var customName = input.color_name ? String(input.color_name).trim() : '';
+      if (customName && hex && hex !== '#000000') {
+        return "".concat(customName, " (").concat(hex, ")");
+      }
+      if (customName) return customName;
+      if (hex && hex !== '#000000') {
+        return "Custom Color (".concat(hex, ")");
+      }
+      return hex || '';
+    },
+    getPresetColor: function getPresetColor(color) {
+      return this.getColorSelectValue(color);
+    },
+    setVariantColor: function setVariantColor(input, color) {
+      this.handleColorChange(input, color);
+    },
+    startMediaDrag: function startMediaDrag(group, index) {
+      var variantIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      this.draggedMedia = {
+        group: group,
+        index: index,
+        variantIndex: variantIndex
+      };
+    },
+    endMediaDrag: function endMediaDrag() {
+      this.draggedMedia = null;
+    },
+    dropMedia: function dropMedia(group, targetIndex) {
+      var variantIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var dragged = this.draggedMedia;
+      if (!dragged || dragged.group !== group || dragged.variantIndex !== variantIndex || dragged.index === targetIndex) {
+        return this.endMediaDrag();
+      }
+      var images = this.getMediaList(group, variantIndex);
+      var movedImage = images.splice(dragged.index, 1)[0];
+      images.splice(targetIndex, 0, movedImage);
+      images.forEach(function (image, index) {
+        image.sort_order = index + 1;
+      });
+      if (group.indexOf('existing') !== -1) {
+        this.saveMediaOrder(group, variantIndex, images);
+      }
+      this.endMediaDrag();
+    },
+    saveMediaOrder: function saveMediaOrder(group, variantIndex, images) {
+      var _this14 = this;
+      if (!this.id || !images.length) return;
+      var variantId = group === 'other-existing' ? null : this.inputs[variantIndex].id;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].post(this.$apiUrl + '/products/reorder_images', {
+        product_id: this.id,
+        variant_id: variantId,
+        image_ids: images.map(function (image) {
+          return image.id;
+        })
+      }).then(function (response) {
+        if (!response.data || response.data.status !== 1) {
+          _this14.showError(response.data && response.data.message || 'Unable to save image order.');
+        }
+      })["catch"](function () {
+        return _this14.showError('Unable to save image order.');
+      });
     },
     addVariantBarcode: function addVariantBarcode(input) {
       if (!Array.isArray(input.barcodes)) {
-        vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, 'barcodes', ['']);
+        vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'barcodes', ['']);
         return;
       }
       input.barcodes.push('');
@@ -909,16 +1993,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       try {
         for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
           var input = _step2.value;
-          vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, 'barcodeError', '');
+          vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'barcodeError', '');
           var mrp = this.toNumber(this.type === 'packet' ? input.packet_price : input.loose_price);
           var salePrice = this.toNumber(this.type === 'packet' ? input.packet_sale_price : input.loose_sale_price);
           var saleErrorKey = this.type === 'packet' ? 'validationErrorSalePrice' : 'validationErrorSalePriceLoose';
           if (salePrice < 0 || salePrice > mrp) {
-            vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, saleErrorKey, 'Sale Price must be between 0 and MRP.');
+            vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, saleErrorKey, 'Sale Price must be between 0 and MRP.');
             this.showError('Sale Price must be between 0 and MRP.');
             return false;
           }
-          vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, saleErrorKey, null);
+          vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, saleErrorKey, null);
           var _iterator3 = _createForOfIteratorHelper(this.normalizeVariantBarcodes(input)),
             _step3;
           try {
@@ -926,12 +2010,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               var barcode = _step3.value;
               var normalized = barcode.toLowerCase();
               if (!barcodePattern.test(barcode)) {
-                vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, 'barcodeError', 'Use only letters, numbers, and hyphens in barcodes.');
+                vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'barcodeError', 'Use only letters, numbers, and hyphens in barcodes.');
                 this.showError(input.barcodeError);
                 return false;
               }
               if (normalized === productBarcode || seenBarcodes.has(normalized)) {
-                vue__WEBPACK_IMPORTED_MODULE_5__["default"].set(input, 'barcodeError', 'Every product and variant barcode must be unique.');
+                vue__WEBPACK_IMPORTED_MODULE_6__["default"].set(input, 'barcodeError', 'Every product and variant barcode must be unique.');
                 this.showError(input.barcodeError);
                 return false;
               }
@@ -960,118 +2044,118 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return this.sellers && this.sellers.length > 0 ? this.sellers[0].id : '';
     },
     getSeller: function getSeller() {
-      var _this16 = this;
+      var _this15 = this;
       if (this.seller_id !== 0 && this.seller_id !== "" && !this.id) {
         this.isLoading = true;
         var param = {
           "seller_id": this.seller_id
         };
-        axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/sellers/edit/' + this.seller_id, {
+        axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/sellers/edit/' + this.seller_id, {
           params: param
         }).then(function (response) {
-          _this16.isLoading = false, _this16.require_products_approval = response.data.data.require_products_approval;
-          _this16.is_approved = _this16.require_products_approval == 0 ? 1 : 0;
+          _this15.isLoading = false, _this15.require_products_approval = response.data.data.require_products_approval;
+          _this15.is_approved = _this15.require_products_approval == 0 ? 1 : 0;
         });
       }
     },
     getCategories: function getCategories() {
-      var _this17 = this;
+      var _this16 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/categories', {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/categories', {
         params: {
           status: 1,
           limit: 1000
         }
       }).then(function (response) {
-        _this17.isLoading = false;
+        _this16.isLoading = false;
         var data = response.data || {};
         var categories = Array.isArray(data.data) ? data.data : data.data && Array.isArray(data.data.categories) ? data.data.categories : [];
-        _this17.productCategoryList = categories;
-        if (_this17.category_id) {
-          _this17.setCategorySelectionFromSavedId(_this17.category_id);
+        _this16.productCategoryList = categories;
+        if (_this16.category_id) {
+          _this16.setCategorySelectionFromSavedId(_this16.category_id);
         }
       })["catch"](function (error) {
-        _this17.isLoading = false;
-        _this17.productCategoryList = [];
+        _this16.isLoading = false;
+        _this16.productCategoryList = [];
       });
     },
     getSellers: function getSellers() {
-      var _this18 = this;
+      var _this17 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/sellers').then(function (response) {
-        _this18.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/sellers').then(function (response) {
+        _this17.isLoading = false;
         var data = response.data;
-        _this18.sellers = Array.isArray(data.data) ? data.data : [];
-        if (!_this18.seller_id && _this18.sellers.length > 0) {
-          _this18.seller_id = _this18.sellers[0].id;
-          _this18.getSeller();
+        _this17.sellers = Array.isArray(data.data) ? data.data : [];
+        if (!_this17.seller_id && _this17.sellers.length > 0) {
+          _this17.seller_id = _this17.sellers[0].id;
+          _this17.getSeller();
         }
       });
     },
     getTaxes: function getTaxes() {
-      var _this19 = this;
+      var _this18 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/products/taxes').then(function (response) {
-        _this19.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/products/taxes').then(function (response) {
+        _this18.isLoading = false;
         var data = response.data;
-        _this19.taxes = data.data;
+        _this18.taxes = data.data;
       });
     },
     getUnits: function getUnits() {
-      var _this20 = this;
+      var _this19 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/units/get').then(function (response) {
-        _this20.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/units/get').then(function (response) {
+        _this19.isLoading = false;
         var data = response.data;
-        _this20.units = data.data;
+        _this19.units = data.data;
       });
     },
     getBrands: function getBrands() {
-      var _this21 = this;
+      var _this20 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/products/brands/get').then(function (response) {
-        _this21.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/products/brands/get').then(function (response) {
+        _this20.isLoading = false;
         var data = response.data;
-        _this21.brands = data.data;
-        if (_this21.cachedData && _this21.cachedData.brand) {
-          var foundBrand = _this21.brands.find(function (b) {
-            return b.id === _this21.cachedData.brand.id;
+        _this20.brands = data.data;
+        if (_this20.cachedData && _this20.cachedData.brand) {
+          var foundBrand = _this20.brands.find(function (b) {
+            return b.id === _this20.cachedData.brand.id;
           }) || null;
           // Update brand with translated name
-          _this21.$nextTick(function () {
-            if (foundBrand && _this21.translatedBrands && _this21.translatedBrands.length > 0) {
-              var translatedBrand = _this21.translatedBrands.find(function (b) {
+          _this20.$nextTick(function () {
+            if (foundBrand && _this20.translatedBrands && _this20.translatedBrands.length > 0) {
+              var translatedBrand = _this20.translatedBrands.find(function (b) {
                 return b.id === foundBrand.id;
               });
               if (translatedBrand) {
-                _this21.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
+                _this20.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
                   name: translatedBrand.name,
                   title: translatedBrand.title
                 });
               } else {
-                _this21.brand = foundBrand;
+                _this20.brand = foundBrand;
               }
             } else {
-              _this21.brand = foundBrand;
+              _this20.brand = foundBrand;
             }
           });
         }
       });
     },
     getCountries: function getCountries() {
-      var _this22 = this;
+      var _this21 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/countries/active').then(function (response) {
-        _this22.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/countries/active').then(function (response) {
+        _this21.isLoading = false;
         var data = response.data;
-        _this22.countries = data.data;
-        if (_this22.cachedData && _this22.cachedData.made_in) {
-          _this22.made_in = _this22.countries.find(function (c) {
-            return c.id === _this22.cachedData.made_in.id;
+        _this21.countries = data.data;
+        if (_this21.cachedData && _this21.cachedData.made_in) {
+          _this21.made_in = _this21.countries.find(function (c) {
+            return c.id === _this21.cachedData.made_in.id;
           }) || null;
         } else {
           // Set default to India
-          _this22.made_in = _this22.countries.find(function (c) {
+          _this21.made_in = _this21.countries.find(function (c) {
             return c.name === 'India';
           }) || null;
         }
@@ -1098,26 +2182,26 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return status.status || '';
     },
     getOrderStatus: function getOrderStatus() {
-      var _this23 = this;
+      var _this22 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/order_statuses').then(function (response) {
-        _this23.isLoading = false;
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/order_statuses').then(function (response) {
+        _this22.isLoading = false;
         var data = response.data;
         var statusesToRemoveIds = [6, 7, 8];
-        _this23.order_status = data.data.filter(function (status) {
+        _this22.order_status = data.data.filter(function (status) {
           return !statusesToRemoveIds.includes(status.id);
         });
       });
     },
     getTextGenKey: function getTextGenKey() {
-      var _this24 = this;
+      var _this23 = this;
       // Get the text generation API key from store settings
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/store_settings').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/store_settings').then(function (response) {
         var data = response.data.data;
         if (data.store_settings) {
           data.store_settings.forEach(function (item) {
             if (item.variable === 'text_gen_key') {
-              _this24.textGenKey = item.value;
+              _this23.textGenKey = item.value;
             }
           });
         }
@@ -1178,91 +2262,217 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       return true;
     },
     getProduct: function getProduct() {
-      var _this25 = this;
+      var _this24 = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get(this.$apiUrl + '/products/edit/' + this.id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/products/edit/' + this.id).then(function (response) {
         var data = response.data;
         if (data.status === 1) {
-          var _this25$record$indica;
-          _this25.record = data.data;
-          _this25.name = _this25.record.name;
-          _this25.slug = _this25.record.slug;
-          _this25.barcode = _this25.record.barcode;
-          if (_this25.clone) {
-            _this25.name = '';
-            _this25.slug = '';
-            _this25.barcode = '';
+          var _this24$record$indica;
+          _this24.record = data.data;
+          _this24.name = _this24.record.name;
+          _this24.slug = _this24.record.slug;
+          _this24.barcode = _this24.record.barcode;
+          if (_this24.clone) {
+            _this24.name = '';
+            _this24.slug = '';
+            _this24.barcode = '';
           }
-          _this25.seller_id = _this25.record.seller_id;
-          _this25.getSellerCategories();
-          _this25.getSeller();
-          _this25.tax_id = _this25.record.tax_id;
-          var foundBrand = _this25.brands.find(function (item) {
-            return item.id === _this25.record.brand_id;
+          _this24.seller_id = _this24.record.seller_id;
+          _this24.getSellerCategories();
+          _this24.getSeller();
+          _this24.tax_id = _this24.record.tax_id;
+          var foundBrand = _this24.brands.find(function (item) {
+            return item.id === _this24.record.brand_id;
           });
           // Update brand with translated name after brands are loaded
-          _this25.$nextTick(function () {
-            if (foundBrand && _this25.translatedBrands && _this25.translatedBrands.length > 0) {
-              var translatedBrand = _this25.translatedBrands.find(function (b) {
+          _this24.$nextTick(function () {
+            if (foundBrand && _this24.translatedBrands && _this24.translatedBrands.length > 0) {
+              var translatedBrand = _this24.translatedBrands.find(function (b) {
                 return b.id === foundBrand.id;
               });
               if (translatedBrand) {
-                _this25.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
+                _this24.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
                   name: translatedBrand.name,
                   title: translatedBrand.title
                 });
               } else {
-                _this25.brand = foundBrand;
+                _this24.brand = foundBrand;
               }
             } else {
-              _this25.brand = foundBrand;
+              _this24.brand = foundBrand;
             }
           });
-          _this25.type = _this25.record.type;
-          _this25.category_id = _this25.record.category_id;
-          _this25.product_type = (_this25$record$indica = _this25.record.indicator) !== null && _this25$record$indica !== void 0 ? _this25$record$indica : "";
+          _this24.type = _this24.record.type;
+          _this24.category_id = _this24.record.category_id;
+
+          // Load all categories (primary + additional) for multi-category selection
+          _this24.selected_categories = [];
+          _this24.selected_sub_categories = [];
+          _this24.selected_sub_sub_categories = [];
+
+          // --- START ROBUST CATEGORY PARSER ---
+          var allCategoryIds = new Set();
+          var parseIds = function parseIds(val) {
+            if (!val) return;
+            String(val).split(',').map(function (id) {
+              return parseInt(id.trim());
+            }).filter(function (id) {
+              return !isNaN(id);
+            }).forEach(function (id) {
+              return allCategoryIds.add(id);
+            });
+          };
+          parseIds(_this24.record.category_id);
+          parseIds(_this24.record.additional_category_ids);
+          parseIds(_this24.record.sub_category_id);
+          parseIds(_this24.record.sub_sub_category_id);
+          allCategoryIds.forEach(function (id) {
+            var cat = _this24.productCategoryList.find(function (c) {
+              return c.id === id;
+            });
+            if (cat) {
+              var isRoot = !cat.parent_id || parseInt(cat.parent_id) === 0;
+              if (isRoot) {
+                if (!_this24.selected_categories.some(function (c) {
+                  return c.id === cat.id;
+                })) {
+                  _this24.selected_categories.push(cat);
+                }
+              } else {
+                var parent = _this24.productCategoryList.find(function (p) {
+                  return p.id === parseInt(cat.parent_id);
+                });
+                if (parent && (!parent.parent_id || parseInt(parent.parent_id) === 0)) {
+                  if (!_this24.selected_sub_categories.some(function (c) {
+                    return c.id === cat.id;
+                  })) {
+                    _this24.selected_sub_categories.push(cat);
+                  }
+                } else if (parent) {
+                  if (!_this24.selected_sub_sub_categories.some(function (c) {
+                    return c.id === cat.id;
+                  })) {
+                    _this24.selected_sub_sub_categories.push(cat);
+                  }
+                }
+              }
+            }
+          });
+          // --- END ROBUST CATEGORY PARSER ---
+
+          // Add primary category (Disabled because handled above)
+          _this24.record.category_id = null;
+          _this24.record.additional_category_ids = null;
+          _this24.record.sub_category_id = null;
+          _this24.record.sub_sub_category_id = null;
+
+          // Add primary category
+          if (_this24.record.category_id) {
+            var primaryCategory = _this24.productCategoryList.find(function (cat) {
+              return cat.id === _this24.record.category_id;
+            });
+            if (primaryCategory) {
+              _this24.selected_categories.push(primaryCategory);
+            }
+          }
+
+          // Add additional categories
+          if (_this24.record.additional_category_ids) {
+            var additionalIds = _this24.record.additional_category_ids.split(',').map(function (id) {
+              return parseInt(id.trim());
+            }).filter(function (id) {
+              return !isNaN(id);
+            });
+            var additionalCategories = _this24.productCategoryList.filter(function (cat) {
+              return additionalIds.includes(cat.id) && cat.id !== _this24.record.category_id;
+            });
+
+            // Categorize them into main, sub, sub-sub
+            additionalCategories.forEach(function (cat) {
+              if (!cat.parent_id || cat.parent_id == 0) {
+                if (!_this24.selected_categories.some(function (c) {
+                  return c.id === cat.id;
+                })) {
+                  _this24.selected_categories.push(cat);
+                }
+              } else {
+                var parent = _this24.productCategoryList.find(function (p) {
+                  return p.id === cat.parent_id;
+                });
+                if (parent && (!parent.parent_id || parent.parent_id == 0)) {
+                  _this24.selected_sub_categories.push(cat);
+                } else if (parent) {
+                  _this24.selected_sub_sub_categories.push(cat);
+                }
+              }
+            });
+          }
+          if (_this24.record.sub_category_id) {
+            var subCatId = parseInt(_this24.record.sub_category_id);
+            var subCategory = _this24.productCategoryList.find(function (cat) {
+              return cat.id === subCatId;
+            });
+            if (subCategory && !_this24.selected_sub_categories.some(function (c) {
+              return c.id === subCatId;
+            })) {
+              _this24.selected_sub_categories.push(subCategory);
+            }
+          }
+          if (_this24.record.sub_sub_category_id) {
+            var subSubCatId = parseInt(_this24.record.sub_sub_category_id);
+            var subSubCategory = _this24.productCategoryList.find(function (cat) {
+              return cat.id === subSubCatId;
+            });
+            if (subSubCategory && !_this24.selected_sub_sub_categories.some(function (c) {
+              return c.id === subSubCatId;
+            })) {
+              _this24.selected_sub_sub_categories.push(subSubCategory);
+            }
+          }
+          _this24.product_type = (_this24$record$indica = _this24.record.indicator) !== null && _this24$record$indica !== void 0 ? _this24$record$indica : "";
 
           // Load translations
-          _this25.loadTranslations();
-          _this25.made_in = _this25.countries.find(function (item) {
-            return item.id == _this25.record.made_in;
+          _this24.loadTranslations();
+          _this24.made_in = _this24.countries.find(function (item) {
+            return item.id == _this24.record.made_in;
           });
-          _this25.tax_included_in_price = _this25.record.tax_included_in_price;
-          _this25.return_status = _this25.record.return_status;
-          _this25.return_days = _this25.record.return_days;
-          _this25.cancelable_status = _this25.record.cancelable_status;
-          _this25.till_status = _this25.record.till_status;
-          _this25.cod_allowed_status = _this25.record.cod_allowed;
-          _this25.max_allowed_quantity = _this25.record.total_allowed_quantity;
-          _this25.description = _this25.record.description;
-          _this25.highlights = _this25.record.highlights || '';
-          _this25.is_approved = _this25.record.is_approved;
-          _this25.status = _this25.record.status;
-          _this25.is_unlimited_stock = _this25.record.is_unlimited_stock;
-          _this25.main_image_path = _this25.$storageUrl + _this25.record.image;
-          _this25.other_images = _this25.record.images;
-          _this25.image = null;
-          _this25.meta_title = _this25.record.meta_title;
-          _this25.meta_keywords = _this25.record.meta_keywords;
-          _this25.schema_markup = _this25.record.schema_markup;
-          _this25.meta_description = _this25.record.meta_description;
+          _this24.tax_included_in_price = _this24.record.tax_included_in_price;
+          _this24.return_status = _this24.record.return_status;
+          _this24.return_days = _this24.record.return_days;
+          _this24.cancelable_status = _this24.record.cancelable_status;
+          _this24.till_status = _this24.record.till_status;
+          _this24.cod_allowed_status = _this24.record.cod_allowed;
+          _this24.max_allowed_quantity = _this24.record.total_allowed_quantity;
+          _this24.description = _this24.record.description;
+          _this24.highlights = _this24.record.highlights || '';
+          _this24.is_approved = _this24.record.is_approved;
+          _this24.status = _this24.record.status;
+          _this24.is_unlimited_stock = _this24.record.is_unlimited_stock;
+          _this24.main_image_path = _this24.$storageUrl + _this24.record.image;
+          _this24.other_images = _this24.record.images;
+          _this24.image = null;
+          _this24.meta_title = _this24.record.meta_title;
+          _this24.meta_keywords = _this24.record.meta_keywords;
+          _this24.schema_markup = _this24.record.schema_markup;
+          _this24.meta_description = _this24.record.meta_description;
 
           // Set default language translation from main record
-          if (_this25.defaultLanguageId && _this25.translations[_this25.defaultLanguageId]) {
-            _this25.translations[_this25.defaultLanguageId].name = _this25.name;
-            _this25.translations[_this25.defaultLanguageId].description = _this25.description;
-            _this25.translations[_this25.defaultLanguageId].highlights = _this25.highlights;
-            _this25.translations[_this25.defaultLanguageId].meta_title = _this25.meta_title;
-            _this25.translations[_this25.defaultLanguageId].meta_keywords = _this25.meta_keywords;
-            _this25.translations[_this25.defaultLanguageId].schema_markup = _this25.schema_markup;
-            _this25.translations[_this25.defaultLanguageId].meta_description = _this25.meta_description;
+          if (_this24.defaultLanguageId && _this24.translations[_this24.defaultLanguageId]) {
+            _this24.translations[_this24.defaultLanguageId].name = _this24.name;
+            _this24.translations[_this24.defaultLanguageId].description = _this24.description;
+            _this24.translations[_this24.defaultLanguageId].highlights = _this24.highlights;
+            _this24.translations[_this24.defaultLanguageId].meta_title = _this24.meta_title;
+            _this24.translations[_this24.defaultLanguageId].meta_keywords = _this24.meta_keywords;
+            _this24.translations[_this24.defaultLanguageId].schema_markup = _this24.schema_markup;
+            _this24.translations[_this24.defaultLanguageId].meta_description = _this24.meta_description;
           }
-          var vm = _this25;
-          if (_this25.type == 'packet') {
-            _this25.inputs = [];
-            _this25.record.variants.forEach(function (item) {
+          var vm = _this24;
+          if (_this24.type == 'packet') {
+            _this24.inputs = [];
+            _this24.record.variants.forEach(function (item) {
               var variantData = {
                 'id': item.id ? item.id : "",
+                'variant_name': item.variant_name || '',
                 'packet_measurement': item.measurement,
                 'packet_price': item.price,
                 'packet_purchase_price': item.purchase_price,
@@ -1274,6 +2484,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 'packet_stock_unit_id': item.stock_unit_id,
                 'packet_status': item.status,
                 'color_variant': item.color_variant || '',
+                'color_name': vm.extractColorName(item.color_variant),
+                'color_custom_hex': vm.getColorHex(item.color_variant),
                 'expiry_date_from': item.expiry_date_from || '',
                 'expiry_date_to': item.expiry_date_to || '',
                 'images': item.images,
@@ -1286,15 +2498,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               vm.inputs.push(variantData);
             });
           }
-          if (_this25.type == 'loose') {
+          if (_this24.type == 'loose') {
             var loose_stock = 0;
             var loose_stock_unit_id = 0;
             var status = 0;
-            _this25.inputs = [];
-            _this25.record.variants.forEach(function (item) {
+            _this24.inputs = [];
+            _this24.record.variants.forEach(function (item) {
               var _item$custom_title;
               var variantData = {
                 'id': item.id ? item.id : "",
+                'variant_name': item.variant_name || '',
                 'loose_measurement': item.measurement,
                 'loose_custom_title': (_item$custom_title = item.custom_title) !== null && _item$custom_title !== void 0 ? _item$custom_title : "",
                 'loose_price': item.price,
@@ -1305,6 +2518,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 'loose_discount_mode': item.discount_percentage ? 'percent' : 'amount',
                 'packet_stock': item.stock,
                 'color_variant': item.color_variant || '',
+                'color_name': vm.extractColorName(item.color_variant),
+                'color_custom_hex': vm.getColorHex(item.color_variant),
                 'expiry_date_from': item.expiry_date_from || '',
                 'expiry_date_to': item.expiry_date_to || '',
                 'loose_images': item.images,
@@ -1319,31 +2534,37 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               loose_stock_unit_id = item.stock_unit_id;
               status = item.status;
             });
-            _this25.loose_stock = loose_stock;
-            _this25.loose_stock_unit_id = loose_stock_unit_id;
-            _this25.loose_purchase_price = _this25.record.variants[0] ? _this25.record.variants[0].purchase_price : 0;
-            _this25.loose_discount_percentage = _this25.record.variants[0] ? _this25.record.variants[0].discount_percentage || _this25.getDiscountPercentFromSalePrice(_this25.record.variants[0].price, _this25.record.variants[0].discounted_price) : 0;
-            _this25.status = status;
+            _this24.loose_stock = loose_stock;
+            _this24.loose_stock_unit_id = loose_stock_unit_id;
+            _this24.loose_purchase_price = _this24.record.variants[0] ? _this24.record.variants[0].purchase_price : 0;
+            _this24.loose_discount_percentage = _this24.record.variants[0] ? _this24.record.variants[0].discount_percentage || _this24.getDiscountPercentFromSalePrice(_this24.record.variants[0].price, _this24.record.variants[0].discounted_price) : 0;
+            _this24.status = status;
           }
         } else {
-          _this25.showError(data.message);
+          _this24.showError(data.message);
           setTimeout(function () {
-            _this25.$router.back();
+            _this24.$router.back();
           }, 1000);
         }
       })["catch"](function (error) {
-        _this25.isLoading = false;
+        _this24.isLoading = false;
         if (error.message) {
-          _this25.showError(error.message);
+          _this24.showError(error.message);
         } else {
-          _this25.showError("Something went wrong!");
+          _this24.showError("Something went wrong!");
         }
       });
     },
     saveRecord: function saveRecord() {
-      var _this26 = this;
+      var _this25 = this;
       // Validate default language
       if (!this.validateDefaultLanguage()) {
+        return;
+      }
+
+      // Validate category selection
+      if (!this.selected_categories || this.selected_categories.length === 0) {
+        this.showError(__('please_select_at_least_one_category'));
         return;
       }
 
@@ -1389,61 +2610,58 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       formData.append('meta_keywords', defaultTranslation.meta_keywords || '');
       formData.append('schema_markup', defaultTranslation.schema_markup || '');
       formData.append('meta_description', defaultTranslation.meta_description || '');
+      formData.append('has_variant', this.has_variant ? 1 : 0);
 
       /*packet*/
       if (this.type === 'packet') {
+        var _loop = function _loop(_i) {
+          formData.append('variant_id[]', _this25.inputs[_i].id ? _this25.inputs[_i].id : "");
+          formData.append('packet_variant_name[]', _this25.inputs[_i].variant_name || '');
+          formData.append('packet_color_variant[]', _this25.getColorForSave(_this25.inputs[_i]));
+          formData.append('packet_color_name[]', _this25.inputs[_i].color_name || '');
+          formData.append('packet_expiry_date_from[]', _this25.inputs[_i].expiry_date_from || '');
+          formData.append('packet_expiry_date_to[]', _this25.inputs[_i].expiry_date_to || '');
+          formData.append('packet_measurement[]', _this25.inputs[_i].packet_measurement || 1);
+          formData.append('packet_price[]', _this25.inputs[_i].packet_price != undefined ? _this25.inputs[_i].packet_price : 0);
+          formData.append('packet_purchase_price[]', _this25.inputs[_i].packet_purchase_price != undefined ? _this25.inputs[_i].packet_purchase_price : 0);
+          formData.append('discounted_price[]', _this25.getPacketSalePriceRaw(_this25.inputs[_i]));
+          formData.append('discount_percentage[]', _this25.getPacketDiscountPercentage(_this25.inputs[_i]));
+          formData.append('packet_stock[]', _this25.inputs[_i].packet_stock != undefined ? _this25.inputs[_i].packet_stock : 0);
+          formData.append('packet_stock_unit_id[]', _this25.inputs[_i].packet_stock_unit_id != undefined ? _this25.inputs[_i].packet_stock_unit_id : 0);
+          formData.append('packet_status[]', _this25.getPacketStatusForSave(_this25.inputs[_i]));
+          formData.append('variant_barcodes[]', JSON.stringify(_this25.normalizeVariantBarcodes(_this25.inputs[_i])));
+          (_this25.variantImages[_i] || []).forEach(function (image) {
+            formData.append('packet_variant_images_' + _i + '[]', image.file);
+          });
+        };
         for (var _i = 0; _i < this.inputs.length; _i++) {
-          formData.append('variant_id[]', this.inputs[_i].id ? this.inputs[_i].id : "");
-          formData.append('packet_color_variant[]', this.inputs[_i].color_variant || '');
-          formData.append('packet_expiry_date_from[]', this.inputs[_i].expiry_date_from || '');
-          formData.append('packet_expiry_date_to[]', this.inputs[_i].expiry_date_to || '');
-          formData.append('packet_measurement[]', this.inputs[_i].packet_measurement || 1);
-          formData.append('packet_price[]', this.inputs[_i].packet_price != undefined ? this.inputs[_i].packet_price : 0);
-          formData.append('packet_purchase_price[]', this.inputs[_i].packet_purchase_price != undefined ? this.inputs[_i].packet_purchase_price : 0);
-          formData.append('discounted_price[]', this.getPacketSalePriceRaw(this.inputs[_i]));
-          formData.append('discount_percentage[]', this.getPacketDiscountPercentage(this.inputs[_i]));
-          formData.append('packet_stock[]', this.inputs[_i].packet_stock != undefined ? this.inputs[_i].packet_stock : 0);
-          formData.append('packet_stock_unit_id[]', this.inputs[_i].packet_stock_unit_id != undefined ? this.inputs[_i].packet_stock_unit_id : 0);
-          formData.append('packet_status[]', this.getPacketStatusForSave(this.inputs[_i]));
-          formData.append('variant_barcodes[]', JSON.stringify(this.normalizeVariantBarcodes(this.inputs[_i])));
-
-          // Safely handle packet variant images refs (can be undefined when card is hidden in non-default language tab)
-          var packetRef = this.$refs['packet_variant_images_' + _i];
-          var packetInput = Array.isArray(packetRef) ? packetRef && packetRef[0] : packetRef;
-          if (packetInput && packetInput.files) {
-            for (var j = 0; j < packetInput.files.length; j++) {
-              var file = packetInput.files[j];
-              formData.append('packet_variant_images_' + _i + '[]', file);
-            }
-          }
+          _loop(_i);
         }
       }
 
       /*loose*/
       if (this.type === 'loose') {
+        var _loop2 = function _loop2(_i2) {
+          formData.append('variant_id[]', _this25.inputs[_i2].id ? _this25.inputs[_i2].id : "");
+          formData.append('loose_variant_name[]', _this25.inputs[_i2].variant_name || '');
+          formData.append('loose_color_variant[]', _this25.getColorForSave(_this25.inputs[_i2]));
+          formData.append('loose_color_name[]', _this25.inputs[_i2].color_name || '');
+          formData.append('loose_expiry_date_from[]', _this25.inputs[_i2].expiry_date_from || '');
+          formData.append('loose_expiry_date_to[]', _this25.inputs[_i2].expiry_date_to || '');
+          formData.append('loose_measurement[]', _this25.inputs[_i2].loose_measurement || 1);
+          formData.append('loose_custom_title[]', _this25.inputs[_i2].loose_custom_title);
+          formData.append('loose_price[]', _this25.inputs[_i2].loose_price != undefined ? _this25.inputs[_i2].loose_price : 0);
+          formData.append('loose_discounted_price[]', _this25.getLooseSalePriceRaw(_this25.inputs[_i2]));
+          formData.append('loose_discount_percentage[]', _this25.getLooseDiscountPercentage(_this25.inputs[_i2]));
+          formData.append('loose_purchase_price[]', _this25.inputs[_i2].loose_purchase_price != undefined ? _this25.inputs[_i2].loose_purchase_price : 0);
+          formData.append('packet_stock[]', _this25.inputs[_i2].packet_stock != undefined ? _this25.inputs[_i2].packet_stock : 0);
+          formData.append('variant_barcodes[]', JSON.stringify(_this25.normalizeVariantBarcodes(_this25.inputs[_i2])));
+          (_this25.variantImages[_i2] || []).forEach(function (image) {
+            formData.append('loose_variant_images_' + _i2 + '[]', image.file);
+          });
+        };
         for (var _i2 = 0; _i2 < this.inputs.length; _i2++) {
-          formData.append('variant_id[]', this.inputs[_i2].id ? this.inputs[_i2].id : "");
-          formData.append('loose_color_variant[]', this.inputs[_i2].color_variant || '');
-          formData.append('loose_expiry_date_from[]', this.inputs[_i2].expiry_date_from || '');
-          formData.append('loose_expiry_date_to[]', this.inputs[_i2].expiry_date_to || '');
-          formData.append('loose_measurement[]', this.inputs[_i2].loose_measurement || 1);
-          formData.append('loose_custom_title[]', this.inputs[_i2].loose_custom_title);
-          formData.append('loose_price[]', this.inputs[_i2].loose_price != undefined ? this.inputs[_i2].loose_price : 0);
-          formData.append('loose_discounted_price[]', this.getLooseSalePriceRaw(this.inputs[_i2]));
-          formData.append('loose_discount_percentage[]', this.getLooseDiscountPercentage(this.inputs[_i2]));
-          formData.append('loose_purchase_price[]', this.inputs[_i2].loose_purchase_price != undefined ? this.inputs[_i2].loose_purchase_price : 0);
-          formData.append('packet_stock[]', this.inputs[_i2].packet_stock != undefined ? this.inputs[_i2].packet_stock : 0);
-          formData.append('variant_barcodes[]', JSON.stringify(this.normalizeVariantBarcodes(this.inputs[_i2])));
-
-          // Safely handle loose variant images refs (can be undefined when card is hidden in non-default language tab)
-          var looseRef = this.$refs['loose_variant_images_' + _i2];
-          var looseInput = Array.isArray(looseRef) ? looseRef && looseRef[0] : looseRef;
-          if (looseInput && looseInput.files) {
-            for (var _j = 0; _j < looseInput.files.length; _j++) {
-              var _file = looseInput.files[_j];
-              formData.append('loose_variant_images_' + _i2 + '[]', _file);
-            }
-          }
+          _loop2(_i2);
         }
         formData.append('loose_stock', this.loose_stock);
         formData.append('loose_stock_unit_id', this.loose_stock_unit_id);
@@ -1452,8 +2670,42 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       formData.append('loose_stock', this.loose_stock != undefined ? this.loose_stock : 0);
       formData.append('loose_stock_unit_id', this.loose_stock_unit_id != undefined ? this.loose_stock_unit_id : 0);
       formData.append('status', this.status != undefined ? this.status : 0);
-      this.category_id = this.selectedProductCategoryId;
-      formData.append('category_id', this.category_id);
+      formData.append('expiry_date_from', this.expiry_date_from || '');
+      formData.append('expiry_date_to', this.expiry_date_to || '');
+
+      // Handle multi-category selection
+      var finalCategories = [];
+      if (this.selected_categories) finalCategories.push.apply(finalCategories, _toConsumableArray(this.selected_categories));
+      if (this.selected_sub_categories) finalCategories.push.apply(finalCategories, _toConsumableArray(this.selected_sub_categories));
+      if (this.selected_sub_sub_categories) finalCategories.push.apply(finalCategories, _toConsumableArray(this.selected_sub_sub_categories));
+      if (finalCategories.length > 0) {
+        // Use the first selected main category as the primary category_id
+        this.category_id = this.selected_categories[0] ? this.selected_categories[0].id : finalCategories[0].id;
+        formData.append('category_id', this.category_id);
+        if (this.selected_sub_categories && this.selected_sub_categories.length > 0) {
+          formData.append('sub_category_id', this.selected_sub_categories.map(function (c) {
+            return c.id;
+          }).join(','));
+        }
+        if (this.selected_sub_sub_categories && this.selected_sub_sub_categories.length > 0) {
+          formData.append('sub_sub_category_id', this.selected_sub_sub_categories.map(function (c) {
+            return c.id;
+          }).join(','));
+        }
+
+        // Send all selected categories as additional_category_ids
+        var allCategoryIds = finalCategories.map(function (cat) {
+          return cat.id;
+        }).join(',');
+        formData.append('additional_category_ids', allCategoryIds);
+      } else {
+        // Fallback to original logic if no categories selected
+        this.category_id = this.selectedProductCategoryId;
+        formData.append('category_id', this.category_id);
+        if (this.product_subcategory_id) formData.append('sub_category_id', this.product_subcategory_id);
+        if (this.product_sub_subcategory_id) formData.append('sub_sub_category_id', this.product_sub_subcategory_id);
+        formData.append('additional_category_ids', '');
+      }
       formData.append('product_type', this.product_type);
       formData.append('made_in', this.made_in ? this.made_in.id : 0);
       formData.append('shipping_type', this.shipping_type);
@@ -1472,14 +2724,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
       // Other Images - Use files from images array to maintain correct indexing
       for (var i = 0; i < this.images.length; i++) {
-        var _file2 = this.images[i].file;
-        formData.append('other_images[]', _file2);
+        var file = this.images[i].file;
+        formData.append('other_images[]', file);
       }
 
       // Prepare translations array
       var allTranslations = [];
       this.languages.forEach(function (language) {
-        var translation = _this26.translations[language.id];
+        var translation = _this25.translations[language.id];
         allTranslations.push({
           language_id: language.id,
           name: translation.name || '',
@@ -1498,16 +2750,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       } else if (this.id) {
         url = this.$apiUrl + '/products/update';
       }
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post(url, formData, {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (res) {
         var data = res.data;
         if (data.status === 1) {
-          _this26.skipCache = true;
+          _this25.skipCache = true;
           localStorage.removeItem('product_form_cache');
-          _this26.showMessage("success", data.message);
+          _this25.showMessage("success", data.message);
           setTimeout(function () {
             var _vm$loggedUser;
             vm.$swal.close();
@@ -1528,11 +2780,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }
       })["catch"](function (error) {
         vm.isLoading = false;
-        _this26.showError("Something went wrong!");
+        _this25.showError("Something went wrong!");
       });
     },
     deleteImage: function deleteImage(index, id, productImage) {
-      var _this27 = this;
+      var _this26 = this;
       var key = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
       this.$swal.fire({
         title: "Are you Sure?",
@@ -1545,14 +2797,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         cancelButtonColor: '#d33'
       }).then(function (result) {
         if (result.value) {
-          _this27.deleteImageIds.push(id);
+          _this26.deleteImageIds.push(id);
           if (productImage) {
-            _this27.other_images.splice(index, 1);
+            _this26.other_images.splice(index, 1);
           } else {
-            if (_this27.type === 'packet') {
-              _this27.inputs[key].images.splice(index, 1);
+            if (_this26.type === 'packet') {
+              _this26.inputs[key].images.splice(index, 1);
             } else {
-              _this27.inputs[key].loose_images.splice(index, 1);
+              _this26.inputs[key].loose_images.splice(index, 1);
             }
           }
         }
@@ -1819,7 +3071,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       } catch (e) {}
     },
     restoreCache: function restoreCache() {
-      var _this28 = this;
+      var _this27 = this;
       try {
         var cached = localStorage.getItem('product_form_cache');
         if (!cached) return;
@@ -1831,7 +3083,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         this.cachedData = data;
         Object.keys(data).forEach(function (key) {
           if (key === 'timestamp' || key === 'brand' || key === 'made_in' || key === 'translations') return;
-          if (_this28.hasOwnProperty(key)) _this28[key] = data[key] !== undefined ? data[key] : _this28[key];
+          if (_this27.hasOwnProperty(key)) _this27[key] = data[key] !== undefined ? data[key] : _this27[key];
         });
 
         // Restore per-language translation data.
@@ -1841,7 +3093,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         if (data.translations && this.languages && this.languages.length > 0) {
           this.languages.forEach(function (language) {
             if (data.translations[language.id]) {
-              _this28.$set(_this28.translations, language.id, _objectSpread(_objectSpread({}, _this28.translations[language.id]), data.translations[language.id]));
+              _this27.$set(_this27.translations, language.id, _objectSpread(_objectSpread({}, _this27.translations[language.id]), data.translations[language.id]));
             }
           });
         }
@@ -1851,20 +3103,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }) || null;
           // Update brand with translated name
           this.$nextTick(function () {
-            if (foundBrand && _this28.translatedBrands && _this28.translatedBrands.length > 0) {
-              var translatedBrand = _this28.translatedBrands.find(function (b) {
+            if (foundBrand && _this27.translatedBrands && _this27.translatedBrands.length > 0) {
+              var translatedBrand = _this27.translatedBrands.find(function (b) {
                 return b.id === foundBrand.id;
               });
               if (translatedBrand) {
-                _this28.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
+                _this27.brand = _objectSpread(_objectSpread({}, foundBrand), {}, {
                   name: translatedBrand.name,
                   title: translatedBrand.title
                 });
               } else {
-                _this28.brand = foundBrand;
+                _this27.brand = foundBrand;
               }
             } else {
-              _this28.brand = foundBrand;
+              _this27.brand = foundBrand;
             }
           });
         }
@@ -1875,8 +3127,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }
         if (this.seller_id) {
           this.$nextTick(function () {
-            _this28.getSellerCategories();
-            _this28.getSeller();
+            _this27.getSellerCategories();
+            _this27.getSeller();
           });
         }
       } catch (e) {
@@ -1894,6 +3146,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         description: '',
         highlights: '',
         type: 'packet',
+        has_variant: true,
         is_unlimited_stock: 0,
         barcode: '',
         meta_title: '',
@@ -1935,21 +3188,52 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       localStorage.removeItem('product_form_cache');
     },
     debouncedSave: function debouncedSave() {
-      var _this29 = this;
+      var _this28 = this;
       if (this.cacheTimer) clearTimeout(this.cacheTimer);
       this.cacheTimer = setTimeout(function () {
-        return _this29.saveCache();
+        return _this28.saveCache();
       }, 500);
+    },
+    isCategorySelected: function isCategorySelected(option, list) {
+      return list && list.some(function (item) {
+        return item.id === option.id;
+      });
+    },
+    onMainCategoriesChange: function onMainCategoriesChange(newVal) {
+      if (this.selected_sub_categories && this.selected_sub_categories.length > 0) {
+        var selectedIds = newVal.map(function (c) {
+          return c.id;
+        });
+        this.selected_sub_categories = this.selected_sub_categories.filter(function (sc) {
+          return selectedIds.includes(sc.parent_id);
+        });
+        this.onSubCategoriesChange(this.selected_sub_categories);
+      }
+    },
+    onSubCategoriesChange: function onSubCategoriesChange(newVal) {
+      if (this.selected_sub_sub_categories && this.selected_sub_sub_categories.length > 0) {
+        var selectedIds = newVal.map(function (c) {
+          return c.id;
+        });
+        this.selected_sub_sub_categories = this.selected_sub_sub_categories.filter(function (ssc) {
+          return selectedIds.includes(ssc.parent_id);
+        });
+      }
     }
   },
   watch: {
+    has_variant: function has_variant(newVal) {
+      if (!newVal && this.inputs.length > 1) {
+        this.inputs = [this.inputs[0]];
+      }
+    },
     // Watch currentLanguageId to update selected brand name when language changes
     currentLanguageId: function currentLanguageId(newVal, oldVal) {
-      var _this30 = this;
+      var _this29 = this;
       if (newVal && this.brand && this.translatedBrands && this.translatedBrands.length > 0) {
         // Find the translated brand from translatedBrands
         var translatedBrand = this.translatedBrands.find(function (b) {
-          return b.id === _this30.brand.id;
+          return b.id === _this29.brand.id;
         });
         if (translatedBrand) {
           // Update the brand object with translated name
@@ -1963,11 +3247,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     // Watch translatedBrands to update selected brand when brands are loaded or language changes
     translatedBrands: {
       handler: function handler(newVal) {
-        var _this31 = this;
+        var _this30 = this;
         if (newVal && newVal.length > 0 && this.brand && this.brand.id) {
           // Find the translated brand from translatedBrands
           var translatedBrand = newVal.find(function (b) {
-            return b.id === _this31.brand.id;
+            return b.id === _this30.brand.id;
           });
           if (translatedBrand) {
             // Update the brand object with translated name
@@ -2030,9 +3314,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       if (!this.id && !this.clone) this.debouncedSave();
     },
     product_category_id: function product_category_id() {
-      var _this32 = this;
+      var _this31 = this;
       var hasSubcategory = this.subCategoryOptions.some(function (category) {
-        return Number(category.id) === Number(_this32.product_subcategory_id);
+        return Number(category.id) === Number(_this31.product_subcategory_id);
       });
       if (!hasSubcategory) {
         this.product_subcategory_id = '';
@@ -2042,9 +3326,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       if (!this.id && !this.clone) this.debouncedSave();
     },
     product_subcategory_id: function product_subcategory_id() {
-      var _this33 = this;
+      var _this32 = this;
       var hasSubSubcategory = this.subSubCategoryOptions.some(function (category) {
-        return Number(category.id) === Number(_this33.product_sub_subcategory_id);
+        return Number(category.id) === Number(_this32.product_sub_subcategory_id);
       });
       if (!hasSubSubcategory) {
         this.product_sub_subcategory_id = '';
@@ -2053,9 +3337,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       if (!this.id && !this.clone) this.debouncedSave();
     },
     product_sub_subcategory_id: function product_sub_subcategory_id() {
-      var _this34 = this;
+      var _this33 = this;
       var hasSubSubSubcategory = this.subSubSubCategoryOptions.some(function (category) {
-        return Number(category.id) === Number(_this34.product_sub_sub_subcategory_id);
+        return Number(category.id) === Number(_this33.product_sub_sub_subcategory_id);
       });
       if (!hasSubSubSubcategory) {
         this.product_sub_sub_subcategory_id = '';
@@ -2138,6 +3422,169 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("b-modal", {
+    key: _vm.id,
+    ref: "my-modal",
+    attrs: {
+      title: _vm.modal_title,
+      scrollable: "",
+      "no-close-on-backdrop": "",
+      "no-fade": "",
+      "static": ""
+    },
+    on: {
+      hidden: function hidden($event) {
+        return _vm.$emit("modalClose");
+      }
+    }
+  }, [_c("div", {
+    attrs: {
+      slot: "modal-footer"
+    },
+    slot: "modal-footer"
+  }, [_c("b-button", {
+    attrs: {
+      variant: "primary",
+      disabled: _vm.isLoading
+    },
+    on: {
+      click: function click($event) {
+        return _vm.$refs["dummy_submit"].click();
+      }
+    }
+  }, [_vm._v("\n      " + _vm._s(_vm.__("save")) + "\n      "), _vm.isLoading ? _c("b-spinner", {
+    attrs: {
+      small: "",
+      label: "Spinning"
+    }
+  }) : _vm._e()], 1), _vm._v(" "), _c("b-button", {
+    attrs: {
+      variant: "secondary"
+    },
+    on: {
+      click: _vm.hideModal
+    }
+  }, [_vm._v(_vm._s(_vm.__("cancel")))])], 1), _vm._v(" "), _c("form", {
+    ref: "my-form",
+    attrs: {
+      novalidate: ""
+    },
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.saveRecord.apply(null, arguments);
+      }
+    }
+  }, [_vm.defaultLanguage ? _c("div", [_vm._l([_vm.defaultLanguage], function (lang) {
+    return [_c("div", {
+      staticClass: "row"
+    }, [_c("div", {
+      staticClass: "form-group"
+    }, [_c("label", [_vm._v(_vm._s(_vm.__("name")))]), _vm._v(" "), lang.is_default ? _c("i", {
+      staticClass: "text-danger"
+    }, [_vm._v("*")]) : _vm._e(), _vm._v(" "), _c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: _vm.form[lang.id].name,
+        expression: "form[lang.id].name"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        type: "text",
+        placeholder: _vm.__("enter_name"),
+        required: lang.is_default ? true : undefined
+      },
+      domProps: {
+        value: _vm.form[lang.id].name
+      },
+      on: {
+        input: function input($event) {
+          if ($event.target.composing) return;
+          _vm.$set(_vm.form[lang.id], "name", $event.target.value);
+        }
+      }
+    })]), _vm._v(" "), lang.is_default ? _c("div", {
+      staticClass: "form-group"
+    }, [_c("label", [_vm._v(_vm._s(_vm.__("image")))]), _vm._v(" "), lang.is_default ? _c("i", {
+      staticClass: "text-danger"
+    }, [_vm._v("*")]) : _vm._e(), _vm._v(" "), _c("input", {
+      staticClass: "d-none",
+      attrs: {
+        type: "file",
+        id: "brand_image",
+        accept: "image/*"
+      },
+      on: {
+        change: _vm.handleFileUpload
+      }
+    }), _vm._v(" "), _c("label", {
+      staticClass: "file-input-div bg-gray-100",
+      attrs: {
+        "for": "brand_image"
+      }
+    }, [_vm.image && _vm.image.name ? [_vm._v("\n                " + _vm._s(_vm.__("selected_file_name")) + ": " + _vm._s(_vm.image.name) + "\n              ")] : [_c("i", {
+      staticClass: "fa fa-cloud-upload-alt fa-2x"
+    }), _c("br"), _vm._v("\n                " + _vm._s(_vm.__("drop_files_here_or_click_to_upload")) + "\n              ")]], 2), _vm._v(" "), _vm.image_url ? _c("div", {
+      staticClass: "mt-2"
+    }, [_c("img", {
+      staticClass: "custom-image",
+      attrs: {
+        src: _vm.image_url
+      }
+    })]) : _vm._e()]) : _vm._e(), _vm._v(" "), _vm.id && lang.is_default ? _c("div", {
+      staticClass: "form-group"
+    }, [_c("label", [_vm._v(_vm._s(_vm.__("status")))]), _vm._v(" "), _c("div", {
+      staticClass: "col-md-9 text-left mt-1"
+    }, [_c("b-form-radio-group", {
+      attrs: {
+        options: [{
+          text: _vm.__("deactivate"),
+          value: 0
+        }, {
+          text: _vm.__("activate"),
+          value: 1
+        }],
+        buttons: "",
+        "button-variant": "outline-primary",
+        required: ""
+      },
+      model: {
+        value: _vm.status,
+        callback: function callback($$v) {
+          _vm.status = $$v;
+        },
+        expression: "status"
+      }
+    })], 1)]) : _vm._e()])];
+  })], 2) : _vm._e(), _vm._v(" "), _c("button", {
+    ref: "dummy_submit",
+    staticStyle: {
+      display: "none"
+    }
+  })])]);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=template&id=a901b314&scoped=true":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=template&id=a901b314&scoped=true ***!
@@ -2147,2531 +3594,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
-var render = function render() {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", [_c("div", {
-    staticClass: "page-heading"
-  }, [_c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-12 col-md-6 order-md-1 order-last"
-  }, [_c("h3", [_vm.clone ? [_vm._v("\n                        " + _vm._s(_vm.__("clone")) + "\n                    ")] : _vm.id ? [_vm._v("\n                        " + _vm._s(_vm.__("edit")) + "\n                    ")] : [_vm._v("\n                        " + _vm._s(_vm.__("add")) + "\n                    ")], _vm._v("\n                    " + _vm._s(_vm.__("product")) + "\n                ")], 2)]), _vm._v(" "), _c("div", {
-    staticClass: "col-12 col-md-6 order-md-2 order-first"
-  }, [_c("nav", {
-    staticClass: "breadcrumb-header float-start float-lg-end",
-    attrs: {
-      "aria-label": "breadcrumb"
-    }
-  }, [_c("ol", {
-    staticClass: "breadcrumb"
-  }, [_vm.isSellerRoute ? _c("li", {
-    staticClass: "breadcrumb-item"
-  }, [_c("router-link", {
-    attrs: {
-      to: "/seller/dashboard"
-    }
-  }, [_vm._v(_vm._s(_vm.__("dashboard")))])], 1) : _c("li", {
-    staticClass: "breadcrumb-item"
-  }, [_c("router-link", {
-    attrs: {
-      to: "/dashboard"
-    }
-  }, [_vm._v(_vm._s(_vm.__("dashboard")))])], 1), _vm._v(" "), _vm.isSellerRoute ? _c("li", {
-    staticClass: "breadcrumb-item"
-  }, [_c("router-link", {
-    attrs: {
-      to: "/seller/manage_products"
-    }
-  }, [_vm._v(_vm._s(_vm.__("manage_products")))])], 1) : _c("li", {
-    staticClass: "breadcrumb-item"
-  }, [_c("router-link", {
-    attrs: {
-      to: "/manage_products"
-    }
-  }, [_vm._v(_vm._s(_vm.__("manage_products")))])], 1), _vm._v(" "), _c("li", {
-    staticClass: "breadcrumb-item active",
-    attrs: {
-      "aria-current": "page"
-    }
-  }, [_vm.clone ? [_vm._v("\n                                " + _vm._s(_vm.__("clone")) + "\n                            ")] : _vm.id ? [_vm._v("\n                                " + _vm._s(_vm.__("edit")) + "\n                            ")] : [_vm._v("\n                                " + _vm._s(_vm.__("add")) + "\n                            ")], _vm._v("\n                            " + _vm._s(_vm.__("product")) + "\n                        ")], 2)])])])]), _vm._v(" "), _c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-12 col-md-12 order-md-1 order-last",
-    attrs: {
-      id: "mymodal"
-    }
-  }, [_vm.isLoadingLanguages ? _c("div", {
-    staticClass: "text-center py-5"
-  }, [_c("b-spinner", {
-    attrs: {
-      label: "Loading..."
-    }
-  }), _vm._v(" "), _c("p", {
-    staticClass: "mt-2"
-  }, [_vm._v("Loading languages...")])], 1) : _c("form", {
-    ref: "my-form",
-    on: {
-      submit: function submit($event) {
-        $event.preventDefault();
-        return _vm.saveRecord.apply(null, arguments);
-      },
-      keydown: function keydown($event) {
-        if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) return null;
-        return $event.preventDefault();
-      }
-    }
-  }, [_c("div", {
-    staticClass: "card"
-  }, [_c("div", {
-    staticClass: "card-header"
-  }, [_c("h4", [_vm.clone ? [_vm._v(_vm._s(_vm.__("clone")))] : _vm.id ? [_vm._v(_vm._s(_vm.__("edit")))] : [_vm._v(_vm._s(_vm.__("add")))], _vm._v(" " + _vm._s(_vm.__("product")))], 2), _vm._v(" "), _c("span", {
-    staticClass: "pull-right"
-  }, [_vm.isSellerRole ? [_c("router-link", {
-    directives: [{
-      name: "b-tooltip",
-      rawName: "v-b-tooltip.hover",
-      modifiers: {
-        hover: true
-      }
-    }],
-    staticClass: "btn btn-primary",
-    attrs: {
-      to: "/seller/manage_products",
-      title: "Manage Product"
-    }
-  }, [_vm._v(_vm._s(_vm.__("manage_products")))])] : [_c("router-link", {
-    directives: [{
-      name: "b-tooltip",
-      rawName: "v-b-tooltip.hover",
-      modifiers: {
-        hover: true
-      }
-    }],
-    staticClass: "btn btn-primary",
-    attrs: {
-      to: "/manage_products",
-      title: "Manage Product"
-    }
-  }, [_vm._v(_vm._s(_vm.__("manage_products")))])]], 2)]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [ false ? 0 : _vm.isLoadingLanguages ? _c("div", {
-    staticClass: "text-center p-3 mb-3"
-  }, [_c("b-spinner", {
-    attrs: {
-      label: "Loading languages..."
-    }
-  })], 1) : _vm._e(), _vm._v(" "), _c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "barcode"
-    }
-  }, [_vm._v(_vm._s(_vm.__("barcode")))]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.barcode,
-      expression: "barcode"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      id: "barcode",
-      placeholder: _vm.__("barcode")
-    },
-    domProps: {
-      value: _vm.barcode
-    },
-    on: {
-      input: [function ($event) {
-        if ($event.target.composing) return;
-        _vm.barcode = $event.target.value;
-      }, _vm.validateBarcode]
-    }
-  }), _vm._v(" "), _vm.validationBarcodeMessage ? _c("p", {
-    staticStyle: {
-      color: "red"
-    }
-  }, [_vm._v(_vm._s(_vm.validationBarcodeMessage))]) : _vm.isBarcodeValid ? _c("p", {
-    staticStyle: {
-      color: "green"
-    }
-  }, [_vm._v("Barcode is valid!\n                                        ")]) : _vm._e()])]), _vm._v(" "), _vm.defaultLanguageId ? _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("product_name")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.translations[_vm.defaultLanguageId].name,
-      expression: "translations[defaultLanguageId].name"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_product_name"),
-      required: ""
-    },
-    domProps: {
-      value: _vm.translations[_vm.defaultLanguageId].name
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "name", $event.target.value);
-      }
-    }
-  })])]) : _vm._e(), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("slug")))]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.slug,
-      expression: "slug"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_product_slug"),
-      readonly: ""
-    },
-    domProps: {
-      value: _vm.slug
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.slug = $event.target.value;
-      }
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "tax_id"
-    }
-  }, [_vm._v(_vm._s(_vm.__("tax")))]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.tax_id,
-      expression: "tax_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      id: "tax_id",
-      name: "tax_id"
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.tax_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: "0"
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_tax")))]), _vm._v(" "), _vm._l(_vm.translatedTaxes, function (tax) {
-    return _c("option", {
-      domProps: {
-        value: tax.id
-      }
-    }, [_vm._v("\n                                                " + _vm._s(tax.title) + "\n                                                (" + _vm._s(tax.percentage) + " %)")]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "brands"
-    }
-  }, [_vm._v(_vm._s(_vm.__("brands")))]), _vm._v(" "), _c("multiselect", {
-    attrs: {
-      id: "brands",
-      options: _vm.translatedBrands,
-      placeholder: _vm.__("select_and_search_brands"),
-      label: "name",
-      "track-by": "id",
-      required: ""
-    },
-    scopedSlots: _vm._u([{
-      key: "singleLabel",
-      fn: function fn(props) {
-        return [_c("span", {
-          staticClass: "option__desc"
-        }, [_c("span", {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.name))])])];
-      }
-    }, {
-      key: "option",
-      fn: function fn(props) {
-        return [_c("div", {
-          staticClass: "option__desc"
-        }, [_c("span", {
-          staticClass: "option__small"
-        }, [_c("img", {
-          staticClass: "option__image",
-          staticStyle: {
-            height: "25px"
-          },
-          attrs: {
-            src: props.option.image_url,
-            alt: "Brand Logo"
-          }
-        })]), _vm._v(" "), _c("span", {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.name))])])];
-      }
-    }]),
-    model: {
-      value: _vm.brand,
-      callback: function callback($$v) {
-        _vm.brand = $$v;
-      },
-      expression: "brand"
-    }
-  })], 1)]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-12"
-  }, [_c("div", {
-    staticClass: "form-group mb-3 d-flex flex-wrap align-items-center"
-  }, [_c("button", {
-    staticClass: "btn btn-outline-primary me-3 my-2 ai-generate-btn",
-    attrs: {
-      type: "button",
-      disabled: _vm.isGeneratingAI
-    },
-    on: {
-      click: _vm.generateDescription
-    }
-  }, [_vm.isGeneratingAI ? [_c("span", {
-    staticClass: "ai-spinner me-2"
-  }), _vm._v(" "), _c("span", {
-    staticClass: "ai-text-animate"
-  }, [_vm._v("AI is\n                                                    generating...")])] : [_c("i", {
-    staticClass: "fa fa-magic me-1"
-  }), _vm._v("\n                                                " + _vm._s(_vm.__("generate_description_with_ai")) + "\n                                            ")]], 2), _vm._v(" "), _c("label", {
-    staticClass: "my-2 d-flex align-items-center"
-  }, [_c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.useCustomPrompt,
-      expression: "useCustomPrompt"
-    }],
-    staticClass: "me-2",
-    attrs: {
-      type: "checkbox"
-    },
-    domProps: {
-      checked: Array.isArray(_vm.useCustomPrompt) ? _vm._i(_vm.useCustomPrompt, null) > -1 : _vm.useCustomPrompt
-    },
-    on: {
-      change: function change($event) {
-        var $$a = _vm.useCustomPrompt,
-          $$el = $event.target,
-          $$c = $$el.checked ? true : false;
-        if (Array.isArray($$a)) {
-          var $$v = null,
-            $$i = _vm._i($$a, $$v);
-          if ($$el.checked) {
-            $$i < 0 && (_vm.useCustomPrompt = $$a.concat([$$v]));
-          } else {
-            $$i > -1 && (_vm.useCustomPrompt = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
-          }
-        } else {
-          _vm.useCustomPrompt = $$c;
-        }
-      }
-    }
-  }), _vm._v(" "), _c("span", {
-    staticClass: "mt-1"
-  }, [_vm._v(_vm._s(_vm.__("use_custom_prompt")))])])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-12"
-  }, [_vm.useCustomPrompt ? _c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("custom_prompt")))]), _vm._v(" "), _c("textarea", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.customPrompt,
-      expression: "customPrompt"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      rows: "2",
-      placeholder: "e.g. Write a fun and engaging description focusing on features and benefits"
-    },
-    domProps: {
-      value: _vm.customPrompt
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.customPrompt = $event.target.value;
-      }
-    }
-  })]) : _vm._e()]), _vm._v(" "), _vm.defaultLanguageId ? _c("div", {
-    staticClass: "col-md-12"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("description")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("editor", {
-    attrs: {
-      placeholder: _vm.__("enter_product_description"),
-      init: _vm.getEditorConfig()
-    },
-    model: {
-      value: _vm.translations[_vm.defaultLanguageId].description,
-      callback: function callback($$v) {
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "description", $$v);
-      },
-      expression: "translations[defaultLanguageId].description"
-    }
-  })], 1)]) : _vm._e(), _vm._v(" "), _vm.defaultLanguageId ? _c("div", {
-    staticClass: "col-md-12"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_vm._m(0), _vm._v(" "), _c("editor", {
-    attrs: {
-      placeholder: "Paste or enter product highlights",
-      init: _vm.getEditorConfig()
-    },
-    model: {
-      value: _vm.translations[_vm.defaultLanguageId].highlights,
-      callback: function callback($$v) {
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "highlights", $$v);
-      },
-      expression: "translations[defaultLanguageId].highlights"
-    }
-  }), _vm._v(" "), _c("small", {
-    staticClass: "text-muted"
-  }, [_vm._v("Pasted formatting, lists and spacing will be preserved.")])], 1)]) : _vm._e(), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("main_image")) + " "), !_vm.id ? _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")]) : _vm._e()]), _vm._v(" "), _c("input", {
-    ref: "file_image",
-    staticClass: "file-input",
-    attrs: {
-      type: "file",
-      name: "image",
-      accept: "image/*"
-    },
-    on: {
-      change: _vm.fileImage
-    }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "file-input-div bg-gray-100",
-    on: {
-      click: function click($event) {
-        return _vm.triggerRefClick("file_image");
-      },
-      drop: _vm.dropFile,
-      dragover: _vm.$dragoverFile,
-      dragleave: _vm.$dragleaveFile
-    }
-  }, [_vm.main_image_name == "" ? [_vm._m(1), _vm._v(" "), _c("label", [_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])] : [_c("label", [_vm._v(_vm._s(_vm.__("selected_file_name")) + " " + _vm._s(_vm.main_image_name))])]], 2), _vm._v(" "), _c("span", {
-    staticClass: "text text-primary"
-  }, [_vm._v(_vm._s(_vm.__("please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px")))]), _vm._v(" "), _vm.mainImageerror ? _c("p", {
-    staticClass: "error"
-  }, [_vm._v(_vm._s(_vm.mainImageerror))]) : _vm._e(), _vm._v(" "), _vm.main_image_path ? _c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-md-4"
-  }, [_c("img", {
-    staticClass: "custom-image",
-    attrs: {
-      src: _vm.main_image_path,
-      title: "Main Image",
-      alt: "Main Image"
-    }
-  })])]) : _vm._e()])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "other_images"
-    }
-  }, [_vm._v(_vm._s(_vm.__("other_images_of_the_product")))]), _vm._v(" "), _c("input", {
-    ref: "file_other_images",
-    staticClass: "file-input",
-    attrs: {
-      type: "file",
-      name: "other_images[]",
-      accept: "image/jpeg,image/png,image/gif,image/webp,video/mp4",
-      id: "other_images",
-      multiple: ""
-    },
-    on: {
-      change: _vm.otherImage
-    }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "file-input-div bg-gray-100",
-    on: {
-      click: function click($event) {
-        return _vm.triggerRefClick("file_other_images");
-      },
-      drop: _vm.dropFileOtherImage,
-      dragover: _vm.$dragoverFile,
-      dragleave: _vm.$dragleaveFile
-    }
-  }, [_vm.images.length === 0 ? [_vm._m(2), _vm._v(" "), _c("label", [_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])] : [_c("label", [_vm._v(_vm._s(_vm.images.length) + " files selected")]), _vm._v(" "), _vm._m(3)]], 2), _vm._v(" "), _c("span", {
-    staticClass: "text text-primary"
-  }, [_vm._v("Allowed media: JPG, JPEG, PNG, GIF, WEBP images or MP4 videos. Max 3 MB per file.")]), _vm._v(" "), _vm.otherImageerror ? _c("p", {
-    staticClass: "error"
-  }, [_vm._v(_vm._s(_vm.otherImageerror))]) : _vm._e(), _vm._v(" "), _vm.images && _vm.images.length !== 0 ? _c("div", {
-    staticClass: "row other-media-list"
-  }, [_c("h6", {
-    staticClass: "mt-3"
-  }, [_vm._v("Selected Other Image List.")]), _vm._v(" "), _vm._l(_vm.images, function (image, index) {
-    return _vm.images.length !== 0 ? _c("div", {
-      staticClass: "col-md-4 image-container"
-    }, [image.isVideo ? _c("video", {
-      staticClass: "img-thumbnail custom-image",
-      attrs: {
-        src: image.url,
-        controls: "",
-        muted: "",
-        playsinline: "",
-        title: "Selected Product Video"
-      },
-      domProps: {
-        muted: true
-      }
-    }) : _c("img", {
-      staticClass: "img-thumbnail custom-image",
-      attrs: {
-        src: image.url,
-        title: "Selected Other Image",
-        alt: "Selected Other Image"
-      }
-    }), _vm._v(" "), _c("button", {
-      staticClass: "btn btn-sm btn-danger btn-remove",
-      attrs: {
-        type: "button"
-      },
-      on: {
-        click: function click($event) {
-          _vm.removeOtherImage(_vm.images.indexOf(image));
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-times-circle"
-    })])]) : _vm._e();
-  }), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("button", {
-    staticClass: "add-more-media-btn",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: function click($event) {
-        return _vm.triggerRefClick("file_other_images");
-      }
-    }
-  }, [_c("i", {
-    staticClass: "fa fa-plus"
-  }), _vm._v(" "), _c("span", [_vm._v("Add More")])])])], 2) : _vm._e(), _vm._v(" "), _vm.other_images && _vm.other_images.length !== 0 ? _c("div", {
-    staticClass: "row"
-  }, [_c("h6", {
-    staticClass: "mt-3"
-  }, [_vm._v("Uploaded Other Image List.")]), _vm._v(" "), _vm._l(_vm.other_images, function (image, index) {
-    return _vm.other_images.length !== 0 ? _c("div", {
-      staticClass: "col-md-4 image-container"
-    }, [_vm.isVideoMedia(image.image) ? _c("video", {
-      staticClass: "img-thumbnail custom-image",
-      attrs: {
-        src: _vm.$storageUrl + image.image,
-        controls: "",
-        muted: "",
-        playsinline: "",
-        title: "Product Video"
-      },
-      domProps: {
-        muted: true
-      }
-    }) : _c("img", {
-      staticClass: "img-thumbnail custom-image",
-      attrs: {
-        src: _vm.$storageUrl + image.image,
-        title: "Other Image",
-        alt: "Other Image"
-      }
-    }), _vm._v(" "), _c("button", {
-      staticClass: "btn btn-sm btn-danger btn-remove",
-      attrs: {
-        type: "button"
-      },
-      on: {
-        click: function click($event) {
-          return _vm.deleteImage(index, image.id, true);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-times-circle"
-    })])]) : _vm._e();
-  })], 2) : _vm._e()])])])])]), _vm._v(" "), _c("div", {
-    staticClass: "card"
-  }, [_c("div", {
-    staticClass: "card-header"
-  }, [_c("h4", [_vm._v(_vm._s(_vm.__("product_variants")))])]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [_c("div", {
-    staticClass: "col-md-6 d-none"
-  }, [_c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "form-group col-md-6"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("product_variants")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _c("br"), _vm._v(" "), _c("b-form-radio-group", {
-    attrs: {
-      options: [{
-        text: _vm.__("packet"),
-        value: "packet"
-      }, {
-        text: _vm.__("loose"),
-        value: "loose"
-      }],
-      buttons: "",
-      "button-variant": "outline-primary"
-    },
-    model: {
-      value: _vm.type,
-      callback: function callback($$v) {
-        _vm.type = $$v;
-      },
-      expression: "type"
-    }
-  })], 1), _vm._v(" "), _c("div", {
-    staticClass: "form-group col-md-6"
-  }, [_vm._m(4), _c("br"), _vm._v(" "), _c("b-form-radio-group", {
-    attrs: {
-      options: [{
-        text: _vm.__("limited"),
-        value: 0
-      }, {
-        text: _vm.__("unlimited"),
-        value: 1
-      }],
-      buttons: "",
-      "button-variant": "outline-primary"
-    },
-    model: {
-      value: _vm.is_unlimited_stock,
-      callback: function callback($$v) {
-        _vm.is_unlimited_stock = $$v;
-      },
-      expression: "is_unlimited_stock"
-    }
-  })], 1)])]), _vm._v(" "), _vm._l(_vm.inputs, function (_input, k) {
-    return _vm.type === "packet" ? _c("div", {
-      key: k,
-      staticClass: "list-group-item",
-      attrs: {
-        id: "packate_div"
-      }
-    }, [_c("div", {
-      staticClass: "row"
-    }, [_c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("unit")) + " "), _c("i", {
-      staticClass: "text-danger"
-    }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_stock_unit_id,
-        expression: "input.packet_stock_unit_id"
-      }],
-      staticClass: "form-control",
-      on: {
-        change: [function ($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-          _vm.$set(_input, "packet_stock_unit_id", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-        }, function ($event) {
-          return _vm.changeUnits();
-        }]
-      }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v(_vm._s(_vm.__("select_unit")))]), _vm._v(" "), _vm._l(_vm.units, function (unit, key) {
-      return _c("option", {
-        domProps: {
-          value: unit.id
-        }
-      }, [_vm._v(_vm._s(unit.short_code))]);
-    })], 2)])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("measurement")))]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_measurement,
-        expression: "input.packet_measurement"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0"
-      },
-      domProps: {
-        value: _input.packet_measurement
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "packet_measurement", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Color Variant")]), _vm._v(" "), _c("select", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.color_variant,
-        expression: "input.color_variant"
-      }],
-      staticClass: "form-control",
-      on: {
-        change: function change($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-          _vm.$set(_input, "color_variant", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-        }
-      }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v("Select Color")]), _vm._v(" "), _vm._l(_vm.colorVariantOptions, function (color) {
-      return _c("option", {
-        key: color.value,
-        domProps: {
-          value: color.value
-        }
-      }, [_vm._v(_vm._s(color.label))]);
-    })], 2)])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Expiry Date From")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.expiry_date_from,
-        expression: "input.expiry_date_from"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "date"
-      },
-      domProps: {
-        value: _input.expiry_date_from
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "expiry_date_from", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Expiry Date To")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.expiry_date_to,
-        expression: "input.expiry_date_to"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "date"
-      },
-      domProps: {
-        value: _input.expiry_date_to
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "expiry_date_to", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("MRP ( " + _vm._s(_vm.$currency) + " ) "), _c("i", {
-      staticClass: "text-danger"
-    }, [_vm._v("*")])]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_price,
-        expression: "input.packet_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0.00",
-        required: ""
-      },
-      domProps: {
-        value: _input.packet_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "packet_price", $event.target.value);
-        }, function ($event) {
-          return _vm.syncPacketSalePriceFromDiscount(_input);
-        }]
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Purchase Price ( " + _vm._s(_vm.$currency) + " )\n                                                "), _c("i", {
-      directives: [{
-        name: "b-tooltip",
-        rawName: "v-b-tooltip.hover",
-        modifiers: {
-          hover: true
-        }
-      }],
-      staticClass: "fa fa-info-circle text-muted",
-      attrs: {
-        title: "This field is used to calculate in your report"
-      }
-    })]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_purchase_price,
-        expression: "input.packet_purchase_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input.packet_purchase_price
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "packet_purchase_price", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Sale Price ( " + _vm._s(_vm.$currency) + " )")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_sale_price,
-        expression: "input.packet_sale_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input.packet_sale_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "packet_sale_price", $event.target.value);
-        }, function ($event) {
-          return _vm.setPacketSalePrice(_input);
-        }]
-      }
-    }), _vm._v(" "), _input.validationErrorSalePrice ? _c("span", {
-      staticClass: "error"
-    }, [_vm._v(_vm._s(_input.validationErrorSalePrice))]) : _vm._e()])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Discount on MRP(%)")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.discount_percentage,
-        expression: "input.discount_percentage"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input.discount_percentage
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "discount_percentage", $event.target.value);
-        }, function ($event) {
-          return _vm.setPacketDiscountMode(_input, "percent");
-        }]
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Discount on MRP(Rs)")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.discounted_price,
-        expression: "input.discounted_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        min: "0",
-        step: "any",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input.discounted_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "discounted_price", $event.target.value);
-        }, function ($event) {
-          return _vm.setPacketDiscountMode(_input, "amount");
-        }]
-      }
-    }), _vm._v(" "), _input.validationErrorDiscountedPrice ? _c("span", {
-      staticClass: "error"
-    }, [_vm._v(_vm._s(_input.validationErrorDiscountedPrice))]) : _vm._e()])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Profit(%)")]), _vm._v(" "), _c("input", {
-      staticClass: "form-control bg-light",
-      attrs: {
-        type: "text",
-        readonly: ""
-      },
-      domProps: {
-        value: _vm.getPacketProfitPercentage(_input)
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v("Profit(Rs)")]), _vm._v(" "), _c("input", {
-      staticClass: "form-control bg-light",
-      attrs: {
-        type: "text",
-        readonly: ""
-      },
-      domProps: {
-        value: _vm.getPacketProfit(_input)
-      }
-    })])]), _vm._v(" "), _vm.is_unlimited_stock != 1 ? _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_vm._m(5, true), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_stock,
-        expression: "input.packet_stock"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0",
-        name: "packate_stock[]"
-      },
-      domProps: {
-        value: _input.packet_stock
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input, "packet_stock", $event.target.value);
-        }
-      }
-    })])]) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("status")) + " "), _c("i", {
-      staticClass: "text-danger"
-    }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input.packet_status,
-        expression: "input.packet_status"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        required: ""
-      },
-      on: {
-        change: function change($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-          _vm.$set(_input, "packet_status", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-        }
-      }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v(_vm._s(_vm.__("select_status")))]), _vm._v(" "), _c("option", {
-      attrs: {
-        value: "1"
-      }
-    }, [_vm._v(_vm._s(_vm.__("available")))]), _vm._v(" "), _c("option", {
-      attrs: {
-        value: "0"
-      }
-    }, [_vm._v(_vm._s(_vm.__("sold_out")))])])])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-12"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_vm._m(6, true), _vm._v(" "), _vm._l(_input.barcodes, function (variantBarcode, barcodeIndex) {
-      return _c("div", {
-        key: "packet_barcode_" + k + "_" + barcodeIndex,
-        staticClass: "row g-2 mb-2"
-      }, [_c("div", {
-        staticClass: "col-md-10"
-      }, [_c("input", {
-        directives: [{
-          name: "model",
-          rawName: "v-model",
-          value: _input.barcodes[barcodeIndex],
-          expression: "input.barcodes[barcodeIndex]"
-        }],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "Enter barcode"
-        },
-        domProps: {
-          value: _input.barcodes[barcodeIndex]
-        },
-        on: {
-          input: function input($event) {
-            if ($event.target.composing) return;
-            _vm.$set(_input.barcodes, barcodeIndex, $event.target.value);
-          }
-        }
-      })]), _vm._v(" "), _c("div", {
-        staticClass: "col-md-2"
-      }, [_c("button", {
-        staticClass: "btn btn-danger w-100",
-        attrs: {
-          type: "button",
-          disabled: _input.barcodes.length === 1
-        },
-        on: {
-          click: function click($event) {
-            return _vm.removeVariantBarcode(_input, barcodeIndex);
-          }
-        }
-      }, [_c("i", {
-        staticClass: "fa fa-minus"
-      })])])]);
-    }), _vm._v(" "), _c("button", {
-      staticClass: "btn btn-outline-primary btn-sm",
-      attrs: {
-        type: "button"
-      },
-      on: {
-        click: function click($event) {
-          return _vm.addVariantBarcode(_input);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-plus"
-    }), _vm._v(" Add Barcode\n                                            ")]), _vm._v(" "), _input.barcodeError ? _c("p", {
-      staticClass: "error mb-0"
-    }, [_vm._v(_vm._s(_input.barcodeError))]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-12"
-    }, [_c("div", {
-      staticClass: "form-group"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("variant_images")) + " "), _c("small", {
-      staticClass: "text-muted"
-    }, [_vm._v("(Multiple allowed)")])]), _vm._v(" "), _c("input", {
-      ref: "packet_variant_images_" + k,
-      refInFor: true,
-      staticClass: "file-input",
-      attrs: {
-        type: "file",
-        accept: "image/*",
-        multiple: ""
-      },
-      on: {
-        change: function change($event) {
-          return _vm.variantImagesChanges(k);
-        }
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "file-input-div bg-gray-100",
-      on: {
-        click: function click($event) {
-          return _vm.openVariantImagePicker(k, "packet");
-        },
-        dragover: _vm.$dragoverFile,
-        dragleave: _vm.$dragleaveFile
-      }
-    }, [_vm._m(7, true), _vm._v(" "), _c("label", [_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])]), _vm._v(" "), _c("span", {
-      staticClass: "text text-primary"
-    }, [_vm._v(_vm._s(_vm.__("please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px")))]), _vm._v(" "), _vm.variantImageerror ? _c("p", {
-      staticClass: "error"
-    }, [_vm._v(_vm._s(_vm.variantImageerror))]) : _vm._e(), _vm._v(" "), _c("div", {
-      staticClass: "row"
-    }, _vm._l(_vm.variantImages[k] || [], function (image, index) {
-      return _c("div", {
-        key: "packet_new_image_" + k + "_" + index,
-        staticClass: "col-md-2 image-container"
-      }, [_c("img", {
-        staticClass: "img-thumbnail custom-image",
-        attrs: {
-          src: image.url,
-          title: "Selected Variant Image",
-          alt: "Selected Variant Image"
-        }
-      })]);
-    }), 0), _vm._v(" "), _c("div", {
-      staticClass: "row"
-    }, _vm._l(_input.images || [], function (image, index) {
-      return _c("div", {
-        key: "packet_image_" + image.id,
-        staticClass: "col-md-2 image-container"
-      }, [_c("img", {
-        staticClass: "img-thumbnail custom-image",
-        attrs: {
-          src: _vm.$storageUrl + image.image,
-          title: "Variant Image",
-          alt: "Variant Image"
-        }
-      }), _vm._v(" "), _c("button", {
-        staticClass: "btn btn-sm btn-danger btn-remove",
-        attrs: {
-          type: "button"
-        },
-        on: {
-          click: function click($event) {
-            return _vm.deleteImage(index, image.id, false, k);
-          }
-        }
-      }, [_c("i", {
-        staticClass: "fa fa-times-circle"
-      })])]);
-    }), 0)])]), _vm._v(" "), k === 0 ? _c("div", {
-      staticClass: "col-md-2 offset-md-10 text-end"
-    }, [_c("a", {
-      directives: [{
-        name: "b-tooltip",
-        rawName: "v-b-tooltip.hover",
-        modifiers: {
-          hover: true
-        }
-      }],
-      staticClass: "btn btn-primary",
-      staticStyle: {
-        cursor: "pointer"
-      },
-      attrs: {
-        title: "Add variant of product"
-      },
-      on: {
-        click: _vm.addRow
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-plus-square"
-    }), _vm._v(" " + _vm._s(_vm.__("add_variant")) + "\n                                        ")])]) : _vm._e(), _vm._v(" "), k !== 0 ? _c("div", {
-      staticClass: "col-md-2 offset-md-10 text-end"
-    }, [_c("a", {
-      directives: [{
-        name: "b-tooltip",
-        rawName: "v-b-tooltip.hover",
-        modifiers: {
-          hover: true
-        }
-      }],
-      staticClass: "btn btn-danger",
-      staticStyle: {
-        cursor: "pointer"
-      },
-      attrs: {
-        title: "Remove variant of product"
-      },
-      on: {
-        click: function click($event) {
-          return _vm.remove(k);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-times"
-    }), _vm._v(" " + _vm._s(_vm.__("remove_variant")) + "\n                                        ")])]) : _vm._e()])]) : _vm._e();
-  }), _vm._v(" "), _vm.type === "loose" ? _c("div", {
-    attrs: {
-      id: "loose_div"
-    }
-  }, _vm._l(_vm.inputs, function (_input2, k) {
-    return _c("div", {
-      key: k,
-      staticClass: "list-group-item"
-    }, [_c("div", {
-      staticClass: "row"
-    }, [_c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("unit")) + " "), _c("i", {
-      staticClass: "text-danger"
-    }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _vm.loose_stock_unit_id,
-        expression: "loose_stock_unit_id"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        name: "loose_stock_unit_id"
-      },
-      on: {
-        change: function change($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-          _vm.loose_stock_unit_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-        }
-      }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v(_vm._s(_vm.__("select_unit")))]), _vm._v(" "), _vm._l(_vm.units, function (unit, key) {
-      return _c("option", {
-        domProps: {
-          value: unit.id
-        }
-      }, [_vm._v(_vm._s(unit.short_code))]);
-    })], 2)])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group loose_div"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("measurement")))]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_measurement,
-        expression: "input.loose_measurement"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0"
-      },
-      domProps: {
-        value: _input2.loose_measurement
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_measurement", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Color Variant")]), _vm._v(" "), _c("select", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.color_variant,
-        expression: "input.color_variant"
-      }],
-      staticClass: "form-control",
-      on: {
-        change: function change($event) {
-          var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-            return o.selected;
-          }).map(function (o) {
-            var val = "_value" in o ? o._value : o.value;
-            return val;
-          });
-          _vm.$set(_input2, "color_variant", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
-        }
-      }
-    }, [_c("option", {
-      attrs: {
-        value: ""
-      }
-    }, [_vm._v("Select Color")]), _vm._v(" "), _vm._l(_vm.colorVariantOptions, function (color) {
-      return _c("option", {
-        key: color.value,
-        domProps: {
-          value: color.value
-        }
-      }, [_vm._v(_vm._s(color.label))]);
-    })], 2)])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Expiry Date From")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.expiry_date_from,
-        expression: "input.expiry_date_from"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "date"
-      },
-      domProps: {
-        value: _input2.expiry_date_from
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "expiry_date_from", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Expiry Date To")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.expiry_date_to,
-        expression: "input.expiry_date_to"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "date"
-      },
-      domProps: {
-        value: _input2.expiry_date_to
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "expiry_date_to", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("MRP ( " + _vm._s(_vm.$currency) + " ): "), _c("i", {
-      staticClass: "text-danger"
-    }, [_vm._v("*")])]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_price,
-        expression: "input.loose_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0.00",
-        required: ""
-      },
-      domProps: {
-        value: _input2.loose_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_price", $event.target.value);
-        }, function ($event) {
-          return _vm.syncLooseSalePriceFromDiscount(_input2);
-        }]
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Purchase Price ( " + _vm._s(_vm.$currency) + " )")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_purchase_price,
-        expression: "input.loose_purchase_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input2.loose_purchase_price
-      },
-      on: {
-        input: function input($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_purchase_price", $event.target.value);
-        }
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Sale Price ( " + _vm._s(_vm.$currency) + " )")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_sale_price,
-        expression: "input.loose_sale_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input2.loose_sale_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_sale_price", $event.target.value);
-        }, function ($event) {
-          return _vm.setLooseSalePrice(_input2);
-        }]
-      }
-    }), _vm._v(" "), _input2.validationErrorSalePriceLoose ? _c("span", {
-      staticClass: "error"
-    }, [_vm._v(_vm._s(_input2.validationErrorSalePriceLoose))]) : _vm._e()])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Discount on MRP(%)")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_discount_percentage,
-        expression: "input.loose_discount_percentage"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input2.loose_discount_percentage
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_discount_percentage", $event.target.value);
-        }, function ($event) {
-          return _vm.setLooseDiscountMode(_input2, "percent");
-        }]
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Discount on MRP(Rs)")]), _vm._v(" "), _c("input", {
-      directives: [{
-        name: "model",
-        rawName: "v-model",
-        value: _input2.loose_discounted_price,
-        expression: "input.loose_discounted_price"
-      }],
-      staticClass: "form-control",
-      attrs: {
-        type: "number",
-        step: "any",
-        min: "0",
-        placeholder: "0.00"
-      },
-      domProps: {
-        value: _input2.loose_discounted_price
-      },
-      on: {
-        input: [function ($event) {
-          if ($event.target.composing) return;
-          _vm.$set(_input2, "loose_discounted_price", $event.target.value);
-        }, function ($event) {
-          return _vm.setLooseDiscountMode(_input2, "amount");
-        }]
-      }
-    }), _vm._v(" "), _input2.validationErrorDiscountedPriceLoose ? _c("span", {
-      staticClass: "error"
-    }, [_vm._v(_vm._s(_input2.validationErrorDiscountedPriceLoose))]) : _vm._e()])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Profit(%)")]), _vm._v(" "), _c("input", {
-      staticClass: "form-control bg-light",
-      attrs: {
-        type: "text",
-        readonly: ""
-      },
-      domProps: {
-        value: _vm.getLooseProfitPercentage(_input2)
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-4"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_c("label", [_vm._v("Profit(Rs)")]), _vm._v(" "), _c("input", {
-      staticClass: "form-control bg-light",
-      attrs: {
-        type: "text",
-        readonly: ""
-      },
-      domProps: {
-        value: _vm.getLooseProfit(_input2)
-      }
-    })])]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-12"
-    }, [_c("div", {
-      staticClass: "form-group mb-3 loose_div"
-    }, [_vm._m(8, true), _vm._v(" "), _vm._l(_input2.barcodes, function (variantBarcode, barcodeIndex) {
-      return _c("div", {
-        key: "loose_barcode_" + k + "_" + barcodeIndex,
-        staticClass: "row g-2 mb-2"
-      }, [_c("div", {
-        staticClass: "col-md-10"
-      }, [_c("input", {
-        directives: [{
-          name: "model",
-          rawName: "v-model",
-          value: _input2.barcodes[barcodeIndex],
-          expression: "input.barcodes[barcodeIndex]"
-        }],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "Enter barcode"
-        },
-        domProps: {
-          value: _input2.barcodes[barcodeIndex]
-        },
-        on: {
-          input: function input($event) {
-            if ($event.target.composing) return;
-            _vm.$set(_input2.barcodes, barcodeIndex, $event.target.value);
-          }
-        }
-      })]), _vm._v(" "), _c("div", {
-        staticClass: "col-md-2"
-      }, [_c("button", {
-        staticClass: "btn btn-danger w-100",
-        attrs: {
-          type: "button",
-          disabled: _input2.barcodes.length === 1
-        },
-        on: {
-          click: function click($event) {
-            return _vm.removeVariantBarcode(_input2, barcodeIndex);
-          }
-        }
-      }, [_c("i", {
-        staticClass: "fa fa-minus"
-      })])])]);
-    }), _vm._v(" "), _c("button", {
-      staticClass: "btn btn-outline-primary btn-sm",
-      attrs: {
-        type: "button"
-      },
-      on: {
-        click: function click($event) {
-          return _vm.addVariantBarcode(_input2);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-plus"
-    }), _vm._v(" Add Barcode\n                                                ")]), _vm._v(" "), _input2.barcodeError ? _c("p", {
-      staticClass: "error mb-0"
-    }, [_vm._v(_vm._s(_input2.barcodeError))]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
-      staticClass: "col-md-12"
-    }, [_c("div", {
-      staticClass: "form-group loose_div"
-    }, [_c("label", [_vm._v(_vm._s(_vm.__("variant_images")) + " "), _c("small", {
-      staticClass: "text-muted"
-    }, [_vm._v("(Multiple allowed)")])]), _vm._v(" "), _c("input", {
-      ref: "loose_variant_images_" + k,
-      refInFor: true,
-      staticClass: "file-input",
-      attrs: {
-        type: "file",
-        accept: "image/*",
-        multiple: ""
-      },
-      on: {
-        change: function change($event) {
-          return _vm.variantImagesChanges(k);
-        },
-        dragover: _vm.$dragoverFile,
-        dragleave: _vm.$dragleaveFile
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "file-input-div bg-gray-100",
-      on: {
-        click: function click($event) {
-          return _vm.openVariantImagePicker(k, "loose");
-        }
-      }
-    }, [_vm._m(9, true), _vm._v(" "), _c("label", [_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])]), _vm._v(" "), _c("span", {
-      staticClass: "text text-primary"
-    }, [_vm._v(_vm._s(_vm.__("please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px")))]), _vm._v(" "), _c("div", {
-      staticClass: "row"
-    }, _vm._l(_input2.loose_images || [], function (image, index) {
-      return _c("div", {
-        key: "loose_image_" + image.id,
-        staticClass: "col-md-2 image-container"
-      }, [_c("img", {
-        staticClass: "img-thumbnail custom-image",
-        attrs: {
-          src: _vm.$storageUrl + image.image,
-          title: "Variant Image",
-          alt: "Variant Image"
-        }
-      }), _vm._v(" "), _c("button", {
-        staticClass: "btn btn-sm btn-danger btn-remove",
-        attrs: {
-          type: "button"
-        },
-        on: {
-          click: function click($event) {
-            return _vm.deleteImage(index, image.id, false, k);
-          }
-        }
-      }, [_c("i", {
-        staticClass: "fa fa-times-circle"
-      })])]);
-    }), 0), _vm._v(" "), _c("div", {
-      staticClass: "row"
-    }, _vm._l(_vm.variantImages[k] || [], function (image, index) {
-      return _c("div", {
-        key: "loose_new_image_" + k + "_" + index,
-        staticClass: "col-md-4 image-container"
-      }, [_c("img", {
-        staticClass: "img-thumbnail custom-image",
-        attrs: {
-          src: image.url,
-          title: "Selected Variant Image",
-          alt: "Selected Variant Image"
-        }
-      })]);
-    }), 0)])]), _vm._v(" "), k === 0 ? _c("div", {
-      staticClass: "col-md-2 offset-md-10 text-end"
-    }, [_c("a", {
-      directives: [{
-        name: "b-tooltip",
-        rawName: "v-b-tooltip.hover",
-        modifiers: {
-          hover: true
-        }
-      }],
-      staticClass: "btn btn-primary",
-      staticStyle: {
-        cursor: "pointer"
-      },
-      attrs: {
-        title: "Add variant of product"
-      },
-      on: {
-        click: _vm.addRow
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-plus-square"
-    }), _vm._v(" " + _vm._s(_vm.__("add_variant")) + "\n                                            ")])]) : _vm._e(), _vm._v(" "), k !== 0 ? _c("div", {
-      staticClass: "col-md-2 offset-md-10 text-end"
-    }, [_c("a", {
-      directives: [{
-        name: "b-tooltip",
-        rawName: "v-b-tooltip.hover",
-        modifiers: {
-          hover: true
-        }
-      }],
-      staticClass: "btn btn-danger",
-      staticStyle: {
-        cursor: "pointer"
-      },
-      attrs: {
-        title: "Remove variant of product"
-      },
-      on: {
-        click: function click($event) {
-          return _vm.remove(k);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "fa fa-times"
-    }), _vm._v(" " + _vm._s(_vm.__("remove_variant")) + "\n                                            ")])]) : _vm._e()])]);
-  }), 0) : _vm._e(), _vm._v(" "), _vm.type === "loose" ? _c("div", {
-    staticClass: "row mt-3",
-    attrs: {
-      id: "loose_stock_div"
-    }
-  }, [_c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("purchase_price")) + " ( " + _vm._s(_vm.$currency) + " )\n                                            "), _c("i", {
-    directives: [{
-      name: "b-tooltip",
-      rawName: "v-b-tooltip.hover",
-      modifiers: {
-        hover: true
-      }
-    }],
-    staticClass: "fa fa-info-circle text-muted",
-    attrs: {
-      title: "This field is used to calculate in your report"
-    }
-  })]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.loose_purchase_price,
-      expression: "loose_purchase_price"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "number",
-      step: "any",
-      min: "0",
-      placeholder: "0.00"
-    },
-    domProps: {
-      value: _vm.loose_purchase_price
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.loose_purchase_price = $event.target.value;
-      }
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v("Profit ( " + _vm._s(_vm.$currency) + " )")]), _vm._v(" "), _c("input", {
-    staticClass: "form-control bg-light",
-    attrs: {
-      type: "text",
-      readonly: ""
-    },
-    domProps: {
-      value: _vm.getLooseProfit()
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v("Margin %")]), _vm._v(" "), _c("input", {
-    staticClass: "form-control bg-light",
-    attrs: {
-      type: "text",
-      readonly: ""
-    },
-    domProps: {
-      value: _vm.getLooseMargin()
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_vm.is_unlimited_stock != 1 ? _c("div", {
-    staticClass: "form-group mb-3"
-  }, [_vm._m(10), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.loose_stock,
-      expression: "loose_stock"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "number",
-      step: "any",
-      min: "0"
-    },
-    domProps: {
-      value: _vm.loose_stock
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.loose_stock = $event.target.value;
-      }
-    }
-  }), _c("br")]) : _vm._e()]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("unit")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.loose_stock_unit_id,
-      expression: "loose_stock_unit_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      name: "loose_stock_unit_id"
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.loose_stock_unit_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_unit")))]), _vm._v(" "), _vm._l(_vm.units, function (unit, key) {
-    return _c("option", {
-      domProps: {
-        value: unit.id
-      }
-    }, [_vm._v(_vm._s(unit.short_code))]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("status")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.status,
-      expression: "status"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      name: "status"
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.status = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_status")))]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "1"
-    }
-  }, [_vm._v(_vm._s(_vm.__("available")))]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "0"
-    }
-  }, [_vm._v(_vm._s(_vm.__("sold_out")))])])])])]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
-    staticClass: "card"
-  }, [_c("div", {
-    staticClass: "card-header"
-  }, [_c("h4", [_vm._v(_vm._s(_vm.__("product_settings")))])]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [_c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("category")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.product_category_id,
-      expression: "product_category_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      required: ""
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.product_category_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_category")))]), _vm._v(" "), _vm._l(_vm.mainCategoryOptions, function (category) {
-    return _c("option", {
-      key: category.id,
-      domProps: {
-        value: category.id
-      }
-    }, [_vm._v(_vm._s(category.name))]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v("SubCategory")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.product_subcategory_id,
-      expression: "product_subcategory_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      disabled: !_vm.product_category_id
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.product_subcategory_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v("Select SubCategory")]), _vm._v(" "), _vm._l(_vm.subCategoryOptions, function (category) {
-    return _c("option", {
-      key: category.id,
-      domProps: {
-        value: category.id
-      }
-    }, [_vm._v(_vm._s(category.name))]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v("Sub SubCategory")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.product_sub_subcategory_id,
-      expression: "product_sub_subcategory_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      disabled: !_vm.product_subcategory_id
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.product_sub_subcategory_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v("Select Sub SubCategory")]), _vm._v(" "), _vm._l(_vm.subSubCategoryOptions, function (category) {
-    return _c("option", {
-      key: category.id,
-      domProps: {
-        value: category.id
-      }
-    }, [_vm._v(_vm._s(category.name))]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v("Sub Sub SubCategory")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.product_sub_sub_subcategory_id,
-      expression: "product_sub_sub_subcategory_id"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      disabled: !_vm.product_sub_subcategory_id
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.product_sub_sub_subcategory_id = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v("Select Sub Sub SubCategory")]), _vm._v(" "), _vm._l(_vm.subSubSubCategoryOptions, function (category) {
-    return _c("option", {
-      key: category.id,
-      domProps: {
-        value: category.id
-      }
-    }, [_vm._v(_vm._s(category.name))]);
-  })], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("product_type")) + " ")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.product_type,
-      expression: "product_type"
-    }],
-    staticClass: "form-control",
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.product_type = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_type")))]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "1"
-    }
-  }, [_vm._v(_vm._s(_vm.__("veg")))]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "2"
-    }
-  }, [_vm._v(_vm._s(_vm.__("non_veg")))])])])]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.is_approved,
-      expression: "is_approved"
-    }],
-    attrs: {
-      type: "hidden"
-    },
-    domProps: {
-      value: _vm.is_approved
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.is_approved = $event.target.value;
-      }
-    }
-  }), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", {
-    attrs: {
-      "for": "made_in"
-    }
-  }, [_vm._v(_vm._s(_vm.__("made_in")))]), _vm._v(" "), _c("multiselect", {
-    attrs: {
-      id: "made_in",
-      options: _vm.countries,
-      placeholder: _vm.__("select_and_search_country_name"),
-      label: "name",
-      "track-by": "name",
-      required: ""
-    },
-    scopedSlots: _vm._u([{
-      key: "singleLabel",
-      fn: function fn(props) {
-        return [_c("span", {
-          staticClass: "option__desc"
-        }, [_c("span", {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.name))])])];
-      }
-    }, {
-      key: "option",
-      fn: function fn(props) {
-        return [_c("div", {
-          staticClass: "option__desc"
-        }, [_c("span", {
-          staticClass: "option__title"
-        }, [_vm._v(_vm._s(props.option.name))]), _vm._v(" "), _c("span", {
-          staticClass: "option__small"
-        }, [_vm._v("[" + _vm._s(props.option.code) + "]")])])];
-      }
-    }]),
-    model: {
-      value: _vm.made_in,
-      callback: function callback($$v) {
-        _vm.made_in = $$v;
-      },
-      expression: "made_in"
-    }
-  })], 1)]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3 d-flex flex-wrap align-items-start gap-2"
-  }, [_c("div", [_c("label", [_vm._v(_vm._s(_vm.__("is_returnable")))]), _c("br"), _vm._v(" "), _c("b-form-radio-group", {
-    attrs: {
-      options: [{
-        text: _vm.__("no"),
-        value: 0
-      }, {
-        text: _vm.__("yes"),
-        value: 1
-      }],
-      buttons: "",
-      "button-variant": "outline-primary",
-      required: ""
-    },
-    model: {
-      value: _vm.return_status,
-      callback: function callback($$v) {
-        _vm.return_status = $$v;
-      },
-      expression: "return_status"
-    }
-  })], 1), _vm._v(" "), _vm.return_status == 1 ? _c("div", {
-    staticClass: "ms-2"
-  }, [_c("label", {
-    attrs: {
-      "for": "return_day"
-    }
-  }, [_vm._v(_vm._s(_vm.__("max_return_days")))]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.return_days,
-      expression: "return_days"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "number",
-      step: "any",
-      min: _vm.return_status == 1 ? 1 : 0,
-      required: _vm.return_status == 1 ? true : undefined,
-      id: "return_day",
-      placeholder: _vm.__("number_of_days_to_return")
-    },
-    domProps: {
-      value: _vm.return_days
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.return_days = $event.target.value;
-      }
-    }
-  })]) : _vm._e()])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3 d-flex flex-wrap align-items-start gap-2"
-  }, [_c("div", [_c("label", [_vm._v(_vm._s(_vm.__("is_cancelable")))]), _c("br"), _vm._v(" "), _c("b-form-radio-group", {
-    attrs: {
-      options: [{
-        text: _vm.__("no"),
-        value: 0
-      }, {
-        text: _vm.__("yes"),
-        value: 1
-      }],
-      buttons: "",
-      "button-variant": "outline-primary"
-    },
-    model: {
-      value: _vm.cancelable_status,
-      callback: function callback($$v) {
-        _vm.cancelable_status = $$v;
-      },
-      expression: "cancelable_status"
-    }
-  })], 1), _vm._v(" "), _vm.cancelable_status === 1 ? _c("div", {
-    staticClass: "ms-2"
-  }, [_c("label", {
-    attrs: {
-      "for": "till_status"
-    }
-  }, [_vm._v(_vm._s(_vm.__("till_which_status")) + " "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.till_status,
-      expression: "till_status"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      id: "till_status",
-      required: _vm.cancelable_status === 1 ? true : undefined
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val;
-        });
-        _vm.till_status = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: ""
-    }
-  }, [_vm._v(_vm._s(_vm.__("select_order_status")))]), _vm._v(" "), _vm._l(_vm.order_status, function (status) {
-    return _c("option", {
-      domProps: {
-        value: status.id
-      }
-    }, [_vm._v(_vm._s(_vm.getStatusDisplayName(status)) + "\n                                                ")]);
-  })], 2)]) : _vm._e()])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-4"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("is_cod_allowed")))]), _c("br"), _vm._v(" "), _c("b-form-radio-group", {
-    attrs: {
-      options: [{
-        text: _vm.__("no"),
-        value: 0
-      }, {
-        text: _vm.__("yes"),
-        value: 1
-      }],
-      buttons: "",
-      "button-variant": "outline-primary"
-    },
-    model: {
-      value: _vm.cod_allowed_status,
-      callback: function callback($$v) {
-        _vm.cod_allowed_status = $$v;
-      },
-      expression: "cod_allowed_status"
-    }
-  })], 1)])])])]), _vm._v(" "), _vm.defaultLanguageId ? _c("div", {
-    staticClass: "card"
-  }, [_c("div", {
-    staticClass: "card-header"
-  }, [_c("h4", [_vm._v(_vm._s(_vm.__("seo_settings")))])]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [_c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("meta_title")) + " ")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.translations[_vm.defaultLanguageId].meta_title,
-      expression: "translations[defaultLanguageId].meta_title"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_meta_title")
-    },
-    domProps: {
-      value: _vm.translations[_vm.defaultLanguageId].meta_title
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "meta_title", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("meta_keywords")) + " ")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.translations[_vm.defaultLanguageId].meta_keywords,
-      expression: "translations[defaultLanguageId].meta_keywords"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_meta_keywords")
-    },
-    domProps: {
-      value: _vm.translations[_vm.defaultLanguageId].meta_keywords
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "meta_keywords", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("schema_markup")) + " ")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.translations[_vm.defaultLanguageId].schema_markup,
-      expression: "translations[defaultLanguageId].schema_markup"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_schema_markup")
-    },
-    domProps: {
-      value: _vm.translations[_vm.defaultLanguageId].schema_markup
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "schema_markup", $event.target.value);
-      }
-    }
-  })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
-    staticClass: "form-group mb-3"
-  }, [_c("label", [_vm._v(_vm._s(_vm.__("meta_description")) + " ")]), _vm._v(" "), _c("textarea", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.translations[_vm.defaultLanguageId].meta_description,
-      expression: "translations[defaultLanguageId].meta_description"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      placeholder: _vm.__("enter_meta_description"),
-      rows: "2"
-    },
-    domProps: {
-      value: _vm.translations[_vm.defaultLanguageId].meta_description
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.translations[_vm.defaultLanguageId], "meta_description", $event.target.value);
-      }
-    }
-  })])])])]), _vm._v(" "), _c("div", {
-    staticClass: "card-footer"
-  }, [_c("b-button", {
-    attrs: {
-      type: "submit",
-      variant: "primary",
-      disabled: _vm.isLoading
-    },
-    on: {
-      keydown: function keydown($event) {
-        if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) return null;
-        return _vm.saveRecord.apply(null, arguments);
-      }
-    }
-  }, [_vm._v(" " + _vm._s(_vm.__("save")) + "\n                                "), _vm.isLoading ? _c("b-spinner", {
-    attrs: {
-      small: "",
-      label: "Spinning"
-    }
-  }) : _vm._e()], 1), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-danger",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: _vm.clearForm
-    }
-  }, [_vm._v(_vm._s(_vm.__("clear")))])], 1)]) : _vm._e()])])])])]);
-};
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_vm._v("Product Highlights "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_c("i", {
-    staticClass: "fa fa-cloud-upload-alt fa-2x"
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_c("i", {
-    staticClass: "fa fa-cloud-upload-alt fa-2x"
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("span", [_c("small", [_vm._v("Use the + button below to add more.")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", {
-    staticClass: "control-label"
-  }, [_vm._v("Available Quantity "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_vm._v("Available Quantity "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_vm._v("Variant Barcodes "), _c("small", {
-    staticClass: "text-muted"
-  }, [_vm._v("(Optional)")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_c("i", {
-    staticClass: "fa fa-cloud-upload-alt fa-2x"
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_vm._v("Variant Barcodes "), _c("small", {
-    staticClass: "text-muted"
-  }, [_vm._v("(Optional)")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_c("i", {
-    staticClass: "fa fa-cloud-upload-alt fa-2x"
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("label", [_vm._v("Available Quantity "), _c("i", {
-    staticClass: "text-danger"
-  }, [_vm._v("*")])]);
-}];
-render._withStripped = true;
-
+var render=function render(){var _vm=this,_c=_vm._self._c;return _c("div",[_c("div",{staticClass:"page-heading"},[_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-12 col-md-6 order-md-1 order-last"},[_c("h3",[_vm.clone?[_vm._v("\n                            "+_vm._s(_vm.__("clone"))+"\n                        ")]:_vm.id?[_vm._v("\n                            "+_vm._s(_vm.__("edit"))+"\n                        ")]:[_vm._v("\n                            "+_vm._s(_vm.__("add"))+"\n                        ")],_vm._v("\n                        "+_vm._s(_vm.__("product"))+"\n                    ")],2)]),_vm._v(" "),_c("div",{staticClass:"col-12 col-md-6 order-md-2 order-first"},[_c("nav",{staticClass:"breadcrumb-header float-start float-lg-end",attrs:{"aria-label":"breadcrumb"}},[_c("ol",{staticClass:"breadcrumb"},[_vm.isSellerRoute?_c("li",{staticClass:"breadcrumb-item"},[_c("router-link",{attrs:{to:"/seller/dashboard"}},[_vm._v(_vm._s(_vm.__("dashboard")))])],1):_c("li",{staticClass:"breadcrumb-item"},[_c("router-link",{attrs:{to:"/dashboard"}},[_vm._v(_vm._s(_vm.__("dashboard")))])],1),_vm._v(" "),_vm.isSellerRoute?_c("li",{staticClass:"breadcrumb-item"},[_c("router-link",{attrs:{to:"/seller/manage_products"}},[_vm._v(_vm._s(_vm.__("manage_products")))])],1):_c("li",{staticClass:"breadcrumb-item"},[_c("router-link",{attrs:{to:"/manage_products"}},[_vm._v(_vm._s(_vm.__("manage_products")))])],1),_vm._v(" "),_c("li",{staticClass:"breadcrumb-item active",attrs:{"aria-current":"page"}},[_vm.clone?[_vm._v("\n                                    "+_vm._s(_vm.__("clone"))+"\n                                ")]:_vm.id?[_vm._v("\n                                    "+_vm._s(_vm.__("edit"))+"\n                                ")]:[_vm._v("\n                                    "+_vm._s(_vm.__("add"))+"\n                                ")],_vm._v("\n                                "+_vm._s(_vm.__("product"))+"\n                            ")],2)])])])]),_vm._v(" "),_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-12 col-md-12 order-md-1 order-last",attrs:{id:"mymodal"}},[_vm.isLoadingLanguages?_c("div",{staticClass:"text-center py-5"},[_c("b-spinner",{attrs:{label:"Loading..."}}),_vm._v(" "),_c("p",{staticClass:"mt-2"},[_vm._v("Loading languages...")])],1):_c("form",{ref:"my-form",staticClass:"modern-admin-form",on:{submit:function submit($event){$event.preventDefault();return _vm.saveRecord.apply(null,arguments);},keydown:function keydown($event){if(!$event.type.indexOf("key")&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter"))return null;return $event.preventDefault();}}},[_c("div",{staticClass:"product-layout",staticStyle:{display:"block"}},[_c("div",{staticClass:"card modern-card card-general"},[_c("div",{staticClass:"card-header border-bottom-0 pb-0"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v("Basic Information")]),_vm._v(" "),_c("span",{staticClass:"pull-right"},[_vm.isSellerRole?[_c("router-link",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:true}}],staticClass:"btn btn-primary",attrs:{to:"/seller/manage_products",title:"Manage Product"}},[_vm._v(_vm._s(_vm.__("manage_products")))])]:[_c("router-link",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:true}}],staticClass:"btn btn-primary",attrs:{to:"/manage_products",title:"Manage Product"}},[_vm._v(_vm._s(_vm.__("manage_products")))])]],2)]),_vm._v(" "),_c("div",{staticClass:"card-body"},[ false?0:_vm.isLoadingLanguages?_c("div",{staticClass:"text-center p-3 mb-3"},[_c("b-spinner",{attrs:{label:"Loading languages..."}})],1):_vm._e(),_vm._v(" "),_c("div",{staticClass:"row form-compact-row"},[_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",{attrs:{"for":"barcode"}},[_vm._v(_vm._s(_vm.__("barcode")))]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.barcode,expression:"barcode"}],staticClass:"form-control",attrs:{type:"text",id:"barcode",placeholder:_vm.__("barcode")},domProps:{value:_vm.barcode},on:{input:[function($event){if($event.target.composing)return;_vm.barcode=$event.target.value;},_vm.validateBarcode]}}),_vm._v(" "),_vm.validationBarcodeMessage?_c("p",{staticStyle:{color:"red"}},[_vm._v(_vm._s(_vm.validationBarcodeMessage))]):_vm.isBarcodeValid?_c("p",{staticStyle:{color:"green"}},[_vm._v("Barcode is valid!\n                                            ")]):_vm._e()])]),_vm._v(" "),_vm.defaultLanguageId?_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("product_name"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.translations[_vm.defaultLanguageId].name,expression:"translations[defaultLanguageId].name"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_product_name"),required:""},domProps:{value:_vm.translations[_vm.defaultLanguageId].name},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_vm.translations[_vm.defaultLanguageId],"name",$event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c("div",{staticClass:"col-md-6 d-none"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("slug")))]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.slug,expression:"slug"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_product_slug"),readonly:""},domProps:{value:_vm.slug},on:{input:function input($event){if($event.target.composing)return;_vm.slug=$event.target.value;}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",{attrs:{"for":"tax_id"}},[_vm._v(_vm._s(_vm.__("tax")))]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.tax_id,expression:"tax_id"}],staticClass:"form-control",attrs:{id:"tax_id",name:"tax_id"},on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.tax_id=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:"0"}},[_vm._v(_vm._s(_vm.__("select_tax")))]),_vm._v(" "),_vm._l(_vm.translatedTaxes,function(tax){return _c("option",{domProps:{value:tax.id}},[_vm._v("\n                                                    "+_vm._s(tax.title)+"\n                                                    ("+_vm._s(tax.percentage)+" %)")]);})],2)])]),_vm._v(" "),_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",{attrs:{"for":"brands"}},[_vm._v(_vm._s(_vm.__("brands")))]),_vm._v(" "),_c("div",{staticClass:"d-flex align-items-center gap-2"},[_c("multiselect",{staticStyle:{"flex-grow":"1"},attrs:{id:"brands",options:_vm.translatedBrands,placeholder:_vm.__("select_and_search_brands"),label:"name","track-by":"id",required:""},nativeOn:{keydown:function keydown($event){if(!$event.type.indexOf("key")&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter"))return null;$event.stopPropagation();}},scopedSlots:_vm._u([{key:"singleLabel",fn:function fn(props){return[_c("span",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}},{key:"option",fn:function fn(props){return[_c("div",{staticClass:"option__desc"},[_c("span",{staticClass:"option__small"},[_c("img",{staticClass:"option__image",staticStyle:{height:"25px"},attrs:{src:props.option.image_url,alt:"Brand Logo"}})]),_vm._v(" "),_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}}]),model:{value:_vm.brand,callback:function callback($$v){_vm.brand=$$v;},expression:"brand"}}),_vm._v(" "),_c("button",{staticClass:"btn btn-primary",staticStyle:{height:"40px","min-width":"40px"},attrs:{type:"button"},on:{click:function click($event){return _vm.$refs.editBrandModal.showModal();}}},[_c("i",{staticClass:"fa fa-plus"})])],1)])])])])]),_vm._v(" "),_c("div",{staticClass:"card modern-card card-media mb-4"},[_vm._m(0),_vm._v(" "),_c("div",{staticClass:"card-body"},[_c("div",{staticClass:"row form-compact-row"},[_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("main_image"))+" "),!_vm.id?_c("i",{staticClass:"text-danger"},[_vm._v("*")]):_vm._e()]),_vm._v(" "),_c("input",{ref:"file_image",staticClass:"file-input",attrs:{type:"file",name:"image",accept:"image/*"},on:{change:_vm.fileImage}}),_vm._v(" "),_c("div",{staticClass:"file-input-div bg-gray-100",on:{click:function click($event){return _vm.triggerRefClick("file_image");},drop:_vm.dropFile,dragover:_vm.$dragoverFile,dragleave:_vm.$dragleaveFile}},[_vm.main_image_name==""?[_vm._m(1),_vm._v(" "),_c("label",[_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])]:[_c("label",[_vm._v(_vm._s(_vm.__("selected_file_name"))+" "+_vm._s(_vm.main_image_name))])]],2),_vm._v(" "),_c("span",{staticClass:"text text-primary"},[_vm._v(_vm._s(_vm.__("please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px")))]),_vm._v(" "),_vm.mainImageerror?_c("p",{staticClass:"error"},[_vm._v(_vm._s(_vm.mainImageerror))]):_vm._e(),_vm._v(" "),_vm.main_image_path?_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-md-4"},[_c("img",{staticClass:"custom-image",attrs:{src:_vm.main_image_path,title:"Main Image",alt:"Main Image"}})])]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",{attrs:{"for":"other_images"}},[_vm._v(_vm._s(_vm.__("other_images_of_the_product")))]),_vm._v(" "),_c("input",{ref:"file_other_images",staticClass:"file-input",attrs:{type:"file",name:"other_images[]",accept:"image/jpeg,image/png,image/gif,image/webp,video/mp4",id:"other_images",multiple:""},on:{change:_vm.otherImage}}),_vm._v(" "),_c("div",{staticClass:"file-input-div bg-gray-100",on:{click:function click($event){return _vm.triggerRefClick("file_other_images");},drop:_vm.dropFileOtherImage,dragover:_vm.$dragoverFile,dragleave:_vm.$dragleaveFile}},[_vm.images.length===0?[_vm._m(2),_vm._v(" "),_c("label",[_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])]:[_c("label",[_vm._v(_vm._s(_vm.images.length)+" files selected")]),_vm._v(" "),_vm._m(3)]],2),_vm._v(" "),_c("span",{staticClass:"text text-primary"},[_vm._v("Allowed media: JPG, JPEG, PNG, GIF, WEBP images or MP4 videos. Max 3 MB per file.")]),_vm._v(" "),_vm.otherImageerror?_c("p",{staticClass:"error"},[_vm._v(_vm._s(_vm.otherImageerror))]):_vm._e(),_vm._v(" "),_vm.images&&_vm.images.length!==0?_c("div",{staticClass:"row other-media-list"},[_c("h6",{staticClass:"mt-3"},[_vm._v("Selected Other Image List.")]),_vm._v(" "),_vm._l(_vm.images,function(image,index){return _vm.images.length!==0?_c("div",{key:"other_new_direct_"+index,staticClass:"col-md-4 image-container",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("other-new",index);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("other-new",index);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s((_vm.other_images||[]).length+index+1))]),_vm._v(" "),image.isVideo?_c("video",{staticClass:"img-thumbnail custom-image",attrs:{src:image.url,controls:"",muted:"",playsinline:"",title:"Selected Product Video"},domProps:{muted:true}}):_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:image.url,title:"Selected Other Image",alt:"Selected Other Image"}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){_vm.removeOtherImage(_vm.images.indexOf(image));}}},[_c("i",{staticClass:"fa fa-times-circle"})])]):_vm._e();}),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("button",{staticClass:"add-more-media-btn",attrs:{type:"button"},on:{click:function click($event){return _vm.triggerRefClick("file_other_images");}}},[_c("i",{staticClass:"fa fa-plus"}),_vm._v(" "),_c("span",[_vm._v("Add More")])])])],2):_vm._e(),_vm._v(" "),_vm.other_images&&_vm.other_images.length!==0?_c("div",{staticClass:"row"},[_c("h6",{staticClass:"mt-3"},[_vm._v("Uploaded Other Image List.")]),_vm._v(" "),_vm._l(_vm.other_images,function(image,index){return _vm.other_images.length!==0?_c("div",{key:"other_existing_direct_"+image.id,staticClass:"col-md-4 image-container",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("other-existing",index);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("other-existing",index);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s(image.sort_order||index+1))]),_vm._v(" "),_vm.isVideoMedia(image.image)?_c("video",{staticClass:"img-thumbnail custom-image",attrs:{src:_vm.$storageUrl+image.image,controls:"",muted:"",playsinline:"",title:"Product Video"},domProps:{muted:true}}):_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:_vm.$storageUrl+image.image,title:"Other Image",alt:"Other Image"}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){return _vm.deleteImage(index,image.id,true);}}},[_c("i",{staticClass:"fa fa-times-circle"})])]):_vm._e();})],2):_vm._e()])])])])])]),_vm._v(" "),_c("div",{staticClass:"card modern-card card-variants mb-4"},[_c("div",{staticClass:"card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v("Pricing & Variants")]),_vm._v(" "),_vm.type==="packet"||_vm.type==="loose"?_c("div",{staticClass:"custom-control custom-switch"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.has_variant,expression:"has_variant"}],staticClass:"custom-control-input",attrs:{type:"checkbox",id:"hasVariantSwitch"},domProps:{checked:Array.isArray(_vm.has_variant)?_vm._i(_vm.has_variant,null)>-1:_vm.has_variant},on:{change:function change($event){var $$a=_vm.has_variant,$$el=$event.target,$$c=$$el.checked?true:false;if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.has_variant=$$a.concat([$$v]));}else{$$i>-1&&(_vm.has_variant=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.has_variant=$$c;}}}}),_vm._v(" "),_c("label",{staticClass:"custom-control-label",attrs:{"for":"hasVariantSwitch"}},[_vm._v("Has Variants")])]):_vm._e()]),_vm._v(" "),_c("div",{staticClass:"card-body"},[_c("div",{staticClass:"col-md-6 d-none"},[_c("div",{staticClass:"row"},[_c("div",{staticClass:"form-group col-md-6"},[_c("label",[_vm._v(_vm._s(_vm.__("product_variants"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_c("br"),_vm._v(" "),_c("b-form-radio-group",{attrs:{options:[{text:_vm.__("packet"),value:"packet"},{text:_vm.__("loose"),value:"loose"}],buttons:"","button-variant":"outline-primary"},model:{value:_vm.type,callback:function callback($$v){_vm.type=$$v;},expression:"type"}})],1),_vm._v(" "),_c("div",{staticClass:"form-group col-md-6"},[_vm._m(4),_c("br"),_vm._v(" "),_c("b-form-radio-group",{attrs:{options:[{text:_vm.__("limited"),value:0},{text:_vm.__("unlimited"),value:1}],buttons:"","button-variant":"outline-primary"},model:{value:_vm.is_unlimited_stock,callback:function callback($$v){_vm.is_unlimited_stock=$$v;},expression:"is_unlimited_stock"}})],1)])])]),_vm._v(" "),_vm.has_variant&&_vm.type==="packet"?_c("div",{staticClass:"table-responsive mb-4"},[_c("table",{staticClass:"table table-bordered table-sm variant-table",staticStyle:{"font-size":"0.85rem","vertical-align":"middle"}},[_c("thead",{staticClass:"bg-light"},[_c("tr",[_c("th",{staticStyle:{width:"60px"}},[_vm._v("Image")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"150px"}},[_vm._v("Details (Name, Barcode, Color)")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"120px"}},[_vm._v("Unit & Meas.")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"120px"}},[_vm._v("Pur. Price & MRP")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"150px"}},[_vm._v("Discount & Sale Price")]),_vm._v(" "),_vm.is_unlimited_stock!=1?_c("th",{staticStyle:{"min-width":"100px"}},[_vm._v("Stock")]):_vm._e(),_vm._v(" "),_c("th",{staticStyle:{"min-width":"100px"}},[_vm._v("Profit")]),_vm._v(" "),_c("th",{staticStyle:{width:"50px"}},[_vm._v("Act")])])]),_vm._v(" "),_c("tbody",_vm._l(_vm.inputs,function(_input,k){return _c("tr",{key:"packet_table_"+k},[_c("td",{staticClass:"text-center p-1"},[_c("div",{staticClass:"variant-image-upload mx-auto",staticStyle:{width:"50px",height:"50px",border:"1px dashed #ccc",display:"flex","align-items":"center","justify-content":"center",cursor:"pointer"},attrs:{title:"Add/View Images"},on:{click:function click($event){return _vm.openVariantImagePicker(k,"packet");}}},[_vm.variantImages[k]&&_vm.variantImages[k].length?_c("img",{staticStyle:{width:"100%",height:"100%","object-fit":"cover"},attrs:{src:_vm.variantImages[k][0].url}}):_input.images&&_input.images.length?_c("img",{staticStyle:{width:"100%",height:"100%","object-fit":"cover"},attrs:{src:_vm.$storageUrl+_input.images[0].image}}):_c("i",{staticClass:"fa fa-image text-muted"})]),_vm._v(" "),(_vm.variantImages[k]?_vm.variantImages[k].length:0)+(_input.images?_input.images.length:0)>1?_c("small",{staticClass:"text-muted d-block",staticStyle:{"font-size":"10px"}},[_vm._v("\n                        +"+_vm._s((_vm.variantImages[k]?_vm.variantImages[k].length:0)+(_input.images?_input.images.length:0)-1)+" more\n                    ")]):_vm._e(),_vm._v(" "),_c("input",{ref:"packet_variant_images_"+k,refInFor:true,staticClass:"d-none",attrs:{type:"file",accept:"image/*",multiple:""},on:{change:function change($event){return _vm.variantImagesChanges(k);}}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.variant_name,expression:"input.variant_name"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"text",placeholder:"Variant Name"},domProps:{value:_input.variant_name},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input,"variant_name",$event.target.value);}}}),_vm._v(" "),_input.barcodes?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.barcodes[0],expression:"input.barcodes[0]"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"text",placeholder:"Barcode"},domProps:{value:_input.barcodes[0]},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input.barcodes,0,$event.target.value);}}}):_vm._e(),_vm._v(" "),_c("div",{staticClass:"color-picker-component"},[_c("div",{staticClass:"input-group input-group-sm"},[_c("span",{staticClass:"input-group-text p-0 overflow-hidden",staticStyle:{width:"32px",height:"31px","min-width":"32px",background:"#fff"},attrs:{title:"Click to open color palette"}},[_c("input",{staticClass:"color-picker-input-swatch border-0 p-0 w-100 h-100",staticStyle:{cursor:"pointer",background:"transparent"},attrs:{type:"color"},domProps:{value:_vm.getColorHex(_input)},on:{input:function input($event){return _vm.onColorPickerChange(_input,$event.target.value);}}})]),_vm._v(" "),_c("select",{staticClass:"form-control form-control-sm",domProps:{value:_vm.getColorSelectValue(_input)},on:{change:function change($event){return _vm.handleColorChange(_input,$event.target.value);}}},[_c("option",{attrs:{value:""}},[_vm._v("Select Color")]),_vm._v(" "),_vm._l(_vm.colorVariantOptions,function(color){return _c("option",{key:color.code,domProps:{value:color.code}},[_vm._v(_vm._s(color.emoji)+" "+_vm._s(color.label)+" ("+_vm._s(color.code)+")")]);}),_vm._v(" "),_c("option",{attrs:{value:"__custom__"}},[_vm._v("🎨 Other / Custom Color...")])],2)]),_vm._v(" "),(_input.color_variant||_input.color_name)&&_vm.getColorHex(_input)!=="#000000"?_c("div",{staticClass:"d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light",staticStyle:{"font-size":"11px",height:"22px"}},[_c("span",{staticClass:"d-inline-block rounded-circle me-1 border shadow-sm",style:{width:"12px",height:"12px",minWidth:"12px",backgroundColor:_vm.getColorHex(_input)}}),_vm._v(" "),_c("span",{staticClass:"text-dark text-truncate me-1",staticStyle:{"font-size":"10px","font-weight":"500"}},[_vm._v(_vm._s(_vm.getColorLabel(_input)))]),_vm._v(" "),_c("span",{staticClass:"text-muted ms-auto font-monospace",staticStyle:{"font-size":"10px"}},[_vm._v(_vm._s(_vm.getColorHex(_input)))])]):_vm._e(),_vm._v(" "),_vm.isCustomColor(_input)?_c("div",{staticClass:"mt-1 p-1 rounded border bg-light"},[_vm._m(5,true),_vm._v(" "),_c("input",{staticClass:"form-control form-control-sm",attrs:{type:"text",placeholder:"Color Name (e.g. Olive Green)",maxlength:"40"},domProps:{value:_input.color_name||""},on:{input:function input($event){return _vm.onCustomNameInput(_input,$event.target.value);}}})]):_vm._e()])]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("select",{directives:[{name:"model",rawName:"v-model",value:_input.packet_stock_unit_id,expression:"input.packet_stock_unit_id"}],staticClass:"form-control form-control-sm mb-1",on:{change:[function($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.$set(_input,"packet_stock_unit_id",$event.target.multiple?$$selectedVal:$$selectedVal[0]);},function($event){return _vm.changeUnits();}]}},[_c("option",{attrs:{value:""}},[_vm._v("Unit")]),_vm._v(" "),_vm._l(_vm.units,function(unit,key){return _c("option",{domProps:{value:unit.id}},[_vm._v(_vm._s(unit.short_code))]);})],2),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.packet_measurement,expression:"input.packet_measurement"}],staticClass:"form-control form-control-sm",attrs:{type:"number",min:"0",step:"any",placeholder:"Measurement"},domProps:{value:_input.packet_measurement},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input,"packet_measurement",$event.target.value);}}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.packet_purchase_price,expression:"input.packet_purchase_price"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"number",min:"0",step:"any",placeholder:"Pur. Price"},domProps:{value:_input.packet_purchase_price},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input,"packet_purchase_price",$event.target.value);}}}),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.packet_price,expression:"input.packet_price"}],staticClass:"form-control form-control-sm border-primary",attrs:{type:"number",min:"0",step:"any",placeholder:"MRP *",required:""},domProps:{value:_input.packet_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input,"packet_price",$event.target.value);},function($event){return _vm.syncPacketSalePriceFromDiscount(_input);}]}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("div",{staticClass:"input-group input-group-sm mb-1"},[_c("select",{staticClass:"form-select form-select-sm",staticStyle:{"max-width":"60px",padding:"0 5px"},domProps:{value:_input.discount_type||"percent"},on:{input:function input($event){_vm.$set(_input,"discount_type",$event.target.value);if($event.target.value==="percent"){_input.discounted_price="";_vm.setPacketDiscountMode(_input,"percent");}else{_input.discount_percentage="";_vm.setPacketDiscountMode(_input,"amount");}}}},[_c("option",{attrs:{value:"percent"}},[_vm._v("%")]),_vm._v(" "),_c("option",{attrs:{value:"amount"}},[_vm._v("Rs")])]),_vm._v(" "),(_input.discount_type||"percent")==="percent"?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.discount_percentage,expression:"input.discount_percentage"}],staticClass:"form-control form-control-sm",attrs:{type:"number",min:"0",step:"any",placeholder:"Disc %"},domProps:{value:_input.discount_percentage},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input,"discount_percentage",$event.target.value);},function($event){return _vm.setPacketDiscountMode(_input,"percent");}]}}):_vm._e(),_vm._v(" "),(_input.discount_type||"percent")==="amount"?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.discounted_price,expression:"input.discounted_price"}],staticClass:"form-control form-control-sm",attrs:{type:"number",min:"0",step:"any",placeholder:"Disc Rs"},domProps:{value:_input.discounted_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input,"discounted_price",$event.target.value);},function($event){return _vm.setPacketDiscountMode(_input,"amount");}]}}):_vm._e()]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.packet_sale_price,expression:"input.packet_sale_price"}],staticClass:"form-control form-control-sm bg-light",attrs:{type:"number",min:"0",step:"any",placeholder:"Sale Price"},domProps:{value:_input.packet_sale_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input,"packet_sale_price",$event.target.value);},function($event){return _vm.setPacketSalePrice(_input);}]}}),_vm._v(" "),_input.validationErrorSalePrice?_c("span",{staticClass:"text-danger d-block",staticStyle:{"font-size":"10px"}},[_vm._v(_vm._s(_input.validationErrorSalePrice))]):_vm._e()]),_vm._v(" "),_vm.is_unlimited_stock!=1?_c("td",{staticClass:"p-1"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_input.packet_stock,expression:"input.packet_stock"}],staticClass:"form-control form-control-sm",attrs:{type:"number",step:"any",min:"0",placeholder:"Stock"},domProps:{value:_input.packet_stock},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input,"packet_stock",$event.target.value);}}})]):_vm._e(),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{staticClass:"form-control form-control-sm mb-1 bg-light text-success",attrs:{type:"text",readonly:"",placeholder:"Prof %"},domProps:{value:_vm.getPacketProfitPercentage(_input)}}),_vm._v(" "),_c("input",{staticClass:"form-control form-control-sm bg-light text-success",attrs:{type:"text",readonly:"",placeholder:"Prof Rs"},domProps:{value:_vm.getPacketProfit(_input)}})]),_vm._v(" "),_c("td",{staticClass:"p-1 text-center"},[k!==0?_c("button",{staticClass:"btn btn-sm btn-outline-danger",attrs:{type:"button"},on:{click:function click($event){return _vm.remove(k);}}},[_c("i",{staticClass:"fa fa-times"})]):_vm._e()])]);}),0)]),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-primary mt-2",attrs:{type:"button"},on:{click:_vm.addRow}},[_c("i",{staticClass:"fa fa-plus-square"}),_vm._v(" "+_vm._s(_vm.__("add_variant")))])]):_vm._e(),_vm._v(" "),_vm.has_variant&&_vm.type==="loose"?_c("div",{staticClass:"table-responsive mb-4"},[_c("table",{staticClass:"table table-bordered table-sm variant-table",staticStyle:{"font-size":"0.85rem","vertical-align":"middle"}},[_vm._m(6),_vm._v(" "),_c("tbody",_vm._l(_vm.inputs,function(_input2,k){return _c("tr",{key:"loose_table_"+k},[_c("td",{staticClass:"text-center p-1"},[_c("div",{staticClass:"variant-image-upload mx-auto",staticStyle:{width:"50px",height:"50px",border:"1px dashed #ccc",display:"flex","align-items":"center","justify-content":"center",cursor:"pointer"},attrs:{title:"Add/View Images"},on:{click:function click($event){return _vm.openVariantImagePicker(k,"loose");}}},[_vm.variantImages[k]&&_vm.variantImages[k].length?_c("img",{staticStyle:{width:"100%",height:"100%","object-fit":"cover"},attrs:{src:_vm.variantImages[k][0].url}}):_input2.loose_images&&_input2.loose_images.length?_c("img",{staticStyle:{width:"100%",height:"100%","object-fit":"cover"},attrs:{src:_vm.$storageUrl+_input2.loose_images[0].image}}):_c("i",{staticClass:"fa fa-image text-muted"})]),_vm._v(" "),(_vm.variantImages[k]?_vm.variantImages[k].length:0)+(_input2.loose_images?_input2.loose_images.length:0)>1?_c("small",{staticClass:"text-muted d-block",staticStyle:{"font-size":"10px"}},[_vm._v("\n                        +"+_vm._s((_vm.variantImages[k]?_vm.variantImages[k].length:0)+(_input2.loose_images?_input2.loose_images.length:0)-1)+" more\n                    ")]):_vm._e(),_vm._v(" "),_c("input",{ref:"loose_variant_images_"+k,refInFor:true,staticClass:"d-none",attrs:{type:"file",accept:"image/*",multiple:""},on:{change:function change($event){return _vm.variantImagesChanges(k);}}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.variant_name,expression:"input.variant_name"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"text",placeholder:"Variant Name"},domProps:{value:_input2.variant_name},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input2,"variant_name",$event.target.value);}}}),_vm._v(" "),_input2.barcodes?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.barcodes[0],expression:"input.barcodes[0]"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"text",placeholder:"Barcode"},domProps:{value:_input2.barcodes[0]},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input2.barcodes,0,$event.target.value);}}}):_vm._e(),_vm._v(" "),_c("div",{staticClass:"color-picker-component"},[_c("div",{staticClass:"input-group input-group-sm"},[_c("span",{staticClass:"input-group-text p-0 overflow-hidden",staticStyle:{width:"32px",height:"31px","min-width":"32px",background:"#fff"},attrs:{title:"Click to open color palette"}},[_c("input",{staticClass:"color-picker-input-swatch border-0 p-0 w-100 h-100",staticStyle:{cursor:"pointer",background:"transparent"},attrs:{type:"color"},domProps:{value:_vm.getColorHex(_input2)},on:{input:function input($event){return _vm.onColorPickerChange(_input2,$event.target.value);}}})]),_vm._v(" "),_c("select",{staticClass:"form-control form-control-sm",domProps:{value:_vm.getColorSelectValue(_input2)},on:{change:function change($event){return _vm.handleColorChange(_input2,$event.target.value);}}},[_c("option",{attrs:{value:""}},[_vm._v("Select Color")]),_vm._v(" "),_vm._l(_vm.colorVariantOptions,function(color){return _c("option",{key:color.code,domProps:{value:color.code}},[_vm._v(_vm._s(color.emoji)+" "+_vm._s(color.label)+" ("+_vm._s(color.code)+")")]);}),_vm._v(" "),_c("option",{attrs:{value:"__custom__"}},[_vm._v("🎨 Other / Custom Color...")])],2)]),_vm._v(" "),(_input2.color_variant||_input2.color_name)&&_vm.getColorHex(_input2)!=="#000000"?_c("div",{staticClass:"d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light",staticStyle:{"font-size":"11px",height:"22px"}},[_c("span",{staticClass:"d-inline-block rounded-circle me-1 border shadow-sm",style:{width:"12px",height:"12px",minWidth:"12px",backgroundColor:_vm.getColorHex(_input2)}}),_vm._v(" "),_c("span",{staticClass:"text-dark text-truncate me-1",staticStyle:{"font-size":"10px","font-weight":"500"}},[_vm._v(_vm._s(_vm.getColorLabel(_input2)))]),_vm._v(" "),_c("span",{staticClass:"text-muted ms-auto font-monospace",staticStyle:{"font-size":"10px"}},[_vm._v(_vm._s(_vm.getColorHex(_input2)))])]):_vm._e(),_vm._v(" "),_vm.isCustomColor(_input2)?_c("div",{staticClass:"mt-1 p-1 rounded border bg-light"},[_vm._m(7,true),_vm._v(" "),_c("input",{staticClass:"form-control form-control-sm",attrs:{type:"text",placeholder:"Color Name (e.g. Olive Green)",maxlength:"40"},domProps:{value:_input2.color_name||""},on:{input:function input($event){return _vm.onCustomNameInput(_input2,$event.target.value);}}})]):_vm._e()])]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.loose_stock_unit_id,expression:"loose_stock_unit_id"}],staticClass:"form-control form-control-sm mb-1",on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.loose_stock_unit_id=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v("Unit")]),_vm._v(" "),_vm._l(_vm.units,function(unit,key){return _c("option",{domProps:{value:unit.id}},[_vm._v(_vm._s(unit.short_code))]);})],2),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_measurement,expression:"input.loose_measurement"}],staticClass:"form-control form-control-sm",attrs:{type:"number",step:"any",min:"0",placeholder:"Measurement"},domProps:{value:_input2.loose_measurement},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input2,"loose_measurement",$event.target.value);}}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_purchase_price,expression:"input.loose_purchase_price"}],staticClass:"form-control form-control-sm mb-1",attrs:{type:"number",step:"any",min:"0",placeholder:"Pur. Price"},domProps:{value:_input2.loose_purchase_price},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input2,"loose_purchase_price",$event.target.value);}}}),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_price,expression:"input.loose_price"}],staticClass:"form-control form-control-sm border-primary",attrs:{type:"number",step:"any",min:"0",placeholder:"MRP *",required:""},domProps:{value:_input2.loose_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input2,"loose_price",$event.target.value);},function($event){return _vm.syncLooseSalePriceFromDiscount(_input2);}]}})]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("div",{staticClass:"input-group input-group-sm mb-1"},[_c("select",{staticClass:"form-select form-select-sm",staticStyle:{"max-width":"60px",padding:"0 5px"},domProps:{value:_input2.discount_type||"percent"},on:{input:function input($event){_vm.$set(_input2,"discount_type",$event.target.value);if($event.target.value==="percent"){_input2.loose_discounted_price="";_vm.setLooseDiscountMode(_input2,"percent");}else{_input2.loose_discount_percentage="";_vm.setLooseDiscountMode(_input2,"amount");}}}},[_c("option",{attrs:{value:"percent"}},[_vm._v("%")]),_vm._v(" "),_c("option",{attrs:{value:"amount"}},[_vm._v("Rs")])]),_vm._v(" "),(_input2.discount_type||"percent")==="percent"?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_discount_percentage,expression:"input.loose_discount_percentage"}],staticClass:"form-control form-control-sm",attrs:{type:"number",step:"any",min:"0",placeholder:"Disc %"},domProps:{value:_input2.loose_discount_percentage},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input2,"loose_discount_percentage",$event.target.value);},function($event){return _vm.setLooseDiscountMode(_input2,"percent");}]}}):_vm._e(),_vm._v(" "),(_input2.discount_type||"percent")==="amount"?_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_discounted_price,expression:"input.loose_discounted_price"}],staticClass:"form-control form-control-sm",attrs:{type:"number",step:"any",min:"0",placeholder:"Disc Rs"},domProps:{value:_input2.loose_discounted_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input2,"loose_discounted_price",$event.target.value);},function($event){return _vm.setLooseDiscountMode(_input2,"amount");}]}}):_vm._e()]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input2.loose_sale_price,expression:"input.loose_sale_price"}],staticClass:"form-control form-control-sm bg-light",attrs:{type:"number",step:"any",min:"0",placeholder:"Sale Price"},domProps:{value:_input2.loose_sale_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input2,"loose_sale_price",$event.target.value);},function($event){return _vm.setLooseSalePrice(_input2);}]}}),_vm._v(" "),_input2.validationErrorSalePriceLoose?_c("span",{staticClass:"text-danger d-block",staticStyle:{"font-size":"10px"}},[_vm._v(_vm._s(_input2.validationErrorSalePriceLoose))]):_vm._e()]),_vm._v(" "),_c("td",{staticClass:"p-1"},[_c("input",{staticClass:"form-control form-control-sm mb-1 bg-light text-success",attrs:{type:"text",readonly:"",placeholder:"Prof %"},domProps:{value:_vm.getLooseProfitPercentage(_input2)}}),_vm._v(" "),_c("input",{staticClass:"form-control form-control-sm bg-light text-success",attrs:{type:"text",readonly:"",placeholder:"Prof Rs"},domProps:{value:_vm.getLooseProfit(_input2)}})]),_vm._v(" "),_c("td",{staticClass:"p-1 text-center"},[k!==0?_c("button",{staticClass:"btn btn-sm btn-outline-danger",attrs:{type:"button"},on:{click:function click($event){return _vm.remove(k);}}},[_c("i",{staticClass:"fa fa-times"})]):_vm._e()])]);}),0)]),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-primary mt-2",attrs:{type:"button"},on:{click:_vm.addRow}},[_c("i",{staticClass:"fa fa-plus-square"}),_vm._v(" "+_vm._s(_vm.__("add_variant")))])]):_vm._e(),_vm._v(" "),_vm._l(_vm.inputs,function(_input3,k){return _vm.type==="packet"&&!_vm.has_variant?_c("div",{key:k,staticClass:"variant-card modern-card mb-4",attrs:{id:"packate_div"}},[_vm.has_variant?_c("div",{staticClass:"variant-header d-flex justify-content-between align-items-center p-3 border-bottom"},[_c("h6",{staticClass:"mb-0 fw-bold text-primary"},[_vm._v("Variant "+_vm._s(k+1))]),_vm._v(" "),_c("div",[k===0?_c("button",{staticClass:"btn btn-sm btn-primary",attrs:{type:"button"},on:{click:_vm.addRow}},[_c("i",{staticClass:"fa fa-plus-square"}),_vm._v(" "+_vm._s(_vm.__("add_variant")))]):_vm._e(),_vm._v(" "),k!==0?_c("button",{staticClass:"btn btn-sm btn-outline-danger",attrs:{type:"button"},on:{click:function click($event){return _vm.remove(k);}}},[_c("i",{staticClass:"fa fa-times"}),_vm._v(" "+_vm._s(_vm.__("remove_variant")))]):_vm._e()])]):_vm._e(),_vm._v(" "),_c("div",{staticClass:"p-3"},[_c("div",{staticClass:"row form-compact-row"},[_vm.has_variant?_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_vm._m(8,true),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.variant_name,expression:"input.variant_name"}],staticClass:"form-control",attrs:{type:"text",maxlength:"255",placeholder:"Enter variant name"},domProps:{value:_input3.variant_name},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input3,"variant_name",$event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("unit"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_stock_unit_id,expression:"input.packet_stock_unit_id"}],staticClass:"form-control",on:{change:[function($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.$set(_input3,"packet_stock_unit_id",$event.target.multiple?$$selectedVal:$$selectedVal[0]);},function($event){return _vm.changeUnits();}]}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_unit")))]),_vm._v(" "),_vm._l(_vm.units,function(unit,key){return _c("option",{domProps:{value:unit.id}},[_vm._v(_vm._s(unit.short_code))]);})],2)])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("measurement")))]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_measurement,expression:"input.packet_measurement"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0"},domProps:{value:_input3.packet_measurement},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input3,"packet_measurement",$event.target.value);}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Color Variant")]),_vm._v(" "),_c("div",{staticClass:"input-group"},[_c("span",{staticClass:"input-group-text p-0 overflow-hidden",staticStyle:{width:"42px",height:"38px","min-width":"42px",background:"#fff"},attrs:{title:"Click to open color palette"}},[_c("input",{staticClass:"color-picker-input-swatch border-0 p-0 w-100 h-100",staticStyle:{cursor:"pointer",background:"transparent"},attrs:{type:"color"},domProps:{value:_vm.getColorHex(_input3)},on:{input:function input($event){return _vm.onColorPickerChange(_input3,$event.target.value);}}})]),_vm._v(" "),_c("select",{staticClass:"form-control",domProps:{value:_vm.getColorSelectValue(_input3)},on:{change:function change($event){return _vm.handleColorChange(_input3,$event.target.value);}}},[_c("option",{attrs:{value:""}},[_vm._v("Select Color")]),_vm._v(" "),_vm._l(_vm.colorVariantOptions,function(color){return _c("option",{key:color.code,domProps:{value:color.code}},[_vm._v(_vm._s(color.emoji)+" "+_vm._s(color.label)+" ("+_vm._s(color.code)+")")]);}),_vm._v(" "),_c("option",{attrs:{value:"__custom__"}},[_vm._v("🎨 Other / Custom Color...")])],2)]),_vm._v(" "),(_input3.color_variant||_input3.color_name)&&_vm.getColorHex(_input3)!=="#000000"?_c("div",{staticClass:"d-flex align-items-center mt-2 px-2 py-1 rounded border bg-light",staticStyle:{"font-size":"13px"}},[_c("span",{staticClass:"d-inline-block rounded-circle me-2 border shadow-sm",style:{width:"16px",height:"16px",minWidth:"16px",backgroundColor:_vm.getColorHex(_input3)}}),_vm._v(" "),_c("span",{staticClass:"text-dark font-weight-medium me-2"},[_vm._v(_vm._s(_vm.getColorLabel(_input3)))]),_vm._v(" "),_c("span",{staticClass:"text-muted ms-auto font-monospace"},[_vm._v(_vm._s(_vm.getColorHex(_input3)))])]):_vm._e(),_vm._v(" "),_vm.isCustomColor(_input3)?_c("div",{staticClass:"mt-2 p-2 rounded border bg-light"},[_vm._m(9,true),_vm._v(" "),_c("input",{staticClass:"form-control",attrs:{type:"text",placeholder:"Enter color name (e.g. Olive Green, Midnight Blue)",maxlength:"50"},domProps:{value:_input3.color_name||""},on:{input:function input($event){return _vm.onCustomNameInput(_input3,$event.target.value);}}})]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Purchase Price ( "+_vm._s(_vm.$currency)+" )\n                                                    "),_c("i",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:true}}],staticClass:"fa fa-info-circle text-muted",attrs:{title:"This field is used to calculate in your report"}})]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_purchase_price,expression:"input.packet_purchase_price"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0.00"},domProps:{value:_input3.packet_purchase_price},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input3,"packet_purchase_price",$event.target.value);}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("MRP ( "+_vm._s(_vm.$currency)+" ) "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_price,expression:"input.packet_price"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0.00",required:""},domProps:{value:_input3.packet_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input3,"packet_price",$event.target.value);},function($event){return _vm.syncPacketSalePriceFromDiscount(_input3);}]}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Sale Price ( "+_vm._s(_vm.$currency)+" )")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_sale_price,expression:"input.packet_sale_price"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0.00"},domProps:{value:_input3.packet_sale_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input3,"packet_sale_price",$event.target.value);},function($event){return _vm.setPacketSalePrice(_input3);}]}}),_vm._v(" "),_input3.validationErrorSalePrice?_c("span",{staticClass:"error"},[_vm._v(_vm._s(_input3.validationErrorSalePrice))]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Discount on MRP(%)")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.discount_percentage,expression:"input.discount_percentage"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0.00"},domProps:{value:_input3.discount_percentage},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input3,"discount_percentage",$event.target.value);},function($event){return _vm.setPacketDiscountMode(_input3,"percent");}]}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Discount on MRP(Rs)")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.discounted_price,expression:"input.discounted_price"}],staticClass:"form-control",attrs:{type:"number",min:"0",step:"any",placeholder:"0.00"},domProps:{value:_input3.discounted_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input3,"discounted_price",$event.target.value);},function($event){return _vm.setPacketDiscountMode(_input3,"amount");}]}}),_vm._v(" "),_input3.validationErrorDiscountedPrice?_c("span",{staticClass:"error"},[_vm._v(_vm._s(_input3.validationErrorDiscountedPrice))]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Profit(%)")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getPacketProfitPercentage(_input3)}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Profit(Rs)")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getPacketProfit(_input3)}})])]),_vm._v(" "),_vm.is_unlimited_stock!=1?_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_vm._m(10,true),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input3.packet_stock,expression:"input.packet_stock"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0",name:"packate_stock[]"},domProps:{value:_input3.packet_stock},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input3,"packet_stock",$event.target.value);}}})])]):_vm._e(),_vm._v(" "),_vm._m(11,true),_vm._v(" "),_vm.has_variant?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-0 mt-3 border-top pt-3"},[_c("label",{staticClass:"fw-bold"},[_vm._v(_vm._s(_vm.__("variant_images"))+" "),_c("small",{staticClass:"text-muted"},[_vm._v("(Multiple allowed)")])]),_vm._v(" "),_c("input",{ref:"packet_variant_images_"+k,refInFor:true,staticClass:"d-none",attrs:{type:"file",accept:"image/*",multiple:""},on:{change:function change($event){return _vm.variantImagesChanges(k);}}}),_vm._v(" "),_c("div",{staticClass:"variant-images-grid d-flex flex-wrap gap-2 mt-2"},[_c("div",{staticClass:"variant-image-upload",on:{click:function click($event){return _vm.openVariantImagePicker(k,"packet");},dragover:_vm.$dragoverFile,dragleave:_vm.$dragleaveFile}},[_c("i",{staticClass:"fa fa-plus fa-lg mb-1"}),_vm._v(" "),_c("span",{staticStyle:{"font-size":"0.8rem"}},[_vm._v("Add Images")])]),_vm._v(" "),_vm._l(_vm.variantImages[k]||[],function(image,index){return _c("div",{key:"packet_new_image_"+k+"_"+index,staticClass:"variant-image-preview",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("packet-new",index,k);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("packet-new",index,k);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s((_input3.images||[]).length+index+1))]),_vm._v(" "),_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:image.url}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){return _vm.variantImages[k].splice(index,1);}}},[_c("i",{staticClass:"fa fa-times"})])]);}),_vm._v(" "),_vm._l(_input3.images||[],function(image,index){return _c("div",{key:"packet_image_"+image.id,staticClass:"variant-image-preview",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("packet-existing",index,k);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("packet-existing",index,k);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s(image.sort_order||index+1))]),_vm._v(" "),_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:_vm.$storageUrl+image.image}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){return _vm.deleteImage(index,image.id,false,k);}}},[_c("i",{staticClass:"fa fa-times"})])]);})],2),_vm._v(" "),_vm.variantImageerror?_c("p",{staticClass:"error mt-2"},[_vm._v(_vm._s(_vm.variantImageerror))]):_vm._e()])]):_vm._e()])])]):_vm._e();}),_vm._v(" "),_vm._l(_vm.inputs,function(_input4,k){return _vm.type==="loose"&&!_vm.has_variant?_c("div",{key:k,staticClass:"variant-card modern-card mb-4",attrs:{id:"loose_div"}},[_vm.has_variant?_c("div",{staticClass:"variant-header d-flex justify-content-between align-items-center p-3 border-bottom"},[_c("h6",{staticClass:"mb-0 fw-bold text-primary"},[_vm._v("Variant "+_vm._s(k+1))]),_vm._v(" "),_c("div",[k===0?_c("button",{staticClass:"btn btn-sm btn-primary",attrs:{type:"button"},on:{click:_vm.addRow}},[_c("i",{staticClass:"fa fa-plus-square"}),_vm._v(" "+_vm._s(_vm.__("add_variant")))]):_vm._e(),_vm._v(" "),k!==0?_c("button",{staticClass:"btn btn-sm btn-outline-danger",attrs:{type:"button"},on:{click:function click($event){return _vm.remove(k);}}},[_c("i",{staticClass:"fa fa-times"}),_vm._v(" "+_vm._s(_vm.__("remove_variant")))]):_vm._e()])]):_vm._e(),_vm._v(" "),_c("div",{staticClass:"p-3"},[_c("div",{staticClass:"row form-compact-row"},[_vm.has_variant?_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_vm._m(12,true),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.variant_name,expression:"input.variant_name"}],staticClass:"form-control",attrs:{type:"text",maxlength:"255",placeholder:"Enter variant name"},domProps:{value:_input4.variant_name},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input4,"variant_name",$event.target.value);}}})])]):_vm._e(),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("unit"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.loose_stock_unit_id,expression:"loose_stock_unit_id"}],staticClass:"form-control",attrs:{name:"loose_stock_unit_id"},on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.loose_stock_unit_id=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_unit")))]),_vm._v(" "),_vm._l(_vm.units,function(unit,key){return _c("option",{domProps:{value:unit.id}},[_vm._v(_vm._s(unit.short_code))]);})],2)])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group loose_div"},[_c("label",[_vm._v(_vm._s(_vm.__("measurement")))]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_measurement,expression:"input.loose_measurement"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0"},domProps:{value:_input4.loose_measurement},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input4,"loose_measurement",$event.target.value);}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Color Variant")]),_vm._v(" "),_c("div",{staticClass:"input-group"},[_c("span",{staticClass:"input-group-text p-0 overflow-hidden",staticStyle:{width:"42px",height:"38px","min-width":"42px",background:"#fff"},attrs:{title:"Click to open color palette"}},[_c("input",{staticClass:"color-picker-input-swatch border-0 p-0 w-100 h-100",staticStyle:{cursor:"pointer",background:"transparent"},attrs:{type:"color"},domProps:{value:_vm.getColorHex(_input4)},on:{input:function input($event){return _vm.onColorPickerChange(_input4,$event.target.value);}}})]),_vm._v(" "),_c("select",{staticClass:"form-control",domProps:{value:_vm.getColorSelectValue(_input4)},on:{change:function change($event){return _vm.handleColorChange(_input4,$event.target.value);}}},[_c("option",{attrs:{value:""}},[_vm._v("Select Color")]),_vm._v(" "),_vm._l(_vm.colorVariantOptions,function(color){return _c("option",{key:color.code,domProps:{value:color.code}},[_vm._v(_vm._s(color.emoji)+" "+_vm._s(color.label)+" ("+_vm._s(color.code)+")")]);}),_vm._v(" "),_c("option",{attrs:{value:"__custom__"}},[_vm._v("🎨 Other / Custom Color...")])],2)]),_vm._v(" "),(_input4.color_variant||_input4.color_name)&&_vm.getColorHex(_input4)!=="#000000"?_c("div",{staticClass:"d-flex align-items-center mt-2 px-2 py-1 rounded border bg-light",staticStyle:{"font-size":"13px"}},[_c("span",{staticClass:"d-inline-block rounded-circle me-2 border shadow-sm",style:{width:"16px",height:"16px",minWidth:"16px",backgroundColor:_vm.getColorHex(_input4)}}),_vm._v(" "),_c("span",{staticClass:"text-dark font-weight-medium me-2"},[_vm._v(_vm._s(_vm.getColorLabel(_input4)))]),_vm._v(" "),_c("span",{staticClass:"text-muted ms-auto font-monospace"},[_vm._v(_vm._s(_vm.getColorHex(_input4)))])]):_vm._e(),_vm._v(" "),_vm.isCustomColor(_input4)?_c("div",{staticClass:"mt-2 p-2 rounded border bg-light"},[_vm._m(13,true),_vm._v(" "),_c("input",{staticClass:"form-control",attrs:{type:"text",placeholder:"Enter color name (e.g. Olive Green, Midnight Blue)",maxlength:"50"},domProps:{value:_input4.color_name||""},on:{input:function input($event){return _vm.onCustomNameInput(_input4,$event.target.value);}}})]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Purchase Price ( "+_vm._s(_vm.$currency)+" )")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_purchase_price,expression:"input.loose_purchase_price"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00"},domProps:{value:_input4.loose_purchase_price},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_input4,"loose_purchase_price",$event.target.value);}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("MRP ( "+_vm._s(_vm.$currency)+" ): "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_price,expression:"input.loose_price"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00",required:""},domProps:{value:_input4.loose_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input4,"loose_price",$event.target.value);},function($event){return _vm.syncLooseSalePriceFromDiscount(_input4);}]}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Sale Price ( "+_vm._s(_vm.$currency)+" )")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_sale_price,expression:"input.loose_sale_price"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00"},domProps:{value:_input4.loose_sale_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input4,"loose_sale_price",$event.target.value);},function($event){return _vm.setLooseSalePrice(_input4);}]}}),_vm._v(" "),_input4.validationErrorSalePriceLoose?_c("span",{staticClass:"error"},[_vm._v(_vm._s(_input4.validationErrorSalePriceLoose))]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Discount on MRP(%)")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_discount_percentage,expression:"input.loose_discount_percentage"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00"},domProps:{value:_input4.loose_discount_percentage},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input4,"loose_discount_percentage",$event.target.value);},function($event){return _vm.setLooseDiscountMode(_input4,"percent");}]}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Discount on MRP(Rs)")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_input4.loose_discounted_price,expression:"input.loose_discounted_price"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00"},domProps:{value:_input4.loose_discounted_price},on:{input:[function($event){if($event.target.composing)return;_vm.$set(_input4,"loose_discounted_price",$event.target.value);},function($event){return _vm.setLooseDiscountMode(_input4,"amount");}]}}),_vm._v(" "),_input4.validationErrorDiscountedPriceLoose?_c("span",{staticClass:"error"},[_vm._v(_vm._s(_input4.validationErrorDiscountedPriceLoose))]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Profit(%)")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getLooseProfitPercentage(_input4)}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 loose_div"},[_c("label",[_vm._v("Profit(Rs)")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getLooseProfit(_input4)}})])]),_vm._v(" "),_vm._m(14,true),_vm._v(" "),k!==0?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group loose_div"},[_vm.has_variant?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-0 mt-3 border-top pt-3"},[_c("label",{staticClass:"fw-bold"},[_vm._v(_vm._s(_vm.__("variant_images"))+" "),_c("small",{staticClass:"text-muted"},[_vm._v("(Multiple allowed)")])]),_vm._v(" "),_c("input",{ref:"loose_variant_images_"+k,refInFor:true,staticClass:"d-none",attrs:{type:"file",accept:"image/*",multiple:""},on:{change:function change($event){return _vm.variantImagesChanges(k);}}}),_vm._v(" "),_c("div",{staticClass:"variant-images-grid d-flex flex-wrap gap-2 mt-2"},[_c("div",{staticClass:"variant-image-upload",on:{click:function click($event){return _vm.openVariantImagePicker(k,"loose");},dragover:_vm.$dragoverFile,dragleave:_vm.$dragleaveFile}},[_c("i",{staticClass:"fa fa-plus fa-lg mb-1"}),_vm._v(" "),_c("span",{staticStyle:{"font-size":"0.8rem"}},[_vm._v("Add Images")])]),_vm._v(" "),_vm._l(_vm.variantImages[k]||[],function(image,index){return _c("div",{key:"loose_new_image_"+k+"_"+index,staticClass:"variant-image-preview",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("loose-new",index,k);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("loose-new",index,k);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s((_input4.loose_images||[]).length+index+1))]),_vm._v(" "),_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:image.url}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){return _vm.variantImages[k].splice(index,1);}}},[_c("i",{staticClass:"fa fa-times"})])]);}),_vm._v(" "),_vm._l(_input4.loose_images||[],function(image,index){return _c("div",{key:"loose_image_"+image.id,staticClass:"variant-image-preview",attrs:{draggable:"true"},on:{dragstart:function dragstart($event){return _vm.startMediaDrag("loose-existing",index,k);},dragover:function dragover($event){$event.preventDefault();},drop:function drop($event){$event.preventDefault();return _vm.dropMedia("loose-existing",index,k);},dragend:_vm.endMediaDrag}},[_c("span",{staticClass:"media-order-badge"},[_vm._v(_vm._s(image.sort_order||index+1))]),_vm._v(" "),_c("img",{staticClass:"img-thumbnail custom-image",attrs:{src:_vm.$storageUrl+image.image}}),_vm._v(" "),_c("button",{staticClass:"btn btn-sm btn-danger btn-remove",attrs:{type:"button"},on:{click:function click($event){return _vm.deleteImage(index,image.id,false,k);}}},[_c("i",{staticClass:"fa fa-times"})])]);})],2),_vm._v(" "),_vm.variantImageerror?_c("p",{staticClass:"error mt-2"},[_vm._v(_vm._s(_vm.variantImageerror))]):_vm._e()])]):_vm._e()])]):_vm._e()]),_vm._v(" "),_vm.type==="loose"?_c("div",{staticClass:"row mt-3",attrs:{id:"loose_stock_div"}},[_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("purchase_price"))+" ( "+_vm._s(_vm.$currency)+" )\n                                                "),_c("i",{directives:[{name:"b-tooltip",rawName:"v-b-tooltip.hover",modifiers:{hover:true}}],staticClass:"fa fa-info-circle text-muted",attrs:{title:"This field is used to calculate in your report"}})]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.loose_purchase_price,expression:"loose_purchase_price"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0",placeholder:"0.00"},domProps:{value:_vm.loose_purchase_price},on:{input:function input($event){if($event.target.composing)return;_vm.loose_purchase_price=$event.target.value;}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Profit ( "+_vm._s(_vm.$currency)+" )")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getLooseProfit()}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Margin %")]),_vm._v(" "),_c("input",{staticClass:"form-control bg-light",attrs:{type:"text",readonly:""},domProps:{value:_vm.getLooseMargin()}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_vm.is_unlimited_stock!=1?_c("div",{staticClass:"form-group mb-3"},[_vm._m(15,true),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.loose_stock,expression:"loose_stock"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:"0"},domProps:{value:_vm.loose_stock},on:{input:function input($event){if($event.target.composing)return;_vm.loose_stock=$event.target.value;}}}),_c("br")]):_vm._e()]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("unit"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.loose_stock_unit_id,expression:"loose_stock_unit_id"}],staticClass:"form-control",attrs:{name:"loose_stock_unit_id"},on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.loose_stock_unit_id=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_unit")))]),_vm._v(" "),_vm._l(_vm.units,function(unit,key){return _c("option",{domProps:{value:unit.id}},[_vm._v(_vm._s(unit.short_code))]);})],2)])])]):_vm._e()])]):_vm._e();}),_vm._v(" "),_c("div",{staticClass:"card modern-card card-settings mb-4"},[_c("div",{staticClass:"card-header border-bottom-0 pb-0"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v(_vm._s(_vm.__("product_settings")))])]),_vm._v(" "),_c("div",{staticClass:"card-body"},[_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("categories"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("multiselect",{attrs:{options:_vm.mainCategories,placeholder:_vm.__("select_categories"),label:"name","track-by":"id",multiple:true,searchable:true,"close-on-select":false,taggable:false},on:{input:_vm.onMainCategoriesChange},scopedSlots:_vm._u([{key:"singleLabel",fn:function fn(props){return[_c("span",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}},{key:"option",fn:function fn(props){return[_c("div",{staticClass:"option__desc d-flex align-items-center"},[_c("input",{staticClass:"me-2",attrs:{type:"checkbox"},domProps:{checked:_vm.isCategorySelected(props.option,_vm.selected_categories)}}),_vm._v(" "),_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}}]),model:{value:_vm.selected_categories,callback:function callback($$v){_vm.selected_categories=$$v;},expression:"selected_categories"}}),_vm._v(" "),_c("small",{staticClass:"text-muted"},[_vm._v(_vm._s(_vm.__("select_one_or_more_categories_for_product")))])],1)]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Sub Categories")]),_vm._v(" "),_c("multiselect",{attrs:{options:_vm.filteredSubCategories,placeholder:"Select Sub Categories",label:"name","track-by":"id",multiple:true,searchable:true,"close-on-select":false,taggable:false},on:{input:_vm.onSubCategoriesChange},scopedSlots:_vm._u([{key:"singleLabel",fn:function fn(props){return[_c("span",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}},{key:"option",fn:function fn(props){return[_c("div",{staticClass:"option__desc d-flex align-items-center"},[_c("input",{staticClass:"me-2",attrs:{type:"checkbox"},domProps:{checked:_vm.isCategorySelected(props.option,_vm.selected_sub_categories)}}),_vm._v(" "),_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}}]),model:{value:_vm.selected_sub_categories,callback:function callback($$v){_vm.selected_sub_categories=$$v;},expression:"selected_sub_categories"}})],1)]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v("Sub Sub Categories")]),_vm._v(" "),_c("multiselect",{attrs:{options:_vm.filteredSubSubCategories,placeholder:"Select Sub Sub Categories",label:"name","track-by":"id",multiple:true,searchable:true,"close-on-select":false,taggable:false},scopedSlots:_vm._u([{key:"singleLabel",fn:function fn(props){return[_c("span",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}},{key:"option",fn:function fn(props){return[_c("div",{staticClass:"option__desc d-flex align-items-center"},[_c("input",{staticClass:"me-2",attrs:{type:"checkbox"},domProps:{checked:_vm.isCategorySelected(props.option,_vm.selected_sub_sub_categories)}}),_vm._v(" "),_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}}]),model:{value:_vm.selected_sub_sub_categories,callback:function callback($$v){_vm.selected_sub_sub_categories=$$v;},expression:"selected_sub_sub_categories"}})],1)]),_vm._v(" "),_c("div",{staticClass:"col-md-3"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("product_type"))+" ")]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.product_type,expression:"product_type"}],staticClass:"form-control",on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.product_type=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_type")))]),_vm._v(" "),_c("option",{attrs:{value:"1"}},[_vm._v(_vm._s(_vm.__("veg")))]),_vm._v(" "),_c("option",{attrs:{value:"2"}},[_vm._v(_vm._s(_vm.__("non_veg")))])])])]),_vm._v(" "),_c("div",{staticClass:"col-md-3"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("status"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.status,expression:"status"}],staticClass:"form-control",attrs:{required:""},on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.status=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_status")))]),_vm._v(" "),_c("option",{attrs:{value:"1"}},[_vm._v(_vm._s(_vm.__("available")))]),_vm._v(" "),_c("option",{attrs:{value:"0"}},[_vm._v(_vm._s(_vm.__("sold_out")))])])])]),_vm._v(" "),_c("div",{staticClass:"col-md-3"},[_c("div",{staticClass:"form-group mb-3"},[_vm._m(16),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.expiry_date_from,expression:"expiry_date_from"}],staticClass:"form-control",attrs:{type:"date"},domProps:{value:_vm.expiry_date_from},on:{input:function input($event){if($event.target.composing)return;_vm.expiry_date_from=$event.target.value;}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-3"},[_c("div",{staticClass:"form-group mb-3"},[_vm._m(17),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.expiry_date_to,expression:"expiry_date_to"}],staticClass:"form-control",attrs:{type:"date"},domProps:{value:_vm.expiry_date_to},on:{input:function input($event){if($event.target.composing)return;_vm.expiry_date_to=$event.target.value;}}})])]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.is_approved,expression:"is_approved"}],attrs:{type:"hidden"},domProps:{value:_vm.is_approved},on:{input:function input($event){if($event.target.composing)return;_vm.is_approved=$event.target.value;}}}),_vm._v(" "),_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",{attrs:{"for":"made_in"}},[_vm._v(_vm._s(_vm.__("made_in")))]),_vm._v(" "),_c("multiselect",{attrs:{id:"made_in",options:_vm.countries,placeholder:_vm.__("select_and_search_country_name"),label:"name","track-by":"name",required:""},scopedSlots:_vm._u([{key:"singleLabel",fn:function fn(props){return[_c("span",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))])])];}},{key:"option",fn:function fn(props){return[_c("div",{staticClass:"option__desc"},[_c("span",{staticClass:"option__title"},[_vm._v(_vm._s(props.option.name))]),_vm._v(" "),_c("span",{staticClass:"option__small"},[_vm._v("["+_vm._s(props.option.code)+"]")])])];}}]),model:{value:_vm.made_in,callback:function callback($$v){_vm.made_in=$$v;},expression:"made_in"}})],1)]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 d-flex flex-wrap align-items-start gap-2"},[_c("div",[_c("label",[_vm._v(_vm._s(_vm.__("is_returnable")))]),_c("br"),_vm._v(" "),_c("b-form-radio-group",{attrs:{options:[{text:_vm.__("no"),value:0},{text:_vm.__("yes"),value:1}],buttons:"","button-variant":"outline-primary",required:""},model:{value:_vm.return_status,callback:function callback($$v){_vm.return_status=$$v;},expression:"return_status"}})],1),_vm._v(" "),_vm.return_status==1?_c("div",{staticClass:"ms-2"},[_c("label",{attrs:{"for":"return_day"}},[_vm._v(_vm._s(_vm.__("max_return_days")))]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.return_days,expression:"return_days"}],staticClass:"form-control",attrs:{type:"number",step:"any",min:_vm.return_status==1?1:0,required:_vm.return_status==1?true:undefined,id:"return_day",placeholder:_vm.__("number_of_days_to_return")},domProps:{value:_vm.return_days},on:{input:function input($event){if($event.target.composing)return;_vm.return_days=$event.target.value;}}})]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3 d-flex flex-wrap align-items-start gap-2"},[_c("div",[_c("label",[_vm._v(_vm._s(_vm.__("is_cancelable")))]),_c("br"),_vm._v(" "),_c("b-form-radio-group",{attrs:{options:[{text:_vm.__("no"),value:0},{text:_vm.__("yes"),value:1}],buttons:"","button-variant":"outline-primary"},model:{value:_vm.cancelable_status,callback:function callback($$v){_vm.cancelable_status=$$v;},expression:"cancelable_status"}})],1),_vm._v(" "),_vm.cancelable_status===1?_c("div",{staticClass:"ms-2"},[_c("label",{attrs:{"for":"till_status"}},[_vm._v(_vm._s(_vm.__("till_which_status"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("select",{directives:[{name:"model",rawName:"v-model",value:_vm.till_status,expression:"till_status"}],staticClass:"form-control",attrs:{id:"till_status",required:_vm.cancelable_status===1?true:undefined},on:{change:function change($event){var $$selectedVal=Array.prototype.filter.call($event.target.options,function(o){return o.selected;}).map(function(o){var val="_value"in o?o._value:o.value;return val;});_vm.till_status=$event.target.multiple?$$selectedVal:$$selectedVal[0];}}},[_c("option",{attrs:{value:""}},[_vm._v(_vm._s(_vm.__("select_order_status")))]),_vm._v(" "),_vm._l(_vm.order_status,function(status){return _c("option",{domProps:{value:status.id}},[_vm._v(_vm._s(_vm.getStatusDisplayName(status))+"\n                                                    ")]);})],2)]):_vm._e()])]),_vm._v(" "),_c("div",{staticClass:"col-md-4"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("is_cod_allowed")))]),_c("br"),_vm._v(" "),_c("b-form-radio-group",{attrs:{options:[{text:_vm.__("no"),value:0},{text:_vm.__("yes"),value:1}],buttons:"","button-variant":"outline-primary"},model:{value:_vm.cod_allowed_status,callback:function callback($$v){_vm.cod_allowed_status=$$v;},expression:"cod_allowed_status"}})],1)])])])]),_vm._v(" "),_vm.defaultLanguageId?_c("div",{staticClass:"card modern-card card-description mb-4"},[_vm._m(18),_vm._v(" "),_c("div",{staticClass:"card-body"},[_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-3 d-flex flex-wrap align-items-center"},[_c("button",{staticClass:"btn btn-outline-primary me-3 my-2 ai-generate-btn",attrs:{type:"button",disabled:_vm.isGeneratingAI||_vm.isGeneratingCustomAI},on:{click:_vm.generateDescription}},[_vm.isGeneratingAI?[_c("span",{staticClass:"ai-spinner me-2"}),_vm._v(" "),_c("span",{staticClass:"ai-text-animate"},[_vm._v("AI is\n                                                        generating...")])]:[_c("i",{staticClass:"fa fa-magic me-1"}),_vm._v("\n                                                    "+_vm._s(_vm.__("generate_description_with_ai"))+"\n                                                ")]],2),_vm._v(" "),_c("label",{staticClass:"my-2 d-flex align-items-center"},[_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.useCustomPrompt,expression:"useCustomPrompt"}],staticClass:"me-2",attrs:{type:"checkbox"},domProps:{checked:Array.isArray(_vm.useCustomPrompt)?_vm._i(_vm.useCustomPrompt,null)>-1:_vm.useCustomPrompt},on:{change:function change($event){var $$a=_vm.useCustomPrompt,$$el=$event.target,$$c=$$el.checked?true:false;if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.useCustomPrompt=$$a.concat([$$v]));}else{$$i>-1&&(_vm.useCustomPrompt=$$a.slice(0,$$i).concat($$a.slice($$i+1)));}}else{_vm.useCustomPrompt=$$c;}}}}),_vm._v(" "),_c("span",{staticClass:"mt-1"},[_vm._v(_vm._s(_vm.__("use_custom_prompt")))])])])]),_vm._v(" "),_vm.useCustomPrompt?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"card bg-light border-primary border-opacity-25 mb-3 shadow-none"},[_c("div",{staticClass:"card-body p-3"},[_c("div",{staticClass:"d-flex justify-content-between align-items-center mb-2"},[_c("label",{staticClass:"fw-bold mb-0 text-primary d-flex align-items-center"},[_c("i",{staticClass:"fa fa-comment-dots me-2"}),_vm._v(" "+_vm._s(_vm.__("custom_prompt"))+"\n                                                    ")]),_vm._v(" "),_vm._m(19)]),_vm._v(" "),_c("textarea",{directives:[{name:"model",rawName:"v-model",value:_vm.customPrompt,expression:"customPrompt"}],staticClass:"form-control mb-2",attrs:{rows:"3",placeholder:"e.g. Write a catchy and premium description highlighting durability, key features, and benefits. Include bullet highlights and optimize meta settings."},domProps:{value:_vm.customPrompt},on:{input:function input($event){if($event.target.composing)return;_vm.customPrompt=$event.target.value;}}}),_vm._v(" "),_c("div",{staticClass:"d-flex flex-wrap justify-content-between align-items-center gap-2"},[_c("div",{staticClass:"d-flex flex-wrap align-items-center gap-2 text-muted",staticStyle:{"font-size":"12px"}},[_vm._m(20),_vm._v(" "),_c("span",{staticClass:"badge bg-white text-dark border"},[_c("i",{staticClass:"fa fa-tags text-info me-1"}),_vm._v(" Auto-detects "+_vm._s(_vm.has_variant?"Variants":"Single Product")+"\n                                                        ")])]),_vm._v(" "),_c("button",{staticClass:"btn btn-primary ai-generate-btn shadow-sm",attrs:{type:"button",disabled:_vm.isGeneratingCustomAI||_vm.isGeneratingAI},on:{click:_vm.generateFromCustomPrompt}},[_vm.isGeneratingCustomAI?[_c("span",{staticClass:"ai-spinner me-2"}),_vm._v(" "),_c("span",{staticClass:"ai-text-animate"},[_vm._v("Generating Content...")])]:[_c("i",{staticClass:"fa fa-paper-plane me-1"}),_vm._v(" Generate with Custom Prompt\n                                                        ")]],2)])])])]):_vm._e(),_vm._v(" "),_vm.defaultLanguageId?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("description"))+" "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]),_vm._v(" "),_c("editor",{attrs:{placeholder:_vm.__("enter_product_description"),init:_vm.getEditorConfig()},model:{value:_vm.translations[_vm.defaultLanguageId].description,callback:function callback($$v){_vm.$set(_vm.translations[_vm.defaultLanguageId],"description",$$v);},expression:"translations[defaultLanguageId].description"}})],1)]):_vm._e(),_vm._v(" "),_vm.defaultLanguageId?_c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-3"},[_vm._m(21),_vm._v(" "),_c("editor",{attrs:{placeholder:"Paste or enter product highlights",init:_vm.getEditorConfig()},model:{value:_vm.translations[_vm.defaultLanguageId].highlights,callback:function callback($$v){_vm.$set(_vm.translations[_vm.defaultLanguageId],"highlights",$$v);},expression:"translations[defaultLanguageId].highlights"}}),_vm._v(" "),_c("small",{staticClass:"text-muted"},[_vm._v("Pasted formatting, lists and spacing will be preserved.")])],1)]):_vm._e()])])]):_vm._e(),_vm._v(" "),_vm.defaultLanguageId?_c("div",{staticClass:"card modern-card card-seo mb-4"},[_c("div",{staticClass:"card-header border-bottom-0 pb-0"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v(_vm._s(_vm.__("seo_settings")))])]),_vm._v(" "),_c("div",{staticClass:"card-body"},[_c("div",{staticClass:"row"},[_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("meta_title"))+" ")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.translations[_vm.defaultLanguageId].meta_title,expression:"translations[defaultLanguageId].meta_title"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_meta_title")},domProps:{value:_vm.translations[_vm.defaultLanguageId].meta_title},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_vm.translations[_vm.defaultLanguageId],"meta_title",$event.target.value);}}})]),_vm._v(" "),_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("meta_keywords"))+" ")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.translations[_vm.defaultLanguageId].meta_keywords,expression:"translations[defaultLanguageId].meta_keywords"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_meta_keywords")},domProps:{value:_vm.translations[_vm.defaultLanguageId].meta_keywords},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_vm.translations[_vm.defaultLanguageId],"meta_keywords",$event.target.value);}}})]),_vm._v(" "),_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("schema_markup"))+" ")]),_vm._v(" "),_c("input",{directives:[{name:"model",rawName:"v-model",value:_vm.translations[_vm.defaultLanguageId].schema_markup,expression:"translations[defaultLanguageId].schema_markup"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_schema_markup")},domProps:{value:_vm.translations[_vm.defaultLanguageId].schema_markup},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_vm.translations[_vm.defaultLanguageId],"schema_markup",$event.target.value);}}})])]),_vm._v(" "),_c("div",{staticClass:"col-md-6"},[_c("div",{staticClass:"form-group mb-3"},[_c("label",[_vm._v(_vm._s(_vm.__("meta_description"))+" ")]),_vm._v(" "),_c("textarea",{directives:[{name:"model",rawName:"v-model",value:_vm.translations[_vm.defaultLanguageId].meta_description,expression:"translations[defaultLanguageId].meta_description"}],staticClass:"form-control",attrs:{type:"text",placeholder:_vm.__("enter_meta_description"),rows:"2"},domProps:{value:_vm.translations[_vm.defaultLanguageId].meta_description},on:{input:function input($event){if($event.target.composing)return;_vm.$set(_vm.translations[_vm.defaultLanguageId],"meta_description",$event.target.value);}}})])])])])]):_vm._e()],2),_vm._v(" "),_c("div",{staticClass:"sticky-bottom-bar"},[_c("div",{staticClass:"d-flex justify-content-end align-items-center"},[_c("button",{staticClass:"btn btn-light-secondary me-3",staticStyle:{"font-weight":"500",padding:"10px 24px"},attrs:{type:"button"},on:{click:_vm.clearForm}},[_vm._v(_vm._s(_vm.__("clear")))]),_vm._v(" "),_c("b-button",{staticClass:"btn-save",attrs:{type:"submit",variant:"primary",disabled:_vm.isLoading},on:{keydown:function keydown($event){if(!$event.type.indexOf("key")&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter"))return null;return _vm.saveRecord.apply(null,arguments);}}},[_c("i",{staticClass:"fa fa-save me-2"}),_vm._v(" "+_vm._s(_vm.__("save_product"))+"\n                                    "),_vm.isLoading?_c("b-spinner",{staticClass:"ms-2",attrs:{small:"",label:"Spinning"}}):_vm._e()],1)],1)])])])])]),_vm._v(" "),_c("edit-brand",{ref:"editBrandModal",on:{saved:_vm.handleBrandCreated}})],1);};var staticRenderFns=[function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"card-header border-bottom-0 pb-0"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v("Media")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_c("i",{staticClass:"fa fa-cloud-upload-alt fa-2x"})]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_c("i",{staticClass:"fa fa-cloud-upload-alt fa-2x"})]);},function(){var _vm=this,_c=_vm._self._c;return _c("span",[_c("small",[_vm._v("Use the + button below to add more.")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",{staticClass:"control-label"},[_vm._v("Available Quantity "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"d-flex justify-content-between align-items-center mb-1"},[_c("span",{staticClass:"text-muted font-weight-bold",staticStyle:{"font-size":"9px","letter-spacing":"0.5px"}},[_vm._v("CUSTOM COLOR NAME:")]),_vm._v(" "),_c("span",{staticClass:"badge badge-light border text-muted py-0 px-1",staticStyle:{"font-size":"9px"}},[_vm._v("CUSTOM")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("thead",{staticClass:"bg-light"},[_c("tr",[_c("th",{staticStyle:{width:"60px"}},[_vm._v("Image")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"150px"}},[_vm._v("Details (Name, Barcode, Color)")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"120px"}},[_vm._v("Unit & Meas.")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"120px"}},[_vm._v("Pur. Price & MRP")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"150px"}},[_vm._v("Discount & Sale Price")]),_vm._v(" "),_c("th",{staticStyle:{"min-width":"100px"}},[_vm._v("Profit")]),_vm._v(" "),_c("th",{staticStyle:{width:"50px"}},[_vm._v("Act")])])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"d-flex justify-content-between align-items-center mb-1"},[_c("span",{staticClass:"text-muted font-weight-bold",staticStyle:{"font-size":"9px","letter-spacing":"0.5px"}},[_vm._v("CUSTOM COLOR NAME:")]),_vm._v(" "),_c("span",{staticClass:"badge badge-light border text-muted py-0 px-1",staticStyle:{"font-size":"9px"}},[_vm._v("CUSTOM")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Variant Name "),_c("small",{staticClass:"text-muted"},[_vm._v("(Optional)")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"d-flex justify-content-between align-items-center mb-1"},[_c("label",{staticClass:"mb-0 text-muted font-weight-bold",staticStyle:{"font-size":"11px","letter-spacing":"0.5px"}},[_vm._v("CUSTOM COLOR NAME:")]),_vm._v(" "),_c("span",{staticClass:"badge badge-light border text-muted"},[_vm._v("CUSTOM")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Available Quantity "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-3"})]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Variant Name "),_c("small",{staticClass:"text-muted"},[_vm._v("(Optional)")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"d-flex justify-content-between align-items-center mb-1"},[_c("label",{staticClass:"mb-0 text-muted font-weight-bold",staticStyle:{"font-size":"11px","letter-spacing":"0.5px"}},[_vm._v("CUSTOM COLOR NAME:")]),_vm._v(" "),_c("span",{staticClass:"badge badge-light border text-muted"},[_vm._v("CUSTOM")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"col-md-12"},[_c("div",{staticClass:"form-group mb-3 loose_div"})]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Available Quantity "),_c("i",{staticClass:"text-danger"},[_vm._v("*")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Expiry Date From "),_c("small",{staticClass:"text-muted"},[_vm._v("(DD/MM/YYYY)")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Expiry Date To "),_c("small",{staticClass:"text-muted"},[_vm._v("(DD/MM/YYYY)")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("div",{staticClass:"card-header border-bottom-0 pb-0"},[_c("h5",{staticClass:"fw-bold mb-0"},[_vm._v("Product Description & Highlights")])]);},function(){var _vm=this,_c=_vm._self._c;return _c("span",{staticClass:"badge bg-primary text-white",staticStyle:{"font-size":"11px"}},[_c("i",{staticClass:"fa fa-magic me-1"}),_vm._v(" Custom AI Generator\n                                                    ")]);},function(){var _vm=this,_c=_vm._self._c;return _c("span",{staticClass:"badge bg-white text-dark border"},[_c("i",{staticClass:"fa fa-check text-success me-1"}),_vm._v(" Required: Product Name, Category & Prompt\n                                                        ")]);},function(){var _vm=this,_c=_vm._self._c;return _c("label",[_vm._v("Product Highlights "),_c("small",{staticClass:"text-muted"},[_vm._v("(Optional)")])]);}];render._withStripped=true;
 
 /***/ }),
 
@@ -4686,8 +3612,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -4857,7 +3782,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         this.showError(_errorMsg);
         return Promise.reject(new Error(_errorMsg));
       }
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/languages/translate-empty", {
+      return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/api/languages/translate-empty", {
         target_language: language.code,
         data: dataToSend
       }).then(function (res) {
@@ -4934,7 +3859,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
         this.showError(_errorMsg2);
         return Promise.reject(new Error(_errorMsg2));
       }
-      return axios__WEBPACK_IMPORTED_MODULE_0___default().post("/api/languages/translate-overwrite", {
+      return axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/api/languages/translate-overwrite", {
         target_language: language.code,
         data: dataToSend
       }).then(function (res) {
@@ -4975,6 +3900,30 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 
 /***/ }),
 
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.image_preview[data-v-64f39104] {\r\n  margin-top: 5px;\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=style&index=0&id=a901b314&scoped=true&lang=css":
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=style&index=0&id=a901b314&scoped=true&lang=css ***!
@@ -4995,7 +3944,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.i(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_multiselect_dist_vue_multiselect_min_css__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n/* AI Generate Button Styles */\n.ai-generate-btn[data-v-a901b314] {\n    position: relative;\n    min-width: 200px;\n    transition: all 0.3s ease;\n}\n.ai-generate-btn[data-v-a901b314]:disabled {\n    opacity: 0.9;\n    cursor: not-allowed;\n    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);\n    border-color: #667eea;\n    color: white;\n}\n\n/* AI Spinner Animation */\n.ai-spinner[data-v-a901b314] {\n    display: inline-block;\n    width: 16px;\n    height: 16px;\n    border: 2px solid rgba(255, 255, 255, 0.3);\n    border-radius: 50%;\n    border-top-color: #fff;\n    animation: ai-spin-a901b314 0.8s ease-in-out infinite;\n}\n@keyframes ai-spin-a901b314 {\nto {\n        transform: rotate(360deg);\n}\n}\n\n/* AI Text Animation - Pulsing effect */\n.ai-text-animate[data-v-a901b314] {\n    animation: ai-pulse-a901b314 1.5s ease-in-out infinite;\n}\n.other-media-list[data-v-a901b314] {\n    row-gap: 12px;\n}\n.add-more-media-btn[data-v-a901b314] {\n    align-items: center;\n    aspect-ratio: 1 / 1;\n    background: #f8fafc;\n    border: 1px dashed #8aa0b8;\n    border-radius: 6px;\n    color: #53677d;\n    display: flex;\n    flex-direction: column;\n    font-weight: 600;\n    gap: 8px;\n    justify-content: center;\n    min-height: 120px;\n    width: 100%;\n}\n.add-more-media-btn i[data-v-a901b314] {\n    font-size: 28px;\n}\n.add-more-media-btn[data-v-a901b314]:hover,\n.add-more-media-btn[data-v-a901b314]:focus {\n    background: #eef4fb;\n    border-color: #53677d;\n    color: #23364a;\n}\n@keyframes ai-pulse-a901b314 {\n0%,\n    100% {\n        opacity: 1;\n}\n50% {\n        opacity: 0.6;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n/* Compact UI Overrides for Edit/Create Product Page */\n.page-wrapper[data-v-a901b314] {\r\n    font-size: 0.85rem;\n}\n.card-header[data-v-a901b314] {\r\n    padding: 0.5rem 1rem !important;\n}\n.card-header h5[data-v-a901b314] {\r\n    font-size: 1rem !important;\n}\n.card-body[data-v-a901b314] {\r\n    padding: 0.75rem 1rem !important;\n}\n.form-group.mb-3[data-v-a901b314] {\r\n    margin-bottom: 0.5rem !important;\n}\nlabel[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\r\n    margin-bottom: 2px !important;\r\n    font-weight: 600;\r\n    color: #444;\n}\n.form-control[data-v-a901b314], .form-select[data-v-a901b314], select[data-v-a901b314] {\r\n    padding: 0.25rem 0.5rem !important;\r\n    font-size: 0.8rem !important;\r\n    height: auto !important;\r\n    min-height: 28px;\r\n    border-radius: 4px;\n}\n.btn[data-v-a901b314] {\r\n    padding: 0.25rem 0.6rem !important;\r\n    font-size: 0.8rem !important;\n}\ntextarea.form-control[data-v-a901b314] {\r\n    min-height: 60px;\n}\n.multiselect__tags[data-v-a901b314] {\r\n    min-height: 30px !important;\r\n    padding: 2px 40px 0 8px !important;\r\n    font-size: 0.8rem !important;\n}\n.multiselect__placeholder[data-v-a901b314] {\r\n    margin-bottom: 2px !important;\r\n    padding-top: 2px !important;\n}\n.multiselect__single[data-v-a901b314] {\r\n    margin-bottom: 2px !important;\n}\n.nav-tabs .nav-link[data-v-a901b314] {\r\n    padding: 0.3rem 0.8rem !important;\r\n    font-size: 0.85rem;\n}\n.input-group-text[data-v-a901b314] {\r\n    padding: 0.2rem 0.5rem;\r\n    font-size: 0.8rem;\n}\r\n\r\n/* AI Generate Button Styles */\n.ai-generate-btn[data-v-a901b314] {\r\n    position: relative;\r\n    min-width: 200px;\r\n    transition: all 0.3s ease;\n}\n.ai-generate-btn[data-v-a901b314]:disabled {\r\n    opacity: 0.9;\r\n    cursor: not-allowed;\r\n    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);\r\n    border-color: #667eea;\r\n    color: white;\n}\r\n\r\n/* AI Spinner Animation */\n.ai-spinner[data-v-a901b314] {\r\n    display: inline-block;\r\n    width: 16px;\r\n    height: 16px;\r\n    border: 2px solid rgba(255, 255, 255, 0.3);\r\n    border-radius: 50%;\r\n    border-top-color: #fff;\r\n    animation: ai-spin-a901b314 0.8s ease-in-out infinite;\n}\n@keyframes ai-spin-a901b314 {\nto {\r\n        transform: rotate(360deg);\n}\n}\r\n\r\n/* AI Text Animation - Pulsing effect */\n.ai-text-animate[data-v-a901b314] {\r\n    animation: ai-pulse-a901b314 1.5s ease-in-out infinite;\n}\n.other-media-list[data-v-a901b314] {\r\n    row-gap: 12px;\n}\n.image-container[data-v-a901b314] {\r\n    position: relative;\n}\n.image-container[draggable=\"true\"][data-v-a901b314] {\r\n    cursor: grab;\n}\n.image-container[draggable=\"true\"][data-v-a901b314]:active {\r\n    cursor: grabbing;\r\n    opacity: 0.7;\n}\n.media-order-badge[data-v-a901b314] {\r\n    align-items: center;\r\n    background: #23364a;\r\n    border: 2px solid #fff;\r\n    border-radius: 50%;\r\n    color: #fff;\r\n    display: inline-flex;\r\n    font-size: 12px;\r\n    font-weight: 700;\r\n    height: 26px;\r\n    justify-content: center;\r\n    left: 4px;\r\n    position: absolute;\r\n    top: 4px;\r\n    width: 26px;\r\n    z-index: 2;\n}\n.add-more-media-btn[data-v-a901b314] {\r\n    align-items: center;\r\n    aspect-ratio: 1 / 1;\r\n    background: #f8fafc;\r\n    border: 1px dashed #8aa0b8;\r\n    border-radius: 6px;\r\n    color: #53677d;\r\n    display: flex;\r\n    flex-direction: column;\r\n    font-weight: 600;\r\n    gap: 8px;\r\n    justify-content: center;\r\n    min-height: 120px;\r\n    width: 100%;\n}\n.add-more-media-btn i[data-v-a901b314] {\r\n    font-size: 28px;\n}\n.add-more-media-btn[data-v-a901b314]:hover,\r\n.add-more-media-btn[data-v-a901b314]:focus {\r\n    background: #eef4fb;\r\n    border-color: #53677d;\r\n    color: #23364a;\n}\n@keyframes ai-pulse-a901b314 {\n0%,\r\n    100% {\r\n        opacity: 1;\n}\n50% {\r\n        opacity: 0.6;\n}\n}\r\n\r\n/* Modern Admin UI Styles */\n.modern-admin-form[data-v-a901b314] {\r\n    background-color: #f4f6f8;\r\n    padding: 15px;\r\n    border-radius: 8px;\n}\n.product-layout[data-v-a901b314] {\r\n    display: grid;\r\n    grid-template-columns: 2fr 1fr;\r\n    gap: 24px;\r\n    overflow: visible !important;\n}\n.card-general[data-v-a901b314] { grid-column: 1 / 2; grid-row: 1;\n}\n.card-media[data-v-a901b314] { grid-column: 1 / 2; grid-row: 2;\n}\n.card-description[data-v-a901b314] { grid-column: 1 / 2; grid-row: 3;\n}\n.card-variants[data-v-a901b314] { grid-column: 1 / 2; grid-row: 4;\n}\n.card-seo[data-v-a901b314] { grid-column: 1 / 2; grid-row: 5;\n}\n.card-settings[data-v-a901b314] { grid-column: 2 / 3; grid-row: 1 / 6;\n}\n@media (max-width: 991px) {\n.product-layout[data-v-a901b314] {\r\n        grid-template-columns: 1fr;\n}\n.card-settings[data-v-a901b314] { grid-column: 1 / 2; grid-row: 2;\n}\n.card-media[data-v-a901b314] { grid-column: 1 / 2; grid-row: 3;\n}\n.card-description[data-v-a901b314] { grid-column: 1 / 2; grid-row: 4;\n}\n.card-variants[data-v-a901b314] { grid-column: 1 / 2; grid-row: 5;\n}\n.card-seo[data-v-a901b314] { grid-column: 1 / 2; grid-row: 6;\n}\n}\n.modern-card[data-v-a901b314] {\r\n    background: #ffffff;\r\n    border: 1px solid #e1e3e5;\r\n    border-radius: 12px;\r\n    box-shadow: 0 1px 3px rgba(0,0,0,0.04);\r\n    overflow: visible !important;\r\n    transition: box-shadow 0.2s ease-in-out;\n}\n.modern-card[data-v-a901b314]:hover {\r\n    box-shadow: 0 4px 12px rgba(0,0,0,0.05);\n}\n.modern-card .card-header[data-v-a901b314] {\r\n    padding: 20px 24px 10px;\r\n    background-color: transparent;\n}\n.modern-card .card-header h5[data-v-a901b314] {\r\n    font-size: 1.1rem;\r\n    margin: 0;\r\n    color: #202223;\n}\n.modern-card .card-body[data-v-a901b314] {\r\n    padding: 16px 24px 24px;\r\n    overflow: visible !important;\n}\n.form-compact-row .form-group[data-v-a901b314] {\r\n    margin-bottom: 12px !important;\n}\n.form-compact-row label[data-v-a901b314] {\r\n    font-weight: 600;\r\n    color: #202223;\r\n    margin-bottom: 6px;\r\n    font-size: 0.9rem;\n}\n.form-compact-row .form-control[data-v-a901b314], .form-compact-row .multiselect__tags[data-v-a901b314], .form-compact-row select.form-control[data-v-a901b314] {\r\n    border: 1px solid #c9cccf;\r\n    border-radius: 6px;\r\n    padding: 8px 12px;\r\n    height: 40px;\r\n    font-size: 0.95rem;\r\n    color: #202223;\n}\n.sticky-bottom-bar[data-v-a901b314] {\r\n    position: sticky;\r\n    bottom: 0;\r\n    background: #ffffff;\r\n    padding: 16px 24px;\r\n    border-top: 1px solid #e1e3e5;\r\n    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);\r\n    z-index: 100;\r\n    margin-top: 30px;\r\n    border-radius: 0 0 12px 12px;\n}\n.btn-save[data-v-a901b314] {\r\n    background-color: #008060;\r\n    border-color: #008060;\r\n    font-weight: 600;\r\n    padding: 10px 30px;\r\n    border-radius: 6px;\r\n    color: white;\n}\n.btn-save[data-v-a901b314]:hover {\r\n    background-color: #006e52;\r\n    border-color: #006e52;\n}\r\n\r\n/* Variant Image UI */\n.variant-images-grid[data-v-a901b314] {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    gap: 12px;\n}\n.variant-image-upload[data-v-a901b314] {\r\n    width: 80px;\r\n    height: 80px;\r\n    border: 1px dashed #c9cccf;\r\n    border-radius: 6px;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: center;\r\n    align-items: center;\r\n    cursor: pointer;\r\n    background: #f8fafc;\r\n    color: #5c5f62;\r\n    transition: all 0.2s;\n}\n.variant-image-upload[data-v-a901b314]:hover {\r\n    background: #eef4fb;\r\n    border-color: #008060;\r\n    color: #008060;\n}\n.variant-image-preview[data-v-a901b314] {\r\n    width: 80px;\r\n    height: 80px;\r\n    position: relative;\r\n    border-radius: 6px;\r\n    overflow: hidden;\r\n    border: 1px solid #e1e3e5;\n}\n.variant-image-preview img[data-v-a901b314] {\r\n    width: 100%;\r\n    height: 100%;\r\n    -o-object-fit: cover;\r\n       object-fit: cover;\n}\n.variant-image-preview .btn-remove[data-v-a901b314] {\r\n    position: absolute;\r\n    top: 4px;\r\n    right: 4px;\r\n    padding: 2px 5px;\r\n    font-size: 10px;\r\n    border-radius: 4px;\r\n    background: rgba(255, 255, 255, 0.9);\r\n    color: #d82c0d;\r\n    border: 1px solid #e1e3e5;\r\n    box-shadow: 0 1px 2px rgba(0,0,0,0.1);\r\n    opacity: 0;\r\n    transition: opacity 0.2s;\n}\n.variant-image-preview:hover .btn-remove[data-v-a901b314] {\r\n    opacity: 1;\n}\n.variant-image-preview .btn-remove[data-v-a901b314]:hover {\r\n    background: #d82c0d;\r\n    color: white;\n}\n.variant-card[data-v-a901b314] {\r\n    background: #fafbfb;\r\n    border: 1px solid #e1e3e5;\n}\r\n\r\n/* Compact UI Overrides for Create/Edit View */\n.modern-card[data-v-a901b314] {\r\n    padding: 1rem !important;\n}\n.modern-card h4.card-title[data-v-a901b314],\r\n.modern-card .card-title[data-v-a901b314],\r\n.card-header h4[data-v-a901b314] {\r\n    font-size: 1rem !important;\r\n    margin-bottom: 0.75rem !important;\n}\nlabel[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\r\n    margin-bottom: 0.2rem !important;\r\n    font-weight: 600 !important;\n}\n.form-control[data-v-a901b314], .form-select[data-v-a901b314], select[data-v-a901b314], input[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\r\n    padding: 0.25rem 0.5rem !important;\r\n    min-height: unset !important;\r\n    height: auto !important;\n}\n.btn[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\r\n    padding: 0.3rem 0.75rem !important;\n}\n.form-group[data-v-a901b314] {\r\n    margin-bottom: 0.5rem !important;\n}\n.ql-editor[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\r\n    min-height: 100px !important;\n}\nsmall.text-muted[data-v-a901b314] {\r\n    font-size: 0.7rem !important;\n}\np.error[data-v-a901b314] {\r\n    font-size: 0.75rem !important;\n}\ninput[type=\"color\"].color-picker-input-swatch[data-v-a901b314] {\r\n    padding: 0 !important;\r\n    width: 100% !important;\r\n    height: 100% !important;\r\n    min-height: 24px !important;\r\n    border: none !important;\r\n    cursor: pointer !important;\r\n    background: transparent !important;\r\n    -webkit-appearance: none !important;\r\n    -moz-appearance: none !important;\r\n    appearance: none !important;\n}\ninput[type=\"color\"].color-picker-input-swatch[data-v-a901b314]::-webkit-color-swatch-wrapper {\r\n    padding: 0 !important;\n}\ninput[type=\"color\"].color-picker-input-swatch[data-v-a901b314]::-webkit-color-swatch {\r\n    border: 1px solid rgba(0, 0, 0, 0.2) !important;\r\n    border-radius: 4px !important;\n}\ninput[type=\"color\"].color-picker-input-swatch[data-v-a901b314]::-moz-color-swatch {\r\n    border: 1px solid rgba(0, 0, 0, 0.2) !important;\r\n    border-radius: 4px !important;\n}\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -5026,6 +3975,36 @@ ___CSS_LOADER_EXPORT___.push([module.id, "fieldset[disabled] .multiselect{pointe
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_style_index_0_id_64f39104_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_style_index_0_id_64f39104_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_style_index_0_id_64f39104_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=style&index=0&id=a901b314&scoped=true&lang=css":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=style&index=0&id=a901b314&scoped=true&lang=css ***!
@@ -5053,6 +4032,47 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_style_index_0_id_a901b314_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/js/views/Product/Brands/Edit.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/views/Product/Brands/Edit.vue ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=64f39104&scoped=true */ "./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true");
+/* harmony import */ var _Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js */ "./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js");
+/* harmony import */ var _Edit_vue_vue_type_style_index_0_id_64f39104_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css */ "./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "64f39104",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/Product/Brands/Edit.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
 
@@ -5097,6 +4117,22 @@ component.options.__file = "resources/js/views/Product/EditProduct.vue"
 
 /***/ }),
 
+/***/ "./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js":
+/*!****************************************************************************!*\
+  !*** ./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Edit.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/views/Product/EditProduct.vue?vue&type=script&lang=js":
 /*!****************************************************************************!*\
   !*** ./resources/js/views/Product/EditProduct.vue?vue&type=script&lang=js ***!
@@ -5113,6 +4149,23 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true":
+/*!**********************************************************************************************!*\
+  !*** ./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_template_id_64f39104_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Edit.vue?vue&type=template&id=64f39104&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=template&id=64f39104&scoped=true");
+
+
+/***/ }),
+
 /***/ "./resources/js/views/Product/EditProduct.vue?vue&type=template&id=a901b314&scoped=true":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/views/Product/EditProduct.vue?vue&type=template&id=a901b314&scoped=true ***!
@@ -5122,10 +4175,23 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_a901b314_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_a901b314_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_a901b314_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_a901b314_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_a901b314_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EditProduct.vue?vue&type=template&id=a901b314&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/EditProduct.vue?vue&type=template&id=a901b314&scoped=true");
+
+
+/***/ }),
+
+/***/ "./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Edit_vue_vue_type_style_index_0_id_64f39104_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Product/Brands/Edit.vue?vue&type=style&index=0&id=64f39104&scoped=true&lang=css");
 
 
 /***/ }),

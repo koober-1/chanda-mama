@@ -762,19 +762,37 @@ class CommonHelper
         }
 
         $sellerIds = self::getSellerIdsfromCityIds($cityIds);
+
+        // Fallback: If location matching yields no seller IDs, return ALL active seller IDs so products are always visible.
+        if (empty($sellerIds) || (is_object($sellerIds) && method_exists($sellerIds, 'isEmpty') && $sellerIds->isEmpty()) || (is_array($sellerIds) && count($sellerIds) === 0)) {
+            $sellerIds = Seller::where('status', 1)->pluck('id');
+            if ($sellerIds->isEmpty()) {
+                $sellerIds = Seller::pluck('id');
+            }
+        }
+
         return $sellerIds;
     }
 
     public static function getDefaultLocation(): array
     {
+        $defaultCity = self::getDefaultCity();
+        if ($defaultCity && is_numeric($defaultCity->latitude) && is_numeric($defaultCity->longitude)) {
+            return [
+                'latitude' => (string) $defaultCity->latitude,
+                'longitude' => (string) $defaultCity->longitude,
+            ];
+        }
+
         $latitude = Setting::get_value('map_latitude');
         $longitude = Setting::get_value('map_longitude');
 
         return [
-            'latitude' => is_numeric($latitude) ? $latitude : '28.6139',
-            'longitude' => is_numeric($longitude) ? $longitude : '77.2090',
+            'latitude' => is_numeric($latitude) ? $latitude : '23.2420',
+            'longitude' => is_numeric($longitude) ? $longitude : '69.6669',
         ];
     }
+
 
     public static function applyDefaultLocation($request): void
     {
@@ -1025,10 +1043,22 @@ class CommonHelper
         $cityIds = [];
 
         foreach ($cities as $city) {
-            $polygon = json_decode($city->boundary_points, true);
+            if ($city->geolocation_type == 'polygon') {
+                $polygon = json_decode($city->boundary_points, true);
 
-            if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
-                $cityIds[] = $city->id;
+                if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
+                    $cityIds[] = $city->id;
+                }
+            } elseif ($city->geolocation_type == 'circle') {
+                $boundaryPoints  = json_decode($city->boundary_points, true);
+                $radius = $city->radius; // Radius in meters
+
+                if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
+                    $center = $boundaryPoints[0]; // Center point
+                    if (self::isPointInCircle($point, $center, $radius)) {
+                        $cityIds[] = $city->id;
+                    }
+                }
             }
         }
         // Return whether the point is deliverable in any of the specified cities
@@ -1278,6 +1308,14 @@ class CommonHelper
 
         $sections = $sections->makeHidden(['created_at', 'updated_at']);
 
+        // Convert seller_ids to array and fallback if empty
+        if (is_object($seller_ids) && method_exists($seller_ids, 'toArray')) {
+            $seller_ids = $seller_ids->toArray();
+        }
+        if (empty($seller_ids)) {
+            $seller_ids = Seller::pluck('id')->toArray();
+        }
+
         // Get settings for product rating and few quantity alert
         $productRatingSetting = (int) (Setting::get_value('product_rating') ?? 0);
         $isProductRatingEnabled = $productRatingSetting === 1;
@@ -1294,7 +1332,7 @@ class CommonHelper
             )));
 
             if (!empty($product_ids_array)) {
-                $products = Product::select(
+                $productsQuery = Product::select(
                     'p.*',
                     'p.type as d_type',
                     's.store_name as seller_name',
@@ -1306,10 +1344,13 @@ class CommonHelper
                     ->leftJoin('categories as c', 'p.category_id', '=', 'c.id')
                     ->where('p.is_approved', 1)
                     ->where('p.status', 1)
-                    ->where('c.status', 1)
-                    ->where('s.status', 1)
-                    ->whereIn('p.seller_id', $seller_ids)
-                    ->whereIn('p.id', $product_ids_array)
+                    ->whereIn('p.id', $product_ids_array);
+
+                if (!empty($seller_ids)) {
+                    $productsQuery->whereIn('p.seller_id', $seller_ids);
+                }
+
+                $products = $productsQuery
                     ->with('ratings')
                     ->groupBy('p.id')
                     ->orderByRaw("FIELD(p.id, " . implode(',', $product_ids_array) . ")")
@@ -1896,121 +1937,67 @@ class CommonHelper
             $charge_method = $city['delivery_charge_method'];
             $min_amount_for_free_delivery = $city['min_amount_for_free_delivery'];
 
+            $distance = 0;
+            $distance_text = "0 km";
+            $time = "0 mins";
+            $googleSuccess = false;
+
             $result = CommonHelper::findGoogleMapDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo);
 
-            if (isset($result['http_code']) && $result['http_code'] != "200") {
-                $response['error'] = true;
-                $response['message'] = $result['body']['error_message'] ?? "";
-                $response['charge'] = "0";
-                $response['distance'] = "0";
-                $response['duration'] = "0";
-                return $response;
-            }
-
             if (isset($result['body']) && !empty($result['body'])) {
-
                 if (is_string($result["body"])) {
-                    $result["body"] =  json_decode($result["body"], true);
+                    $result["body"] = json_decode($result["body"], true);
                 }
-
-                if (isset($result['body']['status']) && $result['body']['status'] == "REQUEST_DENIED") {
-                    $response['error'] = true;
-
-                    $response['message'] = $result['body']['error_message'];
-
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
-                } else if (isset($result['body']['status']) && $result['body']['status'] == "OK") {
-                    if (isset($result['body']['rows'][0]['elements'][0]['status']) && $result['body']['rows'][0]['elements'][0]['status'] == "OK") {
-
-                        $distance_text = $result['body']['rows'][0]['elements'][0]['distance']['text'];
-                        $distance_in_meter = $result['body']['rows'][0]['elements'][0]['distance']['value'];
-                        $distance = round(($distance_in_meter / 1000), 1);
-                        $time = $result['body']['rows'][0]['elements'][0]['duration']['text'];
-
-                        if ($charge_method == "fixed_charge") {
-                            $charge = $city['fixed_charge'];
-                        }
-                        if ($charge_method == "per_km_charge") {
-                            $charge = ($city['per_km_charge'] * intval($distance));
-                        }
-                        if ($charge_method == "range_wise_charges") {
-                            $ranges = json_decode($city['range_wise_charges'], true);
-                            $distance = round($distance);
-                            foreach ($ranges as $range) {
-                                if ($distance >= $range['from_range'] && $distance <= $range['to_range']) {
-                                    $charge = ($range['price']);
-                                }
-                            }
-                        }
-                        if ($min_amount_for_free_delivery <= $sub_total && $min_amount_for_free_delivery != 0) {
-                            $charge = 0;
-                        }
-
-                        $response['error'] = false;
-                        $response['message'] = 'Data fetched successfully.';
-                        $response['charge'] = $charge;
-                        $response['distance'] = $distance_text;
-                        $response['duration'] = $time;
-                        return $response;
-                    } else if (isset($result['body']['rows'][0]['elements'][0]['status']) && $result['body']['rows'][0]['elements'][0]['status'] == "ZERO_RESULTS") {
-                        $response['error'] = false;
-                        $response['message'] = 'Data not found or invalid.Please check!';
-                        $response['charge'] = "0";
-                        $response['distance'] = "0";
-                        $response['duration'] = "0";
-                        return $response;
-                    } else {
-                        $response['error'] = true;
-                        $response['message'] = 'Something went wrong...';
-                        $response['charge'] = "0";
-                        $response['distance'] = "0";
-                        $response['duration'] = "0";
-                        return $response;
-                    }
-                } else if (isset($result['body']['status']) && $result['body']['status'] == "OVER_QUERY_LIMIT") {
-                    // You have exceeded the QPS limits. Billing has not been enabled on your account
-                    $response['error'] = true;
-                    $response['message'] = 'You have exceeded the QPS limits or billing not enabled may be.';
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
-                } else if (isset($result['body']['status']) && $result['body']['status'] == "INVALID_REQUEST") {
-                    // indicating the API request was malformed, generally due to the missing input parameter
-                    $response['error'] = true;
-                    $response['message'] = 'Indicating the API request was malformed.';
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
-                } else if (isset($result['body']['status']) && $result['body']['status'] == "UNKNOWN_ERROR") {
-                    // indicating an unknown error
-                    $response['error'] = true;
-                    $response['message'] = 'An unknown error occure.';
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
-                } else if (isset($result['body']['status']) && $result['body']['status'] == "ZERO_RESULTS") {
-                    // indicating that the search was successful but returned no results. This may occur if the search was passed a bounds in a remote location.
-                    $response['error'] = true;
-                    $response['message'] = 'Data not found or invalid.Please check!';
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
-                } else {
-                    $response['error'] = true;
-                    $response['message'] = 'Something went wrong.';
-                    $response['charge'] = "0";
-                    $response['distance'] = "0";
-                    $response['duration'] = "0";
-                    return $response;
+                if (isset($result['body']['status']) && $result['body']['status'] == "OK" && isset($result['body']['rows'][0]['elements'][0]['status']) && $result['body']['rows'][0]['elements'][0]['status'] == "OK") {
+                    $distance_text = $result['body']['rows'][0]['elements'][0]['distance']['text'];
+                    $distance_in_meter = $result['body']['rows'][0]['elements'][0]['distance']['value'];
+                    $distance = round(($distance_in_meter / 1000), 1);
+                    $time = $result['body']['rows'][0]['elements'][0]['duration']['text'];
+                    $googleSuccess = true;
                 }
             }
+
+            if (!$googleSuccess) {
+                // Haversine fallback calculation for distance in kilometers
+                $earthRadius = 6371; // km
+                $dLat = deg2rad($latitudeTo - $latitudeFrom);
+                $dLon = deg2rad($longitudeTo - $longitudeFrom);
+                $a = sin($dLat / 2) * sin($dLat / 2) +
+                     cos(deg2rad($latitudeFrom)) * cos(deg2rad($latitudeTo)) *
+                     sin($dLon / 2) * sin($dLon / 2);
+                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+                $distance = round($earthRadius * $c, 1);
+                $distance_text = $distance . " km";
+                $time = round($distance * 2) . " mins";
+            }
+
+            if ($charge_method == "fixed_charge") {
+                $charge = $city['fixed_charge'];
+            }
+            if ($charge_method == "per_km_charge") {
+                $charge = ($city['per_km_charge'] * intval($distance));
+            }
+            if ($charge_method == "range_wise_charges") {
+                $ranges = json_decode($city['range_wise_charges'], true);
+                $distanceRound = round($distance);
+                if (is_array($ranges)) {
+                    foreach ($ranges as $range) {
+                        if ($distanceRound >= $range['from_range'] && $distanceRound <= $range['to_range']) {
+                            $charge = ($range['price']);
+                        }
+                    }
+                }
+            }
+            if ($min_amount_for_free_delivery <= $sub_total && $min_amount_for_free_delivery != 0) {
+                $charge = 0;
+            }
+
+            $response['error'] = false;
+            $response['message'] = 'Data fetched successfully.';
+            $response['charge'] = $charge;
+            $response['distance'] = $distance_text;
+            $response['duration'] = $time;
+            return $response;
         } else {
             $response['error'] = true;
             $response['message'] = 'Sorry, We are not delivering on selected address';
@@ -2685,12 +2672,17 @@ class CommonHelper
         Mail::purge($mailer);
 
         $app_name = Setting::get_value('app_name');
+        $support_email = Setting::get_value('smtp_from_mail');
+        if (empty($support_email) || !filter_var($support_email, FILTER_VALIDATE_EMAIL)) {
+            $support_email = config('mail.from.address') ?: 'support@chandamama.com';
+        }
+
         $mailData = array(
             'to' => $to,
             'subject' => $subject,
             'name' => $data['name'] ?? "",
             'app_name' => $app_name,
-            'support_email' => Setting::get_value('smtp_from_mail'),
+            'support_email' => $support_email,
         );
         if (!is_array($data)) {
             $data = [];
@@ -2937,7 +2929,7 @@ class CommonHelper
             $low_stock_limit = Setting::get_value('low_stock_limit') ?? 10;
 
             if (!$low_stock_limit || $low_stock_limit <= 0) {
-                Log::channel('low_stock_mail')->info("Low stock limit not configured or disabled");
+                Log::info("Low stock limit not configured or disabled");
                 return;
             }
 
@@ -2962,7 +2954,7 @@ class CommonHelper
                         ?? optional(Product::find($variant->product_id))->seller_id;
 
                     if (empty($sellerId)) {
-                        Log::channel('low_stock_mail')->warning(
+                        Log::warning(
                             "Low stock skipped: seller_id missing for variant ID {$variant->id}"
                         );
                         continue;
@@ -3043,16 +3035,16 @@ class CommonHelper
                             );
                         }
                     } else {
-                        Log::channel('low_stock_mail')->info(
+                        Log::info(
                             "Low stock email skipped. Invalid or missing email for Seller ID {$sellerId}. Email: " . ($seller->email ?? 'NULL')
                         );
                     }
                 } catch (\Exception $e) {
-                    Log::channel('low_stock_mail')->info("Error sending low stock notification to seller {$sellerId}: " . $e->getMessage());
+                    Log::info("Error sending low stock notification to seller {$sellerId}: " . $e->getMessage());
                 }
             }
         } catch (\Exception $e) {
-            Log::channel('low_stock_mail')->info("Error in sendLowStockNotification: " . $e->getMessage());
+            Log::info("Error in sendLowStockNotification: " . $e->getMessage());
         }
     }
 

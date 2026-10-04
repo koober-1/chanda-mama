@@ -14,13 +14,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-daterange-picker */ "./node_modules/vue2-daterange-picker/dist/vue2-daterange-picker.umd.min.js");
 /* harmony import */ var vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/DateRangePickerMixin */ "./resources/js/mixins/DateRangePickerMixin.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vue_google_charts_legacy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-google-charts/legacy */ "./node_modules/vue-google-charts/legacy/index.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
-/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var vue_google_charts_legacy__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-google-charts/legacy */ "./node_modules/vue-google-charts/legacy/index.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-apexcharts */ "./node_modules/vue-apexcharts/dist/vue-apexcharts.js");
+/* harmony import */ var vue_apexcharts__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_apexcharts__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -38,8 +37,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
   name: 'Chart',
   mixins: [_mixins_DateRangePickerMixin__WEBPACK_IMPORTED_MODULE_1__["default"]],
   components: {
-    GChart: vue_google_charts_legacy__WEBPACK_IMPORTED_MODULE_3__.GChart,
-    apexcharts: (vue_apexcharts__WEBPACK_IMPORTED_MODULE_5___default()),
+    GChart: vue_google_charts_legacy__WEBPACK_IMPORTED_MODULE_2__.GChart,
+    apexcharts: (vue_apexcharts__WEBPACK_IMPORTED_MODULE_4___default()),
     DateRangePicker: (vue2_daterange_picker__WEBPACK_IMPORTED_MODULE_0___default())
   },
   data: function data() {
@@ -437,7 +436,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       var _this2 = this;
       var vm = this;
       this.isLoading = true;
-      axios__WEBPACK_IMPORTED_MODULE_2___default().get(this.$sellerApiUrl + '/dashboard').then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$sellerApiUrl + '/dashboard').then(function (res) {
         vm.isLoading = false;
         var data = res.data;
         if (data.status === 1) {
@@ -462,7 +461,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
           // pieChart
           _this2.graphOrders = data.data.weekly_sales;
           _this2.graphOrders.forEach(function (order) {
-            _this2.options.xaxis.categories.push(moment__WEBPACK_IMPORTED_MODULE_4___default()(order.order_date).format('DD-MMM'));
+            _this2.options.xaxis.categories.push(moment__WEBPACK_IMPORTED_MODULE_3___default()(order.order_date).format('DD-MMM'));
             _this2.series[0].data.push(order.total_sale);
           });
           _this2.$refs.apexBarChart.updateSeries([{
@@ -483,7 +482,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
     getOrderStatus: function getOrderStatus() {
       var _this3 = this;
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_2___default().get(this.$apiUrl + '/order_statuses').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$apiUrl + '/order_statuses').then(function (response) {
         _this3.isLoading = false;
         _this3.statuses = response.data.data;
       })["catch"](function (error) {
@@ -502,13 +501,13 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       this.isLoading = true;
       var vm = this;
       var param = {
-        "startDate": this.dateRange.startDate != null ? moment__WEBPACK_IMPORTED_MODULE_4___default()(this.dateRange.startDate).format('YYYY-MM-DD') : "",
-        "endDate": this.dateRange.endDate != null ? moment__WEBPACK_IMPORTED_MODULE_4___default()(this.dateRange.endDate).format('YYYY-MM-DD') : "",
+        "startDate": this.dateRange.startDate != null ? moment__WEBPACK_IMPORTED_MODULE_3___default()(this.dateRange.startDate).format('YYYY-MM-DD') : "",
+        "endDate": this.dateRange.endDate != null ? moment__WEBPACK_IMPORTED_MODULE_3___default()(this.dateRange.endDate).format('YYYY-MM-DD') : "",
         "status": this.status,
-        startDeliveryDate: this.deliveryDateRange.startDate ? moment__WEBPACK_IMPORTED_MODULE_4___default()(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
-        endDeliveryDate: this.deliveryDateRange.endDate ? moment__WEBPACK_IMPORTED_MODULE_4___default()(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : ''
+        startDeliveryDate: this.deliveryDateRange.startDate ? moment__WEBPACK_IMPORTED_MODULE_3___default()(this.deliveryDateRange.startDate).format('YYYY-MM-DD') : '',
+        endDeliveryDate: this.deliveryDateRange.endDate ? moment__WEBPACK_IMPORTED_MODULE_3___default()(this.deliveryDateRange.endDate).format('YYYY-MM-DD') : ''
       };
-      axios__WEBPACK_IMPORTED_MODULE_2___default().get(this.$sellerApiUrl + '/orders', {
+      axios__WEBPACK_IMPORTED_MODULE_5__["default"].get(this.$sellerApiUrl + '/orders', {
         params: param
       }).then(function (response) {
         var data = response.data;
@@ -568,11 +567,11 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       return classMap[id] || 'status-default';
     },
     formatDateBold: function formatDateBold(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_4___default()(date).format('DD MMM YYYY');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(date).format('DD/MM/YYYY');
     },
     getPeriodLabel: function getPeriodLabel(date) {
       if (!date) return '';
-      var hour = moment__WEBPACK_IMPORTED_MODULE_4___default()(date).hour();
+      var hour = moment__WEBPACK_IMPORTED_MODULE_3___default()(date).hour();
       if (hour >= 5 && hour < 12) {
         return this.__('Morning') || 'Morning';
       } else if (hour >= 12 && hour < 17) {
@@ -584,7 +583,7 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
       }
     },
     formatTimeLight: function formatTimeLight(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_4___default()(date).format('hh:mm A');
+      return moment__WEBPACK_IMPORTED_MODULE_3___default()(date).format('hh:mm A');
     },
     getStatusLabelById: function getStatusLabelById(val) {
       if (val == null || val === '') return '';
@@ -622,8 +621,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -1249,7 +1248,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 ___CSS_LOADER_EXPORT___.i(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue2_daterange_picker_dist_vue2_daterange_picker_css__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-daterange-picker[data-v-1ebd09d2][data-v-209c7b6a] {\n    min-width: 80%;\n}\n@media only screen and (min-width: 600px) {\n.vue-daterange-picker[data-v-1ebd09d2][data-v-209c7b6a] {\n        min-width: 90%;\n}\n}\n.btn_product_count[data-v-209c7b6a] {\n    margin-bottom: 10px;\n}\n.chart-container[data-v-209c7b6a] {\n    min-height: 300px;\n    height: 60vh;\n}\n@media (max-width: 768px) {\n.chart-container[data-v-209c7b6a] {\n        height: 40vh;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-daterange-picker[data-v-1ebd09d2][data-v-209c7b6a] {\r\n    min-width: 80%;\n}\n@media only screen and (min-width: 600px) {\n.vue-daterange-picker[data-v-1ebd09d2][data-v-209c7b6a] {\r\n        min-width: 90%;\n}\n}\n.btn_product_count[data-v-209c7b6a] {\r\n    margin-bottom: 10px;\n}\n.chart-container[data-v-209c7b6a] {\r\n    min-height: 300px;\r\n    height: 60vh;\n}\n@media (max-width: 768px) {\n.chart-container[data-v-209c7b6a] {\r\n        height: 40vh;\n}\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1319,10 +1318,10 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "GChart": () => (/* binding */ GChart),
+/* harmony export */   GChart: () => (/* binding */ GChart),
 /* harmony export */   "default": () => (/* binding */ plugin),
-/* harmony export */   "install": () => (/* binding */ install),
-/* harmony export */   "loadGoogleCharts": () => (/* binding */ loadGoogleCharts)
+/* harmony export */   install: () => (/* binding */ install),
+/* harmony export */   loadGoogleCharts: () => (/* binding */ loadGoogleCharts)
 /* harmony export */ });
 const chartsScriptUrl = 'https://www.gstatic.com/charts/loader.js';
 let chartsLoaderPromise = null;
@@ -1644,8 +1643,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_209c7b6a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_209c7b6a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_209c7b6a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_209c7b6a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_209c7b6a_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=template&id=209c7b6a&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Sellers/Dashboard.vue?vue&type=template&id=209c7b6a&scoped=true");
 

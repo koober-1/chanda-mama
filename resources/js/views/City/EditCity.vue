@@ -90,28 +90,27 @@
                                             <label for="latitude">{{ __('latitude') }} <span
                                                     class="text-danger text-sm">*</span></label>
                                             <input type="text" class="form-control" name="latitude" id="latitude"
-                                                v-model="city.latitude" :placeholder="__('latitude')" required readonly>
+                                                v-model="city.latitude" :placeholder="__('latitude')" required>
                                         </div>
                                         <div class="form-group" v-if="language.is_default">
                                             <label for="longitude"> {{ __('longitude') }}<span
                                                     class="text-danger text-sm">*</span></label>
                                             <input type="text" class="form-control" name="longitude" id="longitude"
-                                                v-model="city.longitude" :placeholder="__('longitude')" required
-                                                readonly>
+                                                v-model="city.longitude" :placeholder="__('longitude')" required>
                                         </div>
 
                                         <div class="form-group" v-if="language.is_default">
                                             <label for="name"> {{ __('city_name') }}<span
                                                     class="text-danger text-sm">*</span></label>
                                             <input type="text" class="form-control" name="name" id="name"
-                                                v-model="city.name" :placeholder="__('city_name')" required readonly>
+                                                v-model="city.name" :placeholder="__('city_name')" required>
                                         </div>
 
                                         <div class="form-group" v-if="language.is_default">
                                             <label for="state"> {{ __('state_name') }}<span
                                                     class="text-danger text-sm">*</span></label>
                                             <input type="text" class="form-control" name="state" id="state"
-                                                v-model="city.state" :placeholder="__('state_name')" required readonly>
+                                                v-model="city.state" :placeholder="__('state_name')" required>
                                         </div>
 
                                         <div class="form-group">
@@ -757,8 +756,16 @@ export default {
             if (!this.validateDefaultLanguage()) return;
 
             if (!this.vertices) {
-                this.showError("Draw Deliverable area on Map");
-                return;
+                if (this.city.latitude && this.city.longitude) {
+                    const lat = parseFloat(this.city.latitude);
+                    const lng = parseFloat(this.city.longitude);
+                    this.geolocation_type = 'circle';
+                    this.radius = 50000; // 50 KM default radius
+                    this.vertices = JSON.stringify([{ lat: lat, lng: lng }]);
+                } else {
+                    this.showError("Please enter Latitude and Longitude");
+                    return;
+                }
             }
 
             this.isLoading = true;

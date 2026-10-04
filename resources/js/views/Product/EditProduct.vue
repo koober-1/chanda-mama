@@ -57,10 +57,11 @@
                         <b-spinner label="Loading..."></b-spinner>
                         <p class="mt-2">Loading languages...</p>
                     </div>
-                    <form ref="my-form" @submit.prevent="saveRecord" @keydown.enter="$event.preventDefault()" v-else>
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>General Details</h4>
+                    <form ref="my-form" @submit.prevent="saveRecord" @keydown.enter="$event.preventDefault()" v-else class="modern-admin-form">
+                        <div class="product-layout" style="display: block;">
+                        <div class="card modern-card card-general">
+                            <div class="card-header border-bottom-0 pb-0">
+                                <h5 class="fw-bold mb-0">Basic Information</h5>
                                 <span class="pull-right">
                                     <template v-if="isSellerRole">
                                         <router-link to="/seller/manage_products" class="btn btn-primary"
@@ -136,7 +137,7 @@
                                                                     @input="handleDefaultLanguageInput('name', language)">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 d-none">
                                                             <div class="form-group mb-3">
                                                                 <label>{{ __('slug') }}</label>
                                                                 <input type="text" class="form-control"
@@ -159,10 +160,11 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group mb-3">
                                                                 <label for="brands">{{ __('brands') }}</label>
-                                                                <multiselect id="brands" v-model="brand" :options="translatedBrands"
-                                                                    :placeholder="__('select_and_search_brands')"
-                                                                    label="name" track-by="id" required>
-                                                                    <template slot="singleLabel" slot-scope="props">
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <multiselect id="brands" v-model="brand" :options="translatedBrands"
+                                                                        :placeholder="__('select_and_search_brands')"
+                                                                        label="name" track-by="id" @keydown.native.enter.prevent required style="flex-grow: 1;">
+                                                                        <template slot="singleLabel" slot-scope="props">
                                                                         <span class="option__desc">
                                                                             <span class="option__title">{{
                                                                                 props.option.name }}</span>
@@ -181,15 +183,19 @@
                                                                         </div>
                                                                     </template>
                                                                 </multiselect>
+                                                                <button type="button" class="btn btn-primary" style="height: 40px; min-width: 40px;" @click="$refs.editBrandModal.showModal()">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                         <div class="col-md-12">
                                                             <div
                                                                 class="form-group mb-3 d-flex flex-wrap align-items-center">
                                                                 <button type="button"
                                                                     class="btn btn-outline-primary me-3 my-2 ai-generate-btn"
                                                                     @click="generateDescription"
-                                                                    :disabled="isGeneratingAI">
+                                                                    :disabled="isGeneratingAI || isGeneratingCustomAI">
                                                                     <!-- AI Processing State -->
                                                                     <template v-if="isGeneratingAI">
                                                                         <span class="ai-spinner me-2"></span>
@@ -211,12 +217,55 @@
                                                             </div>
                                                         </div>
     
-                                                        <div class="col-md-12">
-                                                            <div class="form-group mb-3" v-if="useCustomPrompt">
-                                                                <label>{{ __('custom_prompt') }}</label>
-                                                                <textarea class="form-control" v-model="customPrompt"
-                                                                    rows="2"
-                                                                    placeholder="e.g. Write a fun and engaging description focusing on features and benefits"></textarea>
+                                                        <div class="col-md-12" v-if="useCustomPrompt">
+                                                            <div class="card bg-light border-primary border-opacity-25 mb-3 shadow-none">
+                                                                <div class="card-body p-3">
+                                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                        <label class="fw-bold mb-0 text-primary d-flex align-items-center">
+                                                                            <i class="fa fa-comment-dots me-2"></i> {{ __('custom_prompt') }}
+                                                                        </label>
+                                                                        <span class="badge bg-primary text-white" style="font-size: 11px;">
+                                                                            <i class="fa fa-magic me-1"></i> Custom AI Generator
+                                                                        </span>
+                                                                    </div>
+                                                                    <textarea class="form-control mb-2" v-model="customPrompt"
+                                                                        rows="3"
+                                                                        placeholder="e.g. Write a catchy and premium description highlighting durability, key features, and benefits. Include bullet highlights and optimize meta settings."></textarea>
+                                                                    
+                                                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                                                        <div class="d-flex flex-wrap align-items-center gap-2 text-muted" style="font-size: 12px;">
+                                                                            <span class="badge bg-white text-dark border">
+                                                                                <i class="fa fa-check text-success me-1"></i> Required: Product Name, Category &amp; Prompt
+                                                                            </span>
+                                                                            <span class="badge bg-white text-dark border">
+                                                                                <i class="fa fa-tags text-info me-1"></i> Auto-detects {{ has_variant ? 'Variants' : 'Single Product' }}
+                                                                            </span>
+                                                                        </div>
+                                                                        <button type="button"
+                                                                            class="btn btn-primary ai-generate-btn shadow-sm"
+                                                                            @click="generateFromCustomPrompt"
+                                                                            :disabled="isGeneratingCustomAI || isGeneratingAI">
+                                                                            <template v-if="isGeneratingCustomAI">
+                                                                                <span class="ai-spinner me-2"></span>
+                                                                                <span class="ai-text-animate">Generating Content...</span>
+                                                                            </template>
+                                                                            <template v-else>
+                                                                                <i class="fa fa-paper-plane me-1"></i> Generate with Custom Prompt
+                                                                            </template>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12" v-if="aiDebugInfo">
+                                                            <div class="form-group mb-3">
+                                                                <button type="button" class="btn btn-sm btn-outline-info mb-2" @click="showAiDebug = !showAiDebug">
+                                                                    <i class="fa fa-bug"></i> {{ showAiDebug ? 'Hide AI Debugging' : 'Show AI Debugging' }}
+                                                                </button>
+                                                                <div v-show="showAiDebug" class="p-3 bg-dark text-white rounded" style="max-height: 300px; overflow-y: auto; text-align: left;">
+                                                                    <pre style="color: #00ff00; margin: 0; font-size: 0.85rem; white-space: pre-wrap; word-wrap: break-word;">{{ aiDebugInfo }}</pre>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </template>
@@ -249,8 +298,10 @@
 
                                                     <!-- Non-translatable Fields: Images (only shown in default language tab) -->
                                                     <template v-if="language.is_default">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group mb-3">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group mb-3">
                                                                 <label>{{ __('main_image') }} <i
                                                                         class="text-danger" v-if="!id">*</i></label>
                                                                 <input type="file" name="image" accept="image/*"
@@ -372,6 +423,8 @@
 
                                                             </div>
                                                         </div>
+                                                        </div>
+                                                        </div>
                                                     </template>
                                                 </div>
                                             </div>
@@ -385,7 +438,7 @@
                                 </div>
 
                                 <!-- Direct form fields (without language tabs) -->
-                                <div class="row">
+                                <div class="row form-compact-row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="barcode">{{ __('barcode') }}</label>
@@ -406,7 +459,7 @@
                                                 required>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 d-none">
                                         <div class="form-group mb-3">
                                             <label>{{ __('slug') }}</label>
                                             <input type="text" class="form-control"
@@ -429,10 +482,11 @@
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
                                             <label for="brands">{{ __('brands') }}</label>
-                                            <multiselect id="brands" v-model="brand" :options="translatedBrands"
-                                                :placeholder="__('select_and_search_brands')"
-                                                label="name" track-by="id" required>
-                                                <template slot="singleLabel" slot-scope="props">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <multiselect id="brands" v-model="brand" :options="translatedBrands"
+                                                    :placeholder="__('select_and_search_brands')"
+                                                    label="name" track-by="id" required style="flex-grow: 1;" @keydown.native.enter.stop>
+                                                    <template slot="singleLabel" slot-scope="props">
                                                     <span class="option__desc">
                                                         <span class="option__title">{{
                                                             props.option.name }}</span>
@@ -451,61 +505,23 @@
                                                     </div>
                                                 </template>
                                             </multiselect>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div
-                                            class="form-group mb-3 d-flex flex-wrap align-items-center">
-                                            <button type="button"
-                                                class="btn btn-outline-primary me-3 my-2 ai-generate-btn"
-                                                @click="generateDescription"
-                                                :disabled="isGeneratingAI">
-                                                <template v-if="isGeneratingAI">
-                                                    <span class="ai-spinner me-2"></span>
-                                                    <span class="ai-text-animate">AI is
-                                                        generating...</span>
-                                                </template>
-                                                <template v-else>
-                                                    <i class="fa fa-magic me-1"></i>
-                                                    {{ __('generate_description_with_ai') }}
-                                                </template>
-                                            </button>
-                                            <label class="my-2 d-flex align-items-center">
-                                                <input type="checkbox" v-model="useCustomPrompt"
-                                                    class="me-2" />
-                                                <span class="mt-1">{{ __('use_custom_prompt')
-                                                }}</span>
-                                            </label>
+                                                <button type="button" class="btn btn-primary" style="height: 40px; min-width: 40px;" @click="$refs.editBrandModal.showModal()">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-3" v-if="useCustomPrompt">
-                                            <label>{{ __('custom_prompt') }}</label>
-                                            <textarea class="form-control" v-model="customPrompt"
-                                                rows="2"
-                                                placeholder="e.g. Write a fun and engaging description focusing on features and benefits"></textarea>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <div class="col-md-12" v-if="defaultLanguageId">
-                                        <div class="form-group mb-3">
-                                            <label>{{ __('description') }} <i class="text-danger">*</i></label>
-                                            <editor :placeholder="__('enter_product_description')"
-                                                v-model="translations[defaultLanguageId].description"
-                                                :init="getEditorConfig()" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12" v-if="defaultLanguageId">
-                                        <div class="form-group mb-3">
-                                            <label>Product Highlights <small class="text-muted">(Optional)</small></label>
-                                            <editor placeholder="Paste or enter product highlights"
-                                                v-model="translations[defaultLanguageId].highlights"
-                                                :init="getEditorConfig()" />
-                                            <small class="text-muted">Pasted formatting, lists and spacing will be preserved.</small>
-                                        </div>
-                                    </div>
+                        <div class="card modern-card card-media mb-4">
+                            <div class="card-header border-bottom-0 pb-0">
+                                <h5 class="fw-bold mb-0">Media</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row form-compact-row">
 
                                     <div class="col-md-6">
                                         <div class="form-group mb-3">
@@ -633,13 +649,18 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
 
                         
 
                         <!-- Product Variants: Show regardless of language tabs since they are hidden -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Pricing Details</h4>
+                        <div class="card modern-card card-variants mb-4">
+                            <div class="card-header border-bottom-0 pb-0 d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold mb-0">Pricing & Variants</h5>
+                                <div class="custom-control custom-switch" v-if="type === 'packet' || type === 'loose'">
+                                    <input type="checkbox" class="custom-control-input" id="hasVariantSwitch" v-model="has_variant">
+                                    <label class="custom-control-label" for="hasVariantSwitch">Has Variants</label>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="col-md-6 d-none">
@@ -661,11 +682,205 @@
                                         </div>
                                     </div>
                                 </div>
+                                </div>
 
-                                <div id="packate_div" class="list-group-item" v-if="type === 'packet'"
-                                    v-for="(input, k) in inputs" :key="k">
-                                    <div class="row">
-                                        <div class="col-md-4">
+                                
+<div class="table-responsive mb-4" v-if="has_variant && type === 'packet'">
+    <table class="table table-bordered table-sm variant-table" style="font-size: 0.85rem; vertical-align: middle;">
+        <thead class="bg-light">
+            <tr>
+                <th style="width: 60px;">Image</th>
+                <th style="min-width: 150px;">Details (Name, Barcode, Color)</th>
+                <th style="min-width: 120px;">Unit & Meas.</th>
+                <th style="min-width: 120px;">Pur. Price & MRP</th>
+                <th style="min-width: 150px;">Discount & Sale Price</th>
+                <th style="min-width: 100px;" v-if="is_unlimited_stock != 1">Stock</th>
+                <th style="min-width: 100px;">Profit</th>
+                <th style="width: 50px;">Act</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(input, k) in inputs" :key="'packet_table_'+k">
+                <td class="text-center p-1">
+                    <div class="variant-image-upload mx-auto" @click="openVariantImagePicker(k, 'packet')" style="width: 50px; height: 50px; border: 1px dashed #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer;" title="Add/View Images">
+                        <img v-if="variantImages[k] && variantImages[k].length" :src="variantImages[k][0].url" style="width:100%; height:100%; object-fit:cover;" />
+                        <img v-else-if="input.images && input.images.length" :src="$storageUrl + input.images[0].image" style="width:100%; height:100%; object-fit:cover;" />
+                        <i v-else class="fa fa-image text-muted"></i>
+                    </div>
+                    <small v-if="(variantImages[k] ? variantImages[k].length : 0) + (input.images ? input.images.length : 0) > 1" class="text-muted d-block" style="font-size: 10px;">
+                        +{{ (variantImages[k] ? variantImages[k].length : 0) + (input.images ? input.images.length : 0) - 1 }} more
+                    </small>
+                    <input type="file" accept="image/*" :ref="'packet_variant_images_' + k" multiple class="d-none" v-on:change="variantImagesChanges(k)">
+                </td>
+                <td class="p-1">
+                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Variant Name" v-model="input.variant_name">
+                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Barcode" v-model="input.barcodes[0]" v-if="input.barcodes">
+                    <div class="color-picker-component">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text p-0 overflow-hidden" style="width: 32px; height: 31px; min-width: 32px; background: #fff;" title="Click to open color palette">
+                                <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
+                            </span>
+                            <select class="form-control form-control-sm" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
+                                <option value="">Select Color</option>
+                                <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
+                                <option value="__custom__">🎨 Other / Custom Color...</option>
+                            </select>
+                        </div>
+                        <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light" style="font-size: 11px; height: 22px;">
+                            <span class="d-inline-block rounded-circle me-1 border shadow-sm" :style="{ width: '12px', height: '12px', minWidth: '12px', backgroundColor: getColorHex(input) }"></span>
+                            <span class="text-dark text-truncate me-1" style="font-size: 10px; font-weight: 500;">{{ getColorLabel(input) }}</span>
+                            <span class="text-muted ms-auto font-monospace" style="font-size: 10px;">{{ getColorHex(input) }}</span>
+                        </div>
+                        <div v-if="isCustomColor(input)" class="mt-1 p-1 rounded border bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted font-weight-bold" style="font-size: 9px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</span>
+                                <span class="badge badge-light border text-muted py-0 px-1" style="font-size: 9px;">CUSTOM</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" placeholder="Color Name (e.g. Olive Green)" maxlength="40" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                        </div>
+                    </div>
+                </td>
+                <td class="p-1">
+                    <select class="form-control form-control-sm mb-1" @change="changeUnits()" v-model="input.packet_stock_unit_id">
+                        <option value="">Unit</option>
+                        <option v-for="(unit, key) in units" :value="unit.id">{{ unit.short_code }}</option>
+                    </select>
+                    <input type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Measurement" v-model="input.packet_measurement">
+                </td>
+                <td class="p-1">
+                    <input type="number" min="0" step="any" class="form-control form-control-sm mb-1" placeholder="Pur. Price" v-model="input.packet_purchase_price">
+                    <input type="number" min="0" step="any" class="form-control form-control-sm border-primary" placeholder="MRP *" v-model="input.packet_price" @input="syncPacketSalePriceFromDiscount(input)" required>
+                </td>
+                <td class="p-1">
+                    <div class="input-group input-group-sm mb-1">
+                        <select class="form-select form-select-sm" style="max-width: 60px; padding: 0 5px;" :value="input.discount_type || 'percent'" @input="$set(input, 'discount_type', $event.target.value); if($event.target.value==='percent'){input.discounted_price='';setPacketDiscountMode(input, 'percent');}else{input.discount_percentage='';setPacketDiscountMode(input, 'amount');}">
+                            <option value="percent">%</option>
+                            <option value="amount">Rs</option>
+                        </select>
+                        <input v-if="(input.discount_type || 'percent') === 'percent'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc %" v-model="input.discount_percentage" @input="setPacketDiscountMode(input, 'percent')">
+                        <input v-if="(input.discount_type || 'percent') === 'amount'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc Rs" v-model="input.discounted_price" @input="setPacketDiscountMode(input, 'amount')">
+                    </div>
+                    <input type="number" min="0" step="any" class="form-control form-control-sm bg-light" placeholder="Sale Price" v-model="input.packet_sale_price" @input="setPacketSalePrice(input)">
+                    <span v-if="input.validationErrorSalePrice" class="text-danger d-block" style="font-size: 10px;">{{ input.validationErrorSalePrice }}</span>
+                </td>
+                <td class="p-1" v-if="is_unlimited_stock != 1">
+                    <input type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Stock" v-model="input.packet_stock">
+                </td>
+                <td class="p-1">
+                    <input type="text" class="form-control form-control-sm mb-1 bg-light text-success" :value="getPacketProfitPercentage(input)" readonly placeholder="Prof %">
+                    <input type="text" class="form-control form-control-sm bg-light text-success" :value="getPacketProfit(input)" readonly placeholder="Prof Rs">
+                </td>
+                <td class="p-1 text-center">
+                    <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-primary mt-2" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
+</div>
+
+<div class="table-responsive mb-4" v-if="has_variant && type === 'loose'">
+    <table class="table table-bordered table-sm variant-table" style="font-size: 0.85rem; vertical-align: middle;">
+        <thead class="bg-light">
+            <tr>
+                <th style="width: 60px;">Image</th>
+                <th style="min-width: 150px;">Details (Name, Barcode, Color)</th>
+                <th style="min-width: 120px;">Unit & Meas.</th>
+                <th style="min-width: 120px;">Pur. Price & MRP</th>
+                <th style="min-width: 150px;">Discount & Sale Price</th>
+                <th style="min-width: 100px;">Profit</th>
+                <th style="width: 50px;">Act</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(input, k) in inputs" :key="'loose_table_'+k">
+                <td class="text-center p-1">
+                    <div class="variant-image-upload mx-auto" @click="openVariantImagePicker(k, 'loose')" style="width: 50px; height: 50px; border: 1px dashed #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer;" title="Add/View Images">
+                        <img v-if="variantImages[k] && variantImages[k].length" :src="variantImages[k][0].url" style="width:100%; height:100%; object-fit:cover;" />
+                        <img v-else-if="input.loose_images && input.loose_images.length" :src="$storageUrl + input.loose_images[0].image" style="width:100%; height:100%; object-fit:cover;" />
+                        <i v-else class="fa fa-image text-muted"></i>
+                    </div>
+                    <small v-if="(variantImages[k] ? variantImages[k].length : 0) + (input.loose_images ? input.loose_images.length : 0) > 1" class="text-muted d-block" style="font-size: 10px;">
+                        +{{ (variantImages[k] ? variantImages[k].length : 0) + (input.loose_images ? input.loose_images.length : 0) - 1 }} more
+                    </small>
+                    <input type="file" accept="image/*" :ref="'loose_variant_images_' + k" multiple class="d-none" v-on:change="variantImagesChanges(k)">
+                </td>
+                <td class="p-1">
+                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Variant Name" v-model="input.variant_name">
+                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Barcode" v-model="input.barcodes[0]" v-if="input.barcodes">
+                    <div class="color-picker-component">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text p-0 overflow-hidden" style="width: 32px; height: 31px; min-width: 32px; background: #fff;" title="Click to open color palette">
+                                <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
+                            </span>
+                            <select class="form-control form-control-sm" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
+                                <option value="">Select Color</option>
+                                <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
+                                <option value="__custom__">🎨 Other / Custom Color...</option>
+                            </select>
+                        </div>
+                        <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light" style="font-size: 11px; height: 22px;">
+                            <span class="d-inline-block rounded-circle me-1 border shadow-sm" :style="{ width: '12px', height: '12px', minWidth: '12px', backgroundColor: getColorHex(input) }"></span>
+                            <span class="text-dark text-truncate me-1" style="font-size: 10px; font-weight: 500;">{{ getColorLabel(input) }}</span>
+                            <span class="text-muted ms-auto font-monospace" style="font-size: 10px;">{{ getColorHex(input) }}</span>
+                        </div>
+                        <div v-if="isCustomColor(input)" class="mt-1 p-1 rounded border bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="text-muted font-weight-bold" style="font-size: 9px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</span>
+                                <span class="badge badge-light border text-muted py-0 px-1" style="font-size: 9px;">CUSTOM</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" placeholder="Color Name (e.g. Olive Green)" maxlength="40" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                        </div>
+                    </div>
+                </td>
+                <td class="p-1">
+                    <select class="form-control form-control-sm mb-1" v-model="loose_stock_unit_id">
+                        <option value="">Unit</option>
+                        <option v-for="(unit, key) in units" :value="unit.id">{{ unit.short_code }}</option>
+                    </select>
+                    <input type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Measurement" v-model="input.loose_measurement">
+                </td>
+                <td class="p-1">
+                    <input type="number" step="any" min="0" class="form-control form-control-sm mb-1" placeholder="Pur. Price" v-model="input.loose_purchase_price">
+                    <input type="number" step="any" min="0" class="form-control form-control-sm border-primary" placeholder="MRP *" v-model="input.loose_price" @input="syncLooseSalePriceFromDiscount(input)" required>
+                </td>
+                <td class="p-1">
+                    <div class="input-group input-group-sm mb-1">
+                        <select class="form-select form-select-sm" style="max-width: 60px; padding: 0 5px;" :value="input.discount_type || 'percent'" @input="$set(input, 'discount_type', $event.target.value); if($event.target.value==='percent'){input.loose_discounted_price='';setLooseDiscountMode(input, 'percent');}else{input.loose_discount_percentage='';setLooseDiscountMode(input, 'amount');}">
+                            <option value="percent">%</option>
+                            <option value="amount">Rs</option>
+                        </select>
+                        <input v-if="(input.discount_type || 'percent') === 'percent'" type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Disc %" v-model="input.loose_discount_percentage" @input="setLooseDiscountMode(input, 'percent')">
+                        <input v-if="(input.discount_type || 'percent') === 'amount'" type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Disc Rs" v-model="input.loose_discounted_price" @input="setLooseDiscountMode(input, 'amount')">
+                    </div>
+                    <input type="number" step="any" min="0" class="form-control form-control-sm bg-light" placeholder="Sale Price" v-model="input.loose_sale_price" @input="setLooseSalePrice(input)">
+                    <span v-if="input.validationErrorSalePriceLoose" class="text-danger d-block" style="font-size: 10px;">{{ input.validationErrorSalePriceLoose }}</span>
+                </td>
+                <td class="p-1">
+                    <input type="text" class="form-control form-control-sm mb-1 bg-light text-success" :value="getLooseProfitPercentage(input)" readonly placeholder="Prof %">
+                    <input type="text" class="form-control form-control-sm bg-light text-success" :value="getLooseProfit(input)" readonly placeholder="Prof Rs">
+                </td>
+                <td class="p-1 text-center">
+                    <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-sm btn-primary mt-2" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
+</div>
+
+
+<div id="packate_div" class="variant-card modern-card mb-4" v-if="type === 'packet' && !has_variant" v-for="(input, k) in inputs" :key="k">
+                                    <div class="variant-header d-flex justify-content-between align-items-center p-3 border-bottom" v-if="has_variant">
+                                        <h6 class="mb-0 fw-bold text-primary">Variant {{ k + 1 }}</h6>
+                                        <div>
+                                            <button v-if="k === 0" type="button" class="btn btn-sm btn-primary" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
+                                            <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i> {{ __('remove_variant') }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                    <div class="row form-compact-row">
+                                        <div class="col-md-4" v-if="has_variant">
                                             <div class="form-group mb-3">
                                                 <label>Variant Name <small class="text-muted">(Optional)</small></label>
                                                 <input type="text" class="form-control" maxlength="255"
@@ -694,14 +909,28 @@
                                         <div class="col-md-4">
                                             <div class="form-group mb-3">
                                                 <label>Color Variant</label>
-                                                <select class="form-control" :value="getPresetColor(input.color_variant)"
-                                                    @change="setVariantColor(input, $event.target.value)">
-                                                    <option value="">Select Color</option>
-                                                    <option v-for="color in colorVariantOptions" :key="color.value"
-                                                        :value="color.value">{{ color.label }}</option>
-                                                </select>
-                                                <input type="text" class="form-control mt-2" maxlength="100"
-                                                    placeholder="Or enter a custom color" v-model.trim="input.color_variant">
+                                                <div class="input-group">
+                                                    <span class="input-group-text p-0 overflow-hidden" style="width: 42px; height: 38px; min-width: 42px; background: #fff;" title="Click to open color palette">
+                                                        <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
+                                                    </span>
+                                                    <select class="form-control" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
+                                                        <option value="">Select Color</option>
+                                                        <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
+                                                        <option value="__custom__">🎨 Other / Custom Color...</option>
+                                                    </select>
+                                                </div>
+                                                <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-2 px-2 py-1 rounded border bg-light" style="font-size: 13px;">
+                                                    <span class="d-inline-block rounded-circle me-2 border shadow-sm" :style="{ width: '16px', height: '16px', minWidth: '16px', backgroundColor: getColorHex(input) }"></span>
+                                                    <span class="text-dark font-weight-medium me-2">{{ getColorLabel(input) }}</span>
+                                                    <span class="text-muted ms-auto font-monospace">{{ getColorHex(input) }}</span>
+                                                </div>
+                                                <div v-if="isCustomColor(input)" class="mt-2 p-2 rounded border bg-light">
+                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                        <label class="mb-0 text-muted font-weight-bold" style="font-size: 11px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</label>
+                                                        <span class="badge badge-light border text-muted">CUSTOM</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" placeholder="Enter color name (e.g. Olive Green, Midnight Blue)" maxlength="50" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -771,120 +1000,58 @@
                                                     placeholder="0" name="packate_stock[]" v-model="input.packet_stock">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+
+                                        <div class="col-md-12">
                                             <div class="form-group mb-3">
-                                                <label>{{ __('status') }} <i class="text-danger">*</i></label>
-                                                <select class="form-control" v-model="input.packet_status"
-                                                    required>
-                                                    <option value="">{{ __('select_status') }}</option>
-                                                    <option value="1">{{ __('available') }}</option>
-                                                    <option value="0">{{ __('sold_out') }}</option>
-                                                </select>
+                                                
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label>Expiry Date From <small class="text-muted">(DD/MM/YYYY)</small></label>
-                                                <input type="date" class="form-control" v-model="input.expiry_date_from">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-3">
-                                                <label>Expiry Date To <small class="text-muted">(DD/MM/YYYY)</small></label>
-                                                <input type="date" class="form-control" v-model="input.expiry_date_to">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12" v-if="k !== 0">
-                                            <div class="form-group mb-3">
-                                                <label>Variant Barcodes <small class="text-muted">(Optional)</small></label>
-                                                <div class="row g-2 mb-2" v-for="(variantBarcode, barcodeIndex) in input.barcodes"
-                                                    :key="'packet_barcode_' + k + '_' + barcodeIndex">
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" placeholder="Enter barcode"
-                                                            v-model="input.barcodes[barcodeIndex]">
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <button type="button" class="btn btn-danger w-100"
-                                                            @click="removeVariantBarcode(input, barcodeIndex)"
-                                                            :disabled="input.barcodes.length === 1">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    @click="addVariantBarcode(input)">
-                                                    <i class="fa fa-plus"></i> Add Barcode
-                                                </button>
-                                                <p v-if="input.barcodeError" class="error mb-0">{{ input.barcodeError }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12" v-if="k !== 0">
-                                            <div class="form-group">
-                                                <label>{{ __('variant_images') }} <small class="text-muted">(Multiple allowed)</small></label>
+                                        <div class="col-md-12" v-if="has_variant">
+                                            <div class="form-group mb-0 mt-3 border-top pt-3">
+                                                <label class="fw-bold">{{ __('variant_images') }} <small class="text-muted">(Multiple allowed)</small></label>
                                                 <input type="file" accept="image/*" :ref="'packet_variant_images_' + k"
-                                                    multiple class="file-input" v-on:change="variantImagesChanges(k)">
-
-                                                <div class="file-input-div bg-gray-100"
-                                                    @click="openVariantImagePicker(k, 'packet')"
-                                                    @dragover="$dragoverFile" @dragleave="$dragleaveFile">
-                                                    <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
-                                                    <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
-                                                </div>
-
-                                                <span class="text text-primary">{{ __('please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px') }}</span>
-                                                <p v-if="variantImageerror" class="error">{{ variantImageerror }}</p>
-                                                <div class="row">
-                                                     <div class="col-md-2 image-container"
-                                                         v-for="(image, index) in (variantImages[k] || [])" :key="'packet_new_image_' + k + '_' + index"
-                                                         draggable="true" @dragstart="startMediaDrag('packet-new', index, k)"
-                                                         @dragover.prevent @drop.prevent="dropMedia('packet-new', index, k)" @dragend="endMediaDrag">
+                                                    multiple class="d-none" v-on:change="variantImagesChanges(k)">
+                                                <div class="variant-images-grid d-flex flex-wrap gap-2 mt-2">
+                                                    <div class="variant-image-upload" @click="openVariantImagePicker(k, 'packet')" @dragover="$dragoverFile" @dragleave="$dragleaveFile">
+                                                        <i class="fa fa-plus fa-lg mb-1"></i>
+                                                        <span style="font-size: 0.8rem;">Add Images</span>
+                                                    </div>
+                                                    <div class="variant-image-preview"
+                                                        v-for="(image, index) in (variantImages[k] || [])" :key="'packet_new_image_' + k + '_' + index"
+                                                        draggable="true" @dragstart="startMediaDrag('packet-new', index, k)"
+                                                        @dragover.prevent @drop.prevent="dropMedia('packet-new', index, k)" @dragend="endMediaDrag">
                                                         <span class="media-order-badge">{{ (input.images || []).length + index + 1 }}</span>
-                                                         <img class="img-thumbnail custom-image" :src="image.url"
-                                                            title='Selected Variant Image'
-                                                            alt='Selected Variant Image' />
+                                                        <img class="img-thumbnail custom-image" :src="image.url" />
+                                                        <button type="button" @click="variantImages[k].splice(index, 1)" class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button>
                                                     </div>
-                                                </div>
-
-                                                <div class="row">
-                                                     <div class="col-md-2 image-container"
-                                                         v-for="(image, index) in (input.images || [])" :key="'packet_image_' + image.id"
-                                                         draggable="true" @dragstart="startMediaDrag('packet-existing', index, k)"
-                                                         @dragover.prevent @drop.prevent="dropMedia('packet-existing', index, k)" @dragend="endMediaDrag">
+                                                    <div class="variant-image-preview"
+                                                        v-for="(image, index) in (input.images || [])" :key="'packet_image_' + image.id"
+                                                        draggable="true" @dragstart="startMediaDrag('packet-existing', index, k)"
+                                                        @dragover.prevent @drop.prevent="dropMedia('packet-existing', index, k)" @dragend="endMediaDrag">
                                                         <span class="media-order-badge">{{ image.sort_order || index + 1 }}</span>
-                                                         <img class="img-thumbnail custom-image"
-                                                            :src="$storageUrl + image.image" title='Variant Image'
-                                                            alt='Variant Image' />
-                                                        <button type="button"
-                                                            @click="deleteImage(index, image.id, false, k)"
-                                                            class="btn btn-sm btn-danger btn-remove"> <i
-                                                                class="fa fa-times-circle"></i>
-                                                        </button>
+                                                        <img class="img-thumbnail custom-image" :src="$storageUrl + image.image" />
+                                                        <button type="button" @click="deleteImage(index, image.id, false, k)" class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button>
                                                     </div>
                                                 </div>
-
+                                                <p v-if="variantImageerror" class="error mt-2">{{ variantImageerror }}</p>
                                             </div>
                                         </div>
-
-                                        <div class="col-md-2 offset-md-10 text-end" v-if="k === 0">
-                                            <a style="cursor: pointer;" class="btn btn-primary" v-b-tooltip.hover
-                                                title="Add variant of product" @click="addRow">
-                                                <i class="fa fa-plus-square"></i> {{ __('add_variant') }}
-                                            </a>
-                                        </div>
-                                        <div class="col-md-2 offset-md-10 text-end" v-if="k !== 0">
-                                            <a style="cursor: pointer;" class="btn btn-danger" v-b-tooltip.hover
-                                                title="Remove variant of product" @click="remove(k)">
-                                                <i class="fa fa-times"></i> {{ __('remove_variant') }}
-                                            </a>
-                                        </div>
-
+                                    </div>
                                     </div>
                                 </div>
+                                
 
-                                <div id="loose_div" v-if="type === 'loose'">
-                                    <div class="list-group-item" v-for="(input, k) in inputs" :key="k">
-                                        <div class="row">
-                                            <div class="col-md-4">
+<div id="loose_div" class="variant-card modern-card mb-4" v-if="type === 'loose' && !has_variant" v-for="(input, k) in inputs" :key="k">
+                                    <div class="variant-header d-flex justify-content-between align-items-center p-3 border-bottom" v-if="has_variant">
+                                        <h6 class="mb-0 fw-bold text-primary">Variant {{ k + 1 }}</h6>
+                                        <div>
+                                            <button v-if="k === 0" type="button" class="btn btn-sm btn-primary" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
+                                            <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i> {{ __('remove_variant') }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                    <div class="row form-compact-row">
+                                        <div class="col-md-4" v-if="has_variant">
                                                 <div class="form-group mb-3 loose_div">
                                                     <label>Variant Name <small class="text-muted">(Optional)</small></label>
                                                     <input type="text" class="form-control" maxlength="255"
@@ -912,14 +1079,28 @@
                                             <div class="col-md-4">
                                                 <div class="form-group mb-3 loose_div">
                                                     <label>Color Variant</label>
-                                                    <select class="form-control" :value="getPresetColor(input.color_variant)"
-                                                        @change="setVariantColor(input, $event.target.value)">
+                                                <div class="input-group">
+                                                    <span class="input-group-text p-0 overflow-hidden" style="width: 42px; height: 38px; min-width: 42px; background: #fff;" title="Click to open color palette">
+                                                        <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
+                                                    </span>
+                                                    <select class="form-control" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
                                                         <option value="">Select Color</option>
-                                                        <option v-for="color in colorVariantOptions" :key="color.value"
-                                                            :value="color.value">{{ color.label }}</option>
+                                                        <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
+                                                        <option value="__custom__">🎨 Other / Custom Color...</option>
                                                     </select>
-                                                    <input type="text" class="form-control mt-2" maxlength="100"
-                                                        placeholder="Or enter a custom color" v-model.trim="input.color_variant">
+                                                </div>
+                                                <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-2 px-2 py-1 rounded border bg-light" style="font-size: 13px;">
+                                                    <span class="d-inline-block rounded-circle me-2 border shadow-sm" :style="{ width: '16px', height: '16px', minWidth: '16px', backgroundColor: getColorHex(input) }"></span>
+                                                    <span class="text-dark font-weight-medium me-2">{{ getColorLabel(input) }}</span>
+                                                    <span class="text-muted ms-auto font-monospace">{{ getColorHex(input) }}</span>
+                                                </div>
+                                                <div v-if="isCustomColor(input)" class="mt-2 p-2 rounded border bg-light">
+                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                        <label class="mb-0 text-muted font-weight-bold" style="font-size: 11px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</label>
+                                                        <span class="badge badge-light border text-muted">CUSTOM</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" placeholder="Enter color name (e.g. Olive Green, Midnight Blue)" maxlength="50" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                                                </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -981,93 +1162,46 @@
                                                         :value="getLooseProfit(input)" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12" v-if="k !== 0">
+                                            <div class="col-md-12">
                                                 <div class="form-group mb-3 loose_div">
-                                                    <label>Variant Barcodes <small class="text-muted">(Optional)</small></label>
-                                                    <div class="row g-2 mb-2" v-for="(variantBarcode, barcodeIndex) in input.barcodes"
-                                                        :key="'loose_barcode_' + k + '_' + barcodeIndex">
-                                                        <div class="col-md-10">
-                                                            <input type="text" class="form-control" placeholder="Enter barcode"
-                                                                v-model="input.barcodes[barcodeIndex]">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <button type="button" class="btn btn-danger w-100"
-                                                                @click="removeVariantBarcode(input, barcodeIndex)"
-                                                                :disabled="input.barcodes.length === 1">
-                                                                <i class="fa fa-minus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <button type="button" class="btn btn-outline-primary btn-sm"
-                                                        @click="addVariantBarcode(input)">
-                                                        <i class="fa fa-plus"></i> Add Barcode
-                                                    </button>
-                                                    <p v-if="input.barcodeError" class="error mb-0">{{ input.barcodeError }}</p>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-md-12" v-if="k !== 0">
                                                 <div class="form-group loose_div">
-                                                    <label>{{ __('variant_images') }} <small class="text-muted">(Multiple allowed)</small></label>
-                                                    <!--                                                @drop="dropFileStoreLogo"               -->
-                                                    <input type="file" accept="image/*"
-                                                        :ref="'loose_variant_images_' + k" multiple class="file-input"
-                                                        v-on:change="variantImagesChanges(k)" @dragover="$dragoverFile"
-                                                        @dragleave="$dragleaveFile">
-                                                    <div class="file-input-div bg-gray-100"
-                                                        @click="openVariantImagePicker(k, 'loose')">
-                                                        <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
-                                                        <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
+                                        <div class="col-md-12" v-if="has_variant">
+                                            <div class="form-group mb-0 mt-3 border-top pt-3">
+                                                <label class="fw-bold">{{ __('variant_images') }} <small class="text-muted">(Multiple allowed)</small></label>
+                                                <input type="file" accept="image/*" :ref="'loose_variant_images_' + k"
+                                                    multiple class="d-none" v-on:change="variantImagesChanges(k)">
+                                                <div class="variant-images-grid d-flex flex-wrap gap-2 mt-2">
+                                                    <div class="variant-image-upload" @click="openVariantImagePicker(k, 'loose')" @dragover="$dragoverFile" @dragleave="$dragleaveFile">
+                                                        <i class="fa fa-plus fa-lg mb-1"></i>
+                                                        <span style="font-size: 0.8rem;">Add Images</span>
                                                     </div>
-                                                    <span class="text text-primary">{{ __('please_choose_square_image_of_larger_than_350px_350px_and_smaller_than_550px_550px') }}</span>
-
-                                                    <div class="row">
-                                                    <div class="col-md-2 image-container"
-                                                        v-for="(image, index) in (input.loose_images || [])" :key="'loose_image_' + image.id"
-                                                        draggable="true" @dragstart="startMediaDrag('loose-existing', index, k)"
-                                                        @dragover.prevent @drop.prevent="dropMedia('loose-existing', index, k)" @dragend="endMediaDrag">
-                                                            <span class="media-order-badge">{{ image.sort_order || index + 1 }}</span>
-                                                            <img class="img-thumbnail custom-image"
-                                                                :src="$storageUrl + image.image" title='Variant Image'
-                                                                alt='Variant Image' />
-                                                            <button type="button"
-                                                                @click="deleteImage(index, image.id, false, k)"
-                                                                class="btn btn-sm btn-danger btn-remove"> <i
-                                                                    class="fa fa-times-circle"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                    <div class="col-md-4 image-container"
+                                                    <div class="variant-image-preview"
                                                         v-for="(image, index) in (variantImages[k] || [])" :key="'loose_new_image_' + k + '_' + index"
                                                         draggable="true" @dragstart="startMediaDrag('loose-new', index, k)"
                                                         @dragover.prevent @drop.prevent="dropMedia('loose-new', index, k)" @dragend="endMediaDrag">
-                                                            <span class="media-order-badge">{{ (input.loose_images || []).length + index + 1 }}</span>
-                                                            <img class="img-thumbnail custom-image" :src="image.url"
-                                                                title='Selected Variant Image'
-                                                                alt='Selected Variant Image' />
-                                                        </div>
+                                                        <span class="media-order-badge">{{ (input.loose_images || []).length + index + 1 }}</span>
+                                                        <img class="img-thumbnail custom-image" :src="image.url" />
+                                                        <button type="button" @click="variantImages[k].splice(index, 1)" class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button>
                                                     </div>
-
+                                                    <div class="variant-image-preview"
+                                                        v-for="(image, index) in (input.loose_images || [])" :key="'loose_image_' + image.id"
+                                                        draggable="true" @dragstart="startMediaDrag('loose-existing', index, k)"
+                                                        @dragover.prevent @drop.prevent="dropMedia('loose-existing', index, k)" @dragend="endMediaDrag">
+                                                        <span class="media-order-badge">{{ image.sort_order || index + 1 }}</span>
+                                                        <img class="img-thumbnail custom-image" :src="$storageUrl + image.image" />
+                                                        <button type="button" @click="deleteImage(index, image.id, false, k)" class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="col-md-2 offset-md-10 text-end" v-if="k === 0">
-                                                <a style="cursor: pointer;" class="btn btn-primary" v-b-tooltip.hover
-                                                    title="Add variant of product" @click="addRow">
-                                                    <i class="fa fa-plus-square"></i> {{ __('add_variant') }}
-                                                </a>
-                                            </div>
-                                            <div class="col-md-2 offset-md-10 text-end" v-if="k !== 0">
-                                                <a style="cursor: pointer;" class="btn btn-danger" v-b-tooltip.hover
-                                                    title="Remove variant of product" @click="remove(k)">
-                                                    <i class="fa fa-times"></i> {{ __('remove_variant') }}
-                                                </a>
+                                                <p v-if="variantImageerror" class="error mt-2">{{ variantImageerror }}</p>
                                             </div>
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
-
                                 <div class="row mt-3" id="loose_stock_div" v-if="type === 'loose'">
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
@@ -1112,52 +1246,86 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>{{ __('status') }} <i class="text-danger">*</i></label>
-                                            <select name="status" class="form-control" v-model="status">
-                                                <option value="">{{ __('select_status') }}</option>
-                                                <option value="1">{{ __('available') }}</option>
-                                                <option value="0">{{ __('sold_out') }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <template v-for="(input, k) in inputs">
-                                        <div class="col-md-4" :key="'loose_expiry_from_' + k">
-                                            <div class="form-group mb-3 loose_div">
-                                                <label>Expiry Date From - Variant {{ k + 1 }}
-                                                    <small class="text-muted">(DD/MM/YYYY)</small></label>
-                                                <input type="date" class="form-control" v-model="input.expiry_date_from">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4" :key="'loose_expiry_to_' + k">
-                                            <div class="form-group mb-3 loose_div">
-                                                <label>Expiry Date To - Variant {{ k + 1 }}
-                                                    <small class="text-muted">(DD/MM/YYYY)</small></label>
-                                                <input type="date" class="form-control" v-model="input.expiry_date_to">
-                                            </div>
-                                        </div>
-                                    </template>
+
                                 </div>
                             </div>
                         </div>
 
 
                         <!-- Non-translatable Fields: Show regardless of language tabs since they are hidden -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>{{ __('product_settings') }}</h4>
+                        <div class="card modern-card card-settings mb-4">
+                            <div class="card-header border-bottom-0 pb-0">
+                                <h5 class="fw-bold mb-0">{{ __('product_settings') }}</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <!-- Row: Category, Product type, Product status -->
-                                    <div class="col-md-12">
+                                    <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label>{{ __('categories') }} <i class="text-danger">*</i></label>
                                             <multiselect
                                                 v-model="selected_categories"
-                                                :options="allCategoriesFlat"
+                                                :options="mainCategories"
                                                 :placeholder="__('select_categories')"
+                                                label="name"
+                                                track-by="id"
+                                                :multiple="true"
+                                                :searchable="true"
+                                                :close-on-select="false"
+                                                :taggable="false"
+                                                @input="onMainCategoriesChange">
+                                                <template slot="singleLabel" slot-scope="props">
+                                                    <span class="option__desc">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </span>
+                                                </template>
+                                                <template slot="option" slot-scope="props">
+                                                    <div class="option__desc d-flex align-items-center">
+                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_categories)" class="me-2">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </div>
+                                                </template>
+                                            </multiselect>
+                                            <small class="text-muted">{{ __('select_one_or_more_categories_for_product') }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label>Sub Categories</label>
+                                            <multiselect
+                                                v-model="selected_sub_categories"
+                                                :options="filteredSubCategories"
+                                                placeholder="Select Sub Categories"
+                                                label="name"
+                                                track-by="id"
+                                                :multiple="true"
+                                                :searchable="true"
+                                                :close-on-select="false"
+                                                :taggable="false"
+                                                @input="onSubCategoriesChange">
+                                                <template slot="singleLabel" slot-scope="props">
+                                                    <span class="option__desc">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </span>
+                                                </template>
+                                                <template slot="option" slot-scope="props">
+                                                    <div class="option__desc d-flex align-items-center">
+                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_categories)" class="me-2">
+                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                    </div>
+                                                </template>
+                                            </multiselect>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-3">
+                                            <label>Sub Sub Categories</label>
+                                            <multiselect
+                                                v-model="selected_sub_sub_categories"
+                                                :options="filteredSubSubCategories"
+                                                placeholder="Select Sub Sub Categories"
                                                 label="name"
                                                 track-by="id"
                                                 :multiple="true"
@@ -1170,15 +1338,15 @@
                                                     </span>
                                                 </template>
                                                 <template slot="option" slot-scope="props">
-                                                    <div class="option__desc">
+                                                    <div class="option__desc d-flex align-items-center">
+                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_sub_categories)" class="me-2">
                                                         <span class="option__title">{{ props.option.name }}</span>
                                                     </div>
                                                 </template>
                                             </multiselect>
-                                            <small class="text-muted">{{ __('select_one_or_more_categories_for_product') }}</small>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group mb-3">
                                             <label>{{ __('product_type') }} </label>
                                             <select class="form-control" v-model="product_type">
@@ -1186,6 +1354,28 @@
                                                 <option value="1">{{ __('veg') }}</option>
                                                 <option value="2">{{ __('non_veg') }}</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
+                                            <label>{{ __('status') }} <i class="text-danger">*</i></label>
+                                            <select class="form-control" v-model="status" required>
+                                                <option value="">{{ __('select_status') }}</option>
+                                                <option value="1">{{ __('available') }}</option>
+                                                <option value="0">{{ __('sold_out') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
+                                            <label>Expiry Date From <small class="text-muted">(DD/MM/YYYY)</small></label>
+                                            <input type="date" class="form-control" v-model="expiry_date_from">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-3">
+                                            <label>Expiry Date To <small class="text-muted">(DD/MM/YYYY)</small></label>
+                                            <input type="date" class="form-control" v-model="expiry_date_to">
                                         </div>
                                     </div>
                                     <input type="hidden" v-model="is_approved">
@@ -1268,9 +1458,103 @@
                             </div>
                             
                         </div>
-                        <div class="card" v-if="defaultLanguageId">
-                            <div class="card-header">
-                                <h4>{{ __('seo_settings') }}</h4>
+                        <div class="card modern-card card-description mb-4" v-if="defaultLanguageId">
+                            <div class="card-header border-bottom-0 pb-0">
+                                <h5 class="fw-bold mb-0">Product Description & Highlights</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div
+                                            class="form-group mb-3 d-flex flex-wrap align-items-center">
+                                            <button type="button"
+                                                class="btn btn-outline-primary me-3 my-2 ai-generate-btn"
+                                                @click="generateDescription"
+                                                :disabled="isGeneratingAI || isGeneratingCustomAI">
+                                                <template v-if="isGeneratingAI">
+                                                    <span class="ai-spinner me-2"></span>
+                                                    <span class="ai-text-animate">AI is
+                                                        generating...</span>
+                                                </template>
+                                                <template v-else>
+                                                    <i class="fa fa-magic me-1"></i>
+                                                    {{ __('generate_description_with_ai') }}
+                                                </template>
+                                            </button>
+                                            <label class="my-2 d-flex align-items-center">
+                                                <input type="checkbox" v-model="useCustomPrompt"
+                                                    class="me-2" />
+                                                <span class="mt-1">{{ __('use_custom_prompt')
+                                                }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" v-if="useCustomPrompt">
+                                        <div class="card bg-light border-primary border-opacity-25 mb-3 shadow-none">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="fw-bold mb-0 text-primary d-flex align-items-center">
+                                                        <i class="fa fa-comment-dots me-2"></i> {{ __('custom_prompt') }}
+                                                    </label>
+                                                    <span class="badge bg-primary text-white" style="font-size: 11px;">
+                                                        <i class="fa fa-magic me-1"></i> Custom AI Generator
+                                                    </span>
+                                                </div>
+                                                <textarea class="form-control mb-2" v-model="customPrompt"
+                                                    rows="3"
+                                                    placeholder="e.g. Write a catchy and premium description highlighting durability, key features, and benefits. Include bullet highlights and optimize meta settings."></textarea>
+                                                
+                                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                                    <div class="d-flex flex-wrap align-items-center gap-2 text-muted" style="font-size: 12px;">
+                                                        <span class="badge bg-white text-dark border">
+                                                            <i class="fa fa-check text-success me-1"></i> Required: Product Name, Category &amp; Prompt
+                                                        </span>
+                                                        <span class="badge bg-white text-dark border">
+                                                            <i class="fa fa-tags text-info me-1"></i> Auto-detects {{ has_variant ? 'Variants' : 'Single Product' }}
+                                                        </span>
+                                                    </div>
+                                                    <button type="button"
+                                                        class="btn btn-primary ai-generate-btn shadow-sm"
+                                                        @click="generateFromCustomPrompt"
+                                                        :disabled="isGeneratingCustomAI || isGeneratingAI">
+                                                        <template v-if="isGeneratingCustomAI">
+                                                            <span class="ai-spinner me-2"></span>
+                                                            <span class="ai-text-animate">Generating Content...</span>
+                                                        </template>
+                                                        <template v-else>
+                                                            <i class="fa fa-paper-plane me-1"></i> Generate with Custom Prompt
+                                                        </template>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" v-if="defaultLanguageId">
+                                        <div class="form-group mb-3">
+                                            <label>{{ __('description') }} <i class="text-danger">*</i></label>
+                                            <editor :placeholder="__('enter_product_description')"
+                                                v-model="translations[defaultLanguageId].description"
+                                                :init="getEditorConfig()" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" v-if="defaultLanguageId">
+                                        <div class="form-group mb-3">
+                                            <label>Product Highlights <small class="text-muted">(Optional)</small></label>
+                                            <editor placeholder="Paste or enter product highlights"
+                                                v-model="translations[defaultLanguageId].highlights"
+                                                :init="getEditorConfig()" />
+                                            <small class="text-muted">Pasted formatting, lists and spacing will be preserved.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card modern-card card-seo mb-4" v-if="defaultLanguageId">
+                            <div class="card-header border-bottom-0 pb-0">
+                                <h5 class="fw-bold mb-0">{{ __('seo_settings') }}</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -1305,21 +1589,24 @@
                                 </div>
                             </div>
                             <!-- Save and Clear buttons -->
-                            <div class="card-footer">
-                                <b-button type="submit" @keydown.enter="saveRecord" variant="primary"
-                                    :disabled="isLoading"> {{ __('save') }}
-                                    <b-spinner v-if="isLoading" small label="Spinning"></b-spinner>
-                                </b-button>
-                                <button type="button" class="btn btn-danger" @click="clearForm">{{ __('clear')
-                                    }}</button>
-                            </div>
                         </div>
 
-                        
+                        </div> <!-- /product-layout -->
+
+                        <div class="sticky-bottom-bar">
+                            <div class="d-flex justify-content-end align-items-center">
+                                <button type="button" class="btn btn-light-secondary me-3" @click="clearForm" style="font-weight: 500; padding: 10px 24px;">{{ __('clear') }}</button>
+                                <b-button type="submit" @keydown.enter="saveRecord" variant="primary" :disabled="isLoading" class="btn-save"> 
+                                    <i class="fa fa-save me-2"></i> {{ __('save_product') }}
+                                    <b-spinner v-if="isLoading" small label="Spinning" class="ms-2"></b-spinner>
+                                </b-button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
+        <edit-brand ref="editBrandModal" @saved="handleBrandCreated"></edit-brand>
     </div>
 </template>
 <script>
@@ -1330,16 +1617,20 @@ import Multiselect from 'vue-multiselect'
 import Editor from '@tinymce/tinymce-vue';
 import Auth from '../../Auth.js';
 import TranslationHelper from '../../mixins/TranslationHelper.js';
+import EditBrand from './Brands/Edit.vue';
 
 export default {
     mixins: [TranslationHelper],
     // register the component
-    components: { Multiselect, 'editor': Editor },
+    components: { Multiselect, 'editor': Editor, EditBrand },
     data: function () {
         return {
             login_user: Auth.user,
             isLoading: false,
             isGeneratingAI: false, // Track AI content generation state
+            isGeneratingCustomAI: false, // Track Custom Prompt AI generation state
+            aiDebugInfo: null,
+            showAiDebug: false,
             cacheTimer: null,
             cachedData: null,
             skipCache: false,
@@ -1350,12 +1641,15 @@ export default {
             brand: null,
             tax_id: 0,
             type: 'packet',
+            has_variant: true,
             category_id: '',
             product_category_id: '',
             product_subcategory_id: '',
             product_sub_subcategory_id: '',
             product_sub_sub_subcategory_id: '',
             selected_categories: [], // For multi-category selection
+            selected_sub_categories: [], // For sub categories selection
+            selected_sub_sub_categories: [], // For sub sub categories selection
             product_type: '',
             made_in: '',
             tag: '',
@@ -1368,21 +1662,57 @@ export default {
             ],
             maxOtherMediaSize: 3 * 1024 * 1024,
             colorVariantOptions: [
-                { value: 'black', label: 'Black' },
-                { value: 'white', label: 'White' },
-                { value: 'red', label: 'Red' },
-                { value: 'blue', label: 'Blue' },
-                { value: 'green', label: 'Green' },
-                { value: 'yellow', label: 'Yellow' },
-                { value: 'orange', label: 'Orange' },
-                { value: 'pink', label: 'Pink' },
-                { value: 'purple', label: 'Purple' },
-                { value: 'brown', label: 'Brown' },
-                { value: 'cream', label: 'Cream' },
-                { value: 'grey', label: 'Grey' },
-                { value: 'gold', label: 'Gold' },
-                { value: 'silver', label: 'Silver' },
-                { value: 'multi_color', label: 'Multi Color' },
+                { code: '#000000', value: '#000000', label: 'Black', emoji: '⚫' },
+                { code: '#FFFFFF', value: '#FFFFFF', label: 'White', emoji: '⚪' },
+                { code: '#FAF9F6', value: '#FAF9F6', label: 'Off White', emoji: '⚪' },
+                { code: '#808080', value: '#808080', label: 'Grey', emoji: '🔘' },
+                { code: '#D3D3D3', value: '#D3D3D3', label: 'Light Grey', emoji: '🔘' },
+                { code: '#5A5A5A', value: '#5A5A5A', label: 'Dark Grey', emoji: '🔘' },
+                { code: '#36454F', value: '#36454F', label: 'Charcoal', emoji: '⚫' },
+                { code: '#C0C0C0', value: '#C0C0C0', label: 'Silver', emoji: '🪙' },
+                { code: '#FF0000', value: '#FF0000', label: 'Red', emoji: '🔴' },
+                { code: '#DC143C', value: '#DC143C', label: 'Crimson', emoji: '🔴' },
+                { code: '#800000', value: '#800000', label: 'Maroon', emoji: '🍷' },
+                { code: '#800020', value: '#800020', label: 'Burgundy', emoji: '🍷' },
+                { code: '#722F37', value: '#722F37', label: 'Wine', emoji: '🍷' },
+                { code: '#FFC0CB', value: '#FFC0CB', label: 'Pink', emoji: '🌸' },
+                { code: '#F4C2C2', value: '#F4C2C2', label: 'Baby Pink', emoji: '🌸' },
+                { code: '#FF66CC', value: '#FF66CC', label: 'Rose Pink', emoji: '🌸' },
+                { code: '#FF00FF', value: '#FF00FF', label: 'Magenta', emoji: '🌺' },
+                { code: '#FF69B4', value: '#FF69B4', label: 'Hot Pink', emoji: '🌺' },
+                { code: '#FFE5B4', value: '#FFE5B4', label: 'Peach', emoji: '🍑' },
+                { code: '#FF7F50', value: '#FF7F50', label: 'Coral', emoji: '🧡' },
+                { code: '#FFA500', value: '#FFA500', label: 'Orange', emoji: '🟠' },
+                { code: '#B7410E', value: '#B7410E', label: 'Rust', emoji: '🟫' },
+                { code: '#FFFF00', value: '#FFFF00', label: 'Yellow', emoji: '🟡' },
+                { code: '#FFDB58', value: '#FFDB58', label: 'Mustard', emoji: '🌾' },
+                { code: '#FFF44F', value: '#FFF44F', label: 'Lemon Yellow', emoji: '🍋' },
+                { code: '#FFD700', value: '#FFD700', label: 'Gold', emoji: '✨' },
+                { code: '#0000FF', value: '#0000FF', label: 'Blue', emoji: '🔵' },
+                { code: '#000080', value: '#000080', label: 'Navy Blue', emoji: '🫐' },
+                { code: '#4169E1', value: '#4169E1', label: 'Royal Blue', emoji: '👑' },
+                { code: '#87CEEB', value: '#87CEEB', label: 'Sky Blue', emoji: '🩵' },
+                { code: '#89CFF0', value: '#89CFF0', label: 'Baby Blue', emoji: '🩵' },
+                { code: '#008080', value: '#008080', label: 'Teal', emoji: '🩵' },
+                { code: '#00FFFF', value: '#00FFFF', label: 'Cyan / Aqua', emoji: '🩵' },
+                { code: '#008000', value: '#008000', label: 'Green', emoji: '🟢' },
+                { code: '#006400', value: '#006400', label: 'Dark Green', emoji: '🌲' },
+                { code: '#556B2F', value: '#556B2F', label: 'Olive Green', emoji: '🫒' },
+                { code: '#98FF98', value: '#98FF98', label: 'Mint Green', emoji: '🌿' },
+                { code: '#32CD32', value: '#32CD32', label: 'Lime Green', emoji: '🍋' },
+                { code: '#004225', value: '#004225', label: 'Bottle Green', emoji: '🌲' },
+                { code: '#800080', value: '#800080', label: 'Purple', emoji: '🟣' },
+                { code: '#E6E6FA', value: '#E6E6FA', label: 'Lavender', emoji: '🪻' },
+                { code: '#8F00FF', value: '#8F00FF', label: 'Violet', emoji: '🟣' },
+                { code: '#8B4513', value: '#8B4513', label: 'Brown', emoji: '🟤' },
+                { code: '#3D1C02', value: '#3D1C02', label: 'Chocolate Brown', emoji: '🍫' },
+                { code: '#D2B48C', value: '#D2B48C', label: 'Tan', emoji: '🪵' },
+                { code: '#F5F5DC', value: '#F5F5DC', label: 'Beige', emoji: '🪵' },
+                { code: '#FFFDD0', value: '#FFFDD0', label: 'Cream', emoji: '🥛' },
+                { code: '#C3B091', value: '#C3B091', label: 'Khaki', emoji: '🪵' },
+                { code: '#B87333', value: '#B87333', label: 'Copper', emoji: '🪙' },
+                { code: '#CD7F32', value: '#CD7F32', label: 'Bronze', emoji: '🪙' },
+                { code: '#4A90E2', value: '#4A90E2', label: 'Multi Color', emoji: '🌈' },
             ],
 
             return_status: 0,
@@ -1399,6 +1729,8 @@ export default {
             loose_stock_unit_id: "",
             status: 1,
             is_unlimited_stock: 0,
+            expiry_date_from: '',
+            expiry_date_to: '',
             loose_purchase_price: 0,
             loose_discount_percentage: 0,
             tax_included_in_price: 0,
@@ -1429,6 +1761,8 @@ export default {
                 loose_sale_price: '',
                 loose_discount_mode: 'percent',
                 color_variant: '',
+                color_name: '',
+                color_custom_hex: '',
                 expiry_date_from: '',
                 expiry_date_to: '',
                 barcodes: [''],
@@ -1652,6 +1986,19 @@ export default {
                 parent_id: category.parent_id
             }));
         },
+        mainCategories() {
+            return this.allCategoriesFlat.filter(c => !c.parent_id || c.parent_id == 0);
+        },
+        filteredSubCategories() {
+            if (!this.selected_categories || this.selected_categories.length === 0) return [];
+            const selectedIds = this.selected_categories.map(c => c.id);
+            return this.allCategoriesFlat.filter(c => selectedIds.includes(c.parent_id));
+        },
+        filteredSubSubCategories() {
+            if (!this.selected_sub_categories || this.selected_sub_categories.length === 0) return [];
+            const selectedIds = this.selected_sub_categories.map(c => c.id);
+            return this.allCategoriesFlat.filter(c => selectedIds.includes(c.parent_id));
+        },
         selectedProductCategoryId() {
             // Fallback for backward compatibility
             return this.product_sub_sub_subcategory_id || this.product_sub_subcategory_id || this.product_subcategory_id || this.product_category_id || '';
@@ -1687,6 +2034,11 @@ export default {
         if (this.cacheTimer) clearTimeout(this.cacheTimer);
     },
     methods: {
+        handleBrandCreated(message) {
+            // Re-fetch brands when a new one is created
+            this.getBrands();
+            this.showMessage("success", message);
+        },
         validateDefaultLanguageForTranslation() {
             const form = this.$refs['my-form'];
 
@@ -1834,11 +2186,6 @@ export default {
                 return false;
             }
 
-            if (!this.product_category_id) {
-                this.showError(__('please_select_category'));
-                this.switchToDefaultLanguageTab();
-                return false;
-            }
 
             return true;
         },
@@ -1891,56 +2238,236 @@ export default {
                 this.showError("This function is not available in demo mode.");
                 return;
             }
-            if (!this.name) {
+            const productName = this.translations[this.defaultLanguageId]?.name || '';
+            const isPacket = this.type === 'packet';
+            const input0 = this.inputs && this.inputs.length > 0 ? this.inputs[0] : {};
+            
+            const mrp = isPacket ? input0.packet_price : input0.loose_price;
+            const measurement = isPacket ? input0.packet_measurement : input0.loose_measurement;
+            const stock = isPacket ? input0.packet_stock : this.loose_stock;
+            const isUnlimitedStock = this.is_unlimited_stock == 1;
+
+            if (!productName) {
+                this.showMessage("error", "Please enter the product name.");
+                return;
+            }
+            if (!this.brand) {
+                this.showMessage("error", "Please select a brand.");
+                return;
+            }
+            if (!this.image && !this.main_image_name && !this.main_image_path) {
+                this.showMessage("error", "Please upload a product main image.");
+                return;
+            }
+            if (!measurement) {
+                this.showMessage("error", "Please enter unit measurement.");
+                return;
+            }
+            if (!mrp) {
+                this.showMessage("error", "Please enter MRP.");
+                return;
+            }
+            if (!isUnlimitedStock && (!stock || stock <= 0)) {
+                this.showMessage("error", "Please enter available quantity.");
+                return;
+            }
+            if (!this.selected_categories || this.selected_categories.length === 0) {
+                this.showMessage("error", "Please select at least one category.");
+                return;
+            }
+            if (!this.made_in) {
+                this.showMessage("error", "Please specify made in (country).");
+                return;
+            }
+            if (this.return_status === '' || this.return_status === null) {
+                this.showMessage("error", "Please select if product is returnable.");
+                return;
+            }
+            if (this.cancelable_status === '' || this.cancelable_status === null) {
+                this.showMessage("error", "Please select if product is cancelable.");
+                return;
+            }
+
+            const apiKey = process.env.MIX_GEMINI_API_KEY || this.textGenKey;
+            if (!apiKey) {
+                this.showMessage("error", "Text generation API key is not configured.");
+                return;
+            }
+
+            const variants = this.inputs.map(input => {
+                return {
+                    measurement: isPacket ? input.packet_measurement : input.loose_measurement,
+                    price: isPacket ? input.packet_price : input.loose_price,
+                    discounted_price: isPacket ? input.discounted_price : input.loose_discounted_price,
+                    available_stock_quantity: isUnlimitedStock ? 'Unlimited' : (isPacket ? input.packet_stock : this.loose_stock)
+                };
+            });
+
+            const productContext = {
+                name: productName,
+                brand: this.brand.name || '',
+                category: this.selected_categories.map(c => c.name).join(', '),
+                sub_category: this.selected_sub_categories ? this.selected_sub_categories.map(c => c.name).join(', ') : '',
+                sub_sub_category: this.selected_sub_sub_categories ? this.selected_sub_sub_categories.map(c => c.name).join(', ') : '',
+                made_in: this.made_in,
+                returnable: this.return_status == 1 ? 'Yes' : 'No',
+                cancelable: this.cancelable_status == 1 ? 'Yes' : 'No',
+                variants: variants
+            };
+
+            const customPrompt = this.useCustomPrompt && this.customPrompt.trim() ? this.customPrompt.trim() : null;
+
+            try {
+                this.isGeneratingAI = true;
+                this.aiDebugInfo = "Sending request to Gemini API via backend...\nProduct Context:\n" + JSON.stringify(productContext, null, 2) + "\n\n";
+                const response = await axios.post(this.$apiUrl + '/products/google_gemini', {
+                    product_context: productContext,
+                    custom_prompt: customPrompt,
+                    source: 'web'
+                });
+
+                const data = response.data;
+                this.aiDebugInfo += "Response received from Backend:\n" + JSON.stringify(data, null, 2) + "\n\n";
+
+                if (data.status === 1 && data.data) {
+                    let parsed = data.data;
+                    this.aiDebugInfo += "Successfully parsed JSON:\n" + JSON.stringify(parsed, null, 2);
+                    
+                    if (this.defaultLanguageId && this.translations[this.defaultLanguageId]) {
+                        if (parsed.description) this.$set(this.translations[this.defaultLanguageId], 'description', parsed.description);
+                        if (parsed.highlights) this.$set(this.translations[this.defaultLanguageId], 'highlights', parsed.highlights);
+                        if (parsed.meta_title) this.$set(this.translations[this.defaultLanguageId], 'meta_title', parsed.meta_title);
+                        if (parsed.meta_keywords) this.$set(this.translations[this.defaultLanguageId], 'meta_keywords', parsed.meta_keywords);
+                        if (parsed.meta_description) this.$set(this.translations[this.defaultLanguageId], 'meta_description', parsed.meta_description);
+                        if (parsed.schema_markup) this.$set(this.translations[this.defaultLanguageId], 'schema_markup', typeof parsed.schema_markup === 'object' ? JSON.stringify(parsed.schema_markup) : parsed.schema_markup);
+                    }
+                    this.showMessage("success", "Content generated successfully!");
+                } else if (data.message) {
+                    this.aiDebugInfo += "API ERROR:\n" + data.message;
+                    this.showMessage("error", "API Error: " + data.message);
+                } else {
+                    this.aiDebugInfo += "Failed to generate content: Unexpected response structure.";
+                    this.showMessage("error", "Failed to generate content.");
+                }
+            } catch (error) {
+                this.aiDebugInfo += "NETWORK/REQUEST ERROR:\n" + error.message;
+                console.error(error);
+                this.showMessage("error", "An error occurred while generating the content.");
+            } finally {
+                this.isGeneratingAI = false;
+            }
+        },
+
+        async generateFromCustomPrompt() {
+            if (this.$isDemo == 1) {
+                this.showError("This function is not available in demo mode.");
+                return;
+            }
+
+            // Determine active or default language ID
+            const langId = this.defaultLanguageId || (this.languages && this.languages.find(l => l.is_default)?.id) || (this.translations ? Object.keys(this.translations)[0] : null);
+            const productName = (langId && this.translations && this.translations[langId]?.name) || this.name || '';
+
+            if (!productName || !productName.trim()) {
                 this.showMessage("error", "Please enter the product name.");
                 return;
             }
 
-            if (!this.textGenKey) {
-                this.showMessage("error", "Text generation API key is not configured");
+            if (!this.selected_categories || this.selected_categories.length === 0) {
+                this.showMessage("error", "Please select at least one category.");
                 return;
             }
 
-            const prompt = this.useCustomPrompt && this.customPrompt.trim()
-                ? `${this.customPrompt} for product: ${this.name}. Output raw HTML only, no explanatory text, no code blocks, no images.`
-                : `Generate a detailed product description for ${this.name} formatted for TinyMCE editor.
-            Structure: Start with <strong>Product Overview</strong>, then multiple <p> paragraphs describing features and benefits.
-            Include <strong>Key Features</strong> with <ul><li> bullet points.
-            Add <strong>Benefits</strong> section with more <p> content.
-            Use <strong> for emphasis, <em> for highlights.
-            Important: no code blocks, no markdown syntax, no explanatory text.`;
+            const promptText = this.customPrompt ? this.customPrompt.trim() : '';
+            if (!promptText) {
+                this.showMessage("error", "Please enter your custom prompt.");
+                return;
+            }
+
+            const apiKey = process.env.MIX_GEMINI_API_KEY || this.textGenKey;
+            if (!apiKey) {
+                this.showMessage("error", "Text generation API key is not configured.");
+                return;
+            }
+
+            const hasVariants = !!this.has_variant;
+            const isPacket = this.type === 'packet';
+
+            let variantList = [];
+            if (hasVariants && this.inputs && this.inputs.length > 0) {
+                variantList = this.inputs.map(input => {
+                    const item = {};
+                    if (input.variant_name) item.variant_name = input.variant_name;
+                    const meas = isPacket ? input.packet_measurement : input.loose_measurement;
+                    if (meas) item.measurement = meas;
+                    const price = isPacket ? input.packet_price : input.loose_price;
+                    if (price) item.price = price;
+                    const color = input.color_name || (input.color_variant && input.color_variant !== '__custom__' ? input.color_variant : '');
+                    if (color) item.color = color;
+                    return Object.keys(item).length > 0 ? item : null;
+                }).filter(Boolean);
+            }
+
+            const categoryNames = this.selected_categories.map(c => c.name).join(', ');
+            const subCategoryNames = this.selected_sub_categories ? this.selected_sub_categories.map(c => c.name).join(', ') : '';
+            const subSubCategoryNames = this.selected_sub_sub_categories ? this.selected_sub_sub_categories.map(c => c.name).join(', ') : '';
+
+            const productContext = {
+                name: productName.trim(),
+                category: categoryNames,
+                sub_category: subCategoryNames || undefined,
+                sub_sub_category: subSubCategoryNames || undefined,
+                brand: this.brand && this.brand.name ? this.brand.name : undefined,
+                has_variants: hasVariants,
+                product_structure: hasVariants ? 'Product with multiple variants' : 'Single product (no variants)',
+                variants: hasVariants && variantList.length > 0 ? variantList : (hasVariants ? 'Variants enabled' : 'Single product')
+            };
 
             try {
-                this.isGeneratingAI = true; // Start AI processing state
+                this.isGeneratingCustomAI = true;
+                const response = await axios.post(this.$apiUrl + '/products/google_gemini', {
+                    product_context: productContext,
+                    custom_prompt: promptText,
+                    source: 'web'
+                });
 
-                const response = await fetch(
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + this.textGenKey,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }]
-                        })
+                const data = response.data;
+
+                if (data.status === 1 && data.data) {
+                    let parsed = data.data;
+
+                    if (langId && this.translations && this.translations[langId]) {
+                        if (parsed.description) this.$set(this.translations[langId], 'description', parsed.description);
+                        if (parsed.highlights) this.$set(this.translations[langId], 'highlights', parsed.highlights);
+                        if (parsed.meta_title) this.$set(this.translations[langId], 'meta_title', parsed.meta_title);
+                        if (parsed.meta_keywords) this.$set(this.translations[langId], 'meta_keywords', parsed.meta_keywords);
+                        if (parsed.meta_description) this.$set(this.translations[langId], 'meta_description', parsed.meta_description);
+                        if (parsed.schema_markup) {
+                            const schemaStr = typeof parsed.schema_markup === 'object' ? JSON.stringify(parsed.schema_markup, null, 2) : parsed.schema_markup;
+                            this.$set(this.translations[langId], 'schema_markup', schemaStr);
+                        }
                     }
-                );
 
-                const data = await response.json();
-
-                if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    const generatedText = data.candidates[0].content.parts[0].text;
-                    this.description = generatedText;
-                    if (this.defaultLanguageId && this.translations[this.defaultLanguageId]) {
-                        this.$set(this.translations[this.defaultLanguageId], 'description', generatedText);
+                    if (parsed.description) this.description = parsed.description;
+                    if (parsed.highlights) this.highlights = parsed.highlights;
+                    if (parsed.meta_title) this.meta_title = parsed.meta_title;
+                    if (parsed.meta_keywords) this.meta_keywords = parsed.meta_keywords;
+                    if (parsed.meta_description) this.meta_description = parsed.meta_description;
+                    if (parsed.schema_markup) {
+                        this.schema_markup = typeof parsed.schema_markup === 'object' ? JSON.stringify(parsed.schema_markup, null, 2) : parsed.schema_markup;
                     }
+
+                    this.showMessage("success", "Description, highlights & meta settings generated successfully from custom prompt!");
+                } else if (data.message) {
+                    this.showMessage("error", "API Error: " + data.message);
                 } else {
-                    this.showMessage("error", "Failed to generate description.");
+                    this.showMessage("error", "Failed to generate content.");
                 }
             } catch (error) {
-                this.showMessage("error", "An error occurred while generating the description.");
+                console.error(error);
+                this.showMessage("error", "An error occurred while generating content: " + (error.response?.data?.message || error.message));
             } finally {
-                this.isGeneratingAI = false; // Stop AI processing state
+                this.isGeneratingCustomAI = false;
             }
         },
 
@@ -1986,6 +2513,8 @@ export default {
                 loose_sale_price: '',
                 loose_discount_mode: 'percent',
                 color_variant: '',
+                color_name: '',
+                color_custom_hex: '',
                 expiry_date_from: '',
                 expiry_date_to: '',
                 barcodes: [''],
@@ -2206,11 +2735,226 @@ export default {
             if (group === 'loose-existing') return this.inputs[variantIndex].loose_images || [];
             return [];
         },
+        getColorHex(inputOrColor) {
+            if (!inputOrColor) return '#000000';
+            let color = '';
+            if (typeof inputOrColor === 'object') {
+                if (inputOrColor.color_custom_hex) return String(inputOrColor.color_custom_hex).toUpperCase();
+                color = inputOrColor.color_variant;
+            } else {
+                color = inputOrColor;
+            }
+            if (!color || color === '__custom__') return '#000000';
+            const clean = String(color).trim();
+            const hexMatch = clean.match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+            if (hexMatch) return hexMatch[0].toUpperCase();
+            if (/^[0-9A-Fa-f]{6}$/.test(clean)) return ('#' + clean).toUpperCase();
+            if (/^[0-9A-Fa-f]{3}$/.test(clean)) {
+                return ('#' + clean[0] + clean[0] + clean[1] + clean[1] + clean[2] + clean[2]).toUpperCase();
+            }
+            const lower = clean.toLowerCase();
+            const found = this.colorVariantOptions.find(opt => 
+                (opt.label && opt.label.toLowerCase() === lower) ||
+                (opt.code && opt.code.toLowerCase() === lower) ||
+                (opt.value && opt.value.toLowerCase() === lower) ||
+                (opt.label && opt.label.toLowerCase().replace(/\s+/g, '_') === lower)
+            );
+            if (found && found.code) return found.code.toUpperCase();
+            return '#000000';
+        },
+        getColorSelectValue(inputOrColor) {
+            if (!inputOrColor) return '';
+            let color = '';
+            let customName = '';
+            if (typeof inputOrColor === 'object') {
+                color = inputOrColor.color_variant;
+                customName = inputOrColor.color_name;
+            } else {
+                color = inputOrColor;
+            }
+            if (!color && !customName) return '';
+            if (color === '__custom__') return '__custom__';
+
+            const clean = String(color).trim().toLowerCase();
+            const hexMatch = clean.match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/);
+            const hex = hexMatch ? hexMatch[0].toLowerCase() : '';
+            const nameMatch = clean.match(/^(.*?)\s*\((#[0-9A-Fa-f]{3,6})\)$/);
+
+            // 1. If format is "Name (#HEX)"
+            if (nameMatch) {
+                const name = nameMatch[1].trim().toLowerCase();
+                const matchedHex = nameMatch[2].trim().toLowerCase();
+                // If a custom name is explicitly provided and doesn't match the preset name
+                if (customName && String(customName).trim().toLowerCase() !== name) {
+                    return '__custom__';
+                }
+                const preset = this.colorVariantOptions.find(option => 
+                    option.label.toLowerCase() === name && option.code.toLowerCase() === matchedHex
+                );
+                return preset ? preset.code : '__custom__';
+            }
+
+            // 2. If a custom name is explicitly provided, treat as custom unless exactly matching a preset
+            if (customName && String(customName).trim()) {
+                const trimmedCustomName = String(customName).trim().toLowerCase();
+                const preset = this.colorVariantOptions.find(option => 
+                    option.label.toLowerCase() === trimmedCustomName && 
+                    hex && option.code.toLowerCase() === hex
+                );
+                return preset ? preset.code : '__custom__';
+            }
+
+            // 3. Match presets by hex or label
+            const found = this.colorVariantOptions.find(option => 
+                (hex && option.code && option.code.toLowerCase() === hex) ||
+                (option.code && option.code.toLowerCase() === clean) ||
+                (option.label && option.label.toLowerCase() === clean) ||
+                (option.value && option.value.toLowerCase() === clean)
+            );
+            if (found) return found.code;
+            return '__custom__';
+        },
+        isCustomColor(inputOrColor) {
+            if (!inputOrColor) return false;
+            let color = '';
+            let customName = '';
+            if (typeof inputOrColor === 'object') {
+                color = inputOrColor.color_variant;
+                customName = inputOrColor.color_name;
+            } else {
+                color = inputOrColor;
+            }
+            if (color === '__custom__') return true;
+            if (customName && String(customName).trim()) return true;
+            if (!color) return false;
+            return this.getColorSelectValue(inputOrColor) === '__custom__';
+        },
+        getColorLabel(inputOrColor) {
+            if (!inputOrColor) return '';
+            let color = '';
+            let customName = '';
+            if (typeof inputOrColor === 'object') {
+                color = inputOrColor.color_variant;
+                customName = inputOrColor.color_name;
+            } else {
+                color = inputOrColor;
+            }
+            if (!color && !customName) return '';
+            if (color === '__custom__') {
+                return customName ? `🎨 ${customName}` : '🎨 Custom Color';
+            }
+            const selectValue = this.getColorSelectValue(inputOrColor);
+            if (selectValue && selectValue !== '__custom__') {
+                const found = this.colorVariantOptions.find(opt => opt.code === selectValue);
+                if (found) return `${found.emoji} ${found.label}`;
+            }
+            if (customName && String(customName).trim()) {
+                return `🎨 ${String(customName).trim()}`;
+            }
+            const nameMatch = String(color).trim().match(/^(.*?)\s*\(#([0-9A-Fa-f]{3,6})\)$/);
+            if (nameMatch && nameMatch[1].trim()) {
+                return `🎨 ${nameMatch[1].trim()}`;
+            }
+            return '🎨 Custom Color';
+        },
+        getDisplayHex(input) {
+            if (!input || !input.color_variant || input.color_variant === '__custom__') return '';
+            const hex = this.getColorHex(input);
+            return (hex && hex !== '#000000') ? hex : (String(input.color_variant).startsWith('#') ? input.color_variant : '');
+        },
+        extractColorName(val) {
+            if (!val) return '';
+            const str = String(val).trim();
+            const match = str.match(/^(.*?)\s*\((#[0-9A-Fa-f]{3,6})\)$/);
+            if (match) {
+                const name = match[1].trim();
+                if (name.toLowerCase() === 'custom color' || name.toLowerCase() === 'custom') return '';
+                const isPreset = this.colorVariantOptions.some(opt => opt.label.toLowerCase() === name.toLowerCase());
+                return isPreset ? '' : name;
+            }
+            if (str.startsWith('#')) return '';
+            const isPreset = this.colorVariantOptions.some(opt => 
+                opt.label.toLowerCase() === str.toLowerCase() || 
+                opt.code.toLowerCase() === str.toLowerCase()
+            );
+            if (isPreset) return '';
+            return str;
+        },
+        handleColorChange(input, value) {
+            if (value === '__custom__') {
+                const currentHex = this.getColorHex(input);
+                Vue.set(input, 'color_variant', '__custom__');
+                Vue.set(input, 'color_custom_hex', currentHex && currentHex !== '#000000' ? currentHex : '#4A90E2');
+            } else if (value) {
+                Vue.set(input, 'color_variant', value);
+                Vue.set(input, 'color_name', '');
+                Vue.set(input, 'color_custom_hex', '');
+            } else {
+                Vue.set(input, 'color_variant', '');
+                Vue.set(input, 'color_name', '');
+                Vue.set(input, 'color_custom_hex', '');
+            }
+        },
+        onColorPickerChange(input, hex) {
+            if (hex) {
+                const upperHex = hex.toUpperCase();
+                Vue.set(input, 'color_custom_hex', upperHex);
+                if (!input.color_name || !String(input.color_name).trim()) {
+                    const preset = this.colorVariantOptions.find(opt => opt.code.toUpperCase() === upperHex);
+                    if (preset) {
+                        Vue.set(input, 'color_variant', preset.code);
+                        return;
+                    }
+                }
+                Vue.set(input, 'color_variant', upperHex);
+            }
+        },
+        onCustomTextInput(input, text) {
+            const val = text ? text.trim() : '';
+            Vue.set(input, 'color_variant', val ? val : '__custom__');
+        },
+        onCustomNameInput(input, name) {
+            Vue.set(input, 'color_name', name);
+            if (!input.color_variant || input.color_variant === '__custom__') {
+                const hex = input.color_custom_hex || '#4A90E2';
+                Vue.set(input, 'color_custom_hex', hex);
+                Vue.set(input, 'color_variant', hex);
+            }
+        },
+        getColorForSave(input) {
+            if (!input) return '';
+            const color = input.color_variant;
+            if (!color && !input.color_name) return '';
+
+            const hex = this.getColorHex(input);
+            const selectValue = this.getColorSelectValue(input);
+            const isPreset = selectValue && selectValue !== '__custom__';
+
+            if (isPreset) {
+                const found = this.colorVariantOptions.find(opt => opt.code === selectValue);
+                const label = found ? found.label : '';
+                if (label && hex && hex !== '#000000') {
+                    return `${label} (${hex})`;
+                }
+                return label || hex;
+            }
+
+            // Custom color
+            const customName = input.color_name ? String(input.color_name).trim() : '';
+            if (customName && hex && hex !== '#000000') {
+                return `${customName} (${hex})`;
+            }
+            if (customName) return customName;
+            if (hex && hex !== '#000000') {
+                return `Custom Color (${hex})`;
+            }
+            return hex || '';
+        },
         getPresetColor(color) {
-            return this.colorVariantOptions.some(option => option.value === color) ? color : '';
+            return this.getColorSelectValue(color);
         },
         setVariantColor(input, color) {
-            input.color_variant = color;
+            this.handleColorChange(input, color);
         },
         startMediaDrag(group, index, variantIndex = null) {
             this.draggedMedia = { group, index, variantIndex };
@@ -2572,6 +3316,51 @@ export default {
 
                         // Load all categories (primary + additional) for multi-category selection
                         this.selected_categories = [];
+                        this.selected_sub_categories = [];
+                        this.selected_sub_sub_categories = [];
+                        
+                        // --- START ROBUST CATEGORY PARSER ---
+                        const allCategoryIds = new Set();
+                        
+                        const parseIds = (val) => {
+                            if (!val) return;
+                            String(val).split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id)).forEach(id => allCategoryIds.add(id));
+                        };
+
+                        parseIds(this.record.category_id);
+                        parseIds(this.record.additional_category_ids);
+                        parseIds(this.record.sub_category_id);
+                        parseIds(this.record.sub_sub_category_id);
+
+                        allCategoryIds.forEach(id => {
+                            const cat = this.productCategoryList.find(c => c.id === id);
+                            if (cat) {
+                                const isRoot = !cat.parent_id || parseInt(cat.parent_id) === 0;
+                                if (isRoot) {
+                                    if (!this.selected_categories.some(c => c.id === cat.id)) {
+                                        this.selected_categories.push(cat);
+                                    }
+                                } else {
+                                    const parent = this.productCategoryList.find(p => p.id === parseInt(cat.parent_id));
+                                    if (parent && (!parent.parent_id || parseInt(parent.parent_id) === 0)) {
+                                        if (!this.selected_sub_categories.some(c => c.id === cat.id)) {
+                                            this.selected_sub_categories.push(cat);
+                                        }
+                                    } else if (parent) {
+                                        if (!this.selected_sub_sub_categories.some(c => c.id === cat.id)) {
+                                            this.selected_sub_sub_categories.push(cat);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        // --- END ROBUST CATEGORY PARSER ---
+
+                        // Add primary category (Disabled because handled above)
+                        this.record.category_id = null;
+                        this.record.additional_category_ids = null;
+                        this.record.sub_category_id = null;
+                        this.record.sub_sub_category_id = null;
                         
                         // Add primary category
                         if (this.record.category_id) {
@@ -2587,8 +3376,38 @@ export default {
                             const additionalCategories = this.productCategoryList.filter(cat => 
                                 additionalIds.includes(cat.id) && cat.id !== this.record.category_id
                             );
-                            this.selected_categories = this.selected_categories.concat(additionalCategories);
+                            
+                            // Categorize them into main, sub, sub-sub
+                            additionalCategories.forEach(cat => {
+                                if (!cat.parent_id || cat.parent_id == 0) {
+                                    if (!this.selected_categories.some(c => c.id === cat.id)) {
+                                        this.selected_categories.push(cat);
+                                    }
+                                } else {
+                                    const parent = this.productCategoryList.find(p => p.id === cat.parent_id);
+                                    if (parent && (!parent.parent_id || parent.parent_id == 0)) {
+                                        this.selected_sub_categories.push(cat);
+                                    } else if (parent) {
+                                        this.selected_sub_sub_categories.push(cat);
+                                    }
+                                }
+                            });
                         }
+                        if (this.record.sub_category_id) {
+                            const subCatId = parseInt(this.record.sub_category_id);
+                            const subCategory = this.productCategoryList.find(cat => cat.id === subCatId);
+                            if (subCategory && !this.selected_sub_categories.some(c => c.id === subCatId)) {
+                                this.selected_sub_categories.push(subCategory);
+                            }
+                        }
+                        if (this.record.sub_sub_category_id) {
+                            const subSubCatId = parseInt(this.record.sub_sub_category_id);
+                            const subSubCategory = this.productCategoryList.find(cat => cat.id === subSubCatId);
+                            if (subSubCategory && !this.selected_sub_sub_categories.some(c => c.id === subSubCatId)) {
+                                this.selected_sub_sub_categories.push(subSubCategory);
+                            }
+                        }
+
 
                         this.product_type = this.record.indicator ?? "";
 
@@ -2651,6 +3470,8 @@ export default {
                                     'packet_stock_unit_id': item.stock_unit_id,
                                     'packet_status': item.status,
                                     'color_variant': item.color_variant || '',
+                                    'color_name': vm.extractColorName(item.color_variant),
+                                    'color_custom_hex': vm.getColorHex(item.color_variant),
                                     'expiry_date_from': item.expiry_date_from || '',
                                     'expiry_date_to': item.expiry_date_to || '',
                                     'images': item.images,
@@ -2685,6 +3506,8 @@ export default {
                                     'loose_discount_mode': item.discount_percentage ? 'percent' : 'amount',
                                     'packet_stock': item.stock,
                                     'color_variant': item.color_variant || '',
+                                    'color_name': vm.extractColorName(item.color_variant),
+                                    'color_custom_hex': vm.getColorHex(item.color_variant),
                                     'expiry_date_from': item.expiry_date_from || '',
                                     'expiry_date_to': item.expiry_date_to || '',
                                     'loose_images': item.images,
@@ -2776,6 +3599,7 @@ export default {
             formData.append('meta_keywords', defaultTranslation.meta_keywords || '');
             formData.append('schema_markup', defaultTranslation.schema_markup || '');
             formData.append('meta_description', defaultTranslation.meta_description || '');
+            formData.append('has_variant', this.has_variant ? 1 : 0);
 
             /*packet*/
             if (this.type === 'packet') {
@@ -2783,7 +3607,8 @@ export default {
 
                     formData.append('variant_id[]', (this.inputs[i].id) ? this.inputs[i].id : "");
                     formData.append('packet_variant_name[]', this.inputs[i].variant_name || '');
-                    formData.append('packet_color_variant[]', this.inputs[i].color_variant || '');
+                    formData.append('packet_color_variant[]', this.getColorForSave(this.inputs[i]));
+                    formData.append('packet_color_name[]', this.inputs[i].color_name || '');
                     formData.append('packet_expiry_date_from[]', this.inputs[i].expiry_date_from || '');
                     formData.append('packet_expiry_date_to[]', this.inputs[i].expiry_date_to || '');
                     formData.append('packet_measurement[]', this.inputs[i].packet_measurement || 1);
@@ -2808,7 +3633,8 @@ export default {
                 for (let i = 0; i < this.inputs.length; i++) {
                     formData.append('variant_id[]', (this.inputs[i].id) ? this.inputs[i].id : "");
                     formData.append('loose_variant_name[]', this.inputs[i].variant_name || '');
-                    formData.append('loose_color_variant[]', this.inputs[i].color_variant || '');
+                    formData.append('loose_color_variant[]', this.getColorForSave(this.inputs[i]));
+                    formData.append('loose_color_name[]', this.inputs[i].color_name || '');
                     formData.append('loose_expiry_date_from[]', this.inputs[i].expiry_date_from || '');
                     formData.append('loose_expiry_date_to[]', this.inputs[i].expiry_date_to || '');
                     formData.append('loose_measurement[]', this.inputs[i].loose_measurement || 1);
@@ -2835,20 +3661,38 @@ export default {
             formData.append('loose_stock', (this.loose_stock != undefined) ? this.loose_stock : 0);
             formData.append('loose_stock_unit_id', (this.loose_stock_unit_id != undefined) ? this.loose_stock_unit_id : 0);
             formData.append('status', (this.status != undefined) ? this.status : 0);
+            formData.append('expiry_date_from', this.expiry_date_from || '');
+            formData.append('expiry_date_to', this.expiry_date_to || '');
 
             // Handle multi-category selection
-            if (this.selected_categories && this.selected_categories.length > 0) {
-                // Use the first selected category as the primary category_id
-                this.category_id = this.selected_categories[0].id;
+            let finalCategories = [];
+            if (this.selected_categories) finalCategories.push(...this.selected_categories);
+            if (this.selected_sub_categories) finalCategories.push(...this.selected_sub_categories);
+            if (this.selected_sub_sub_categories) finalCategories.push(...this.selected_sub_sub_categories);
+
+            if (finalCategories.length > 0) {
+                // Use the first selected main category as the primary category_id
+                this.category_id = this.selected_categories[0] ? this.selected_categories[0].id : finalCategories[0].id;
                 formData.append('category_id', this.category_id);
                 
+                if (this.selected_sub_categories && this.selected_sub_categories.length > 0) {
+                    formData.append('sub_category_id', this.selected_sub_categories.map(c => c.id).join(','));
+                }
+                if (this.selected_sub_sub_categories && this.selected_sub_sub_categories.length > 0) {
+                    formData.append('sub_sub_category_id', this.selected_sub_sub_categories.map(c => c.id).join(','));
+                }
+
                 // Send all selected categories as additional_category_ids
-                const allCategoryIds = this.selected_categories.map(cat => cat.id).join(',');
+                const allCategoryIds = finalCategories.map(cat => cat.id).join(',');
                 formData.append('additional_category_ids', allCategoryIds);
             } else {
                 // Fallback to original logic if no categories selected
                 this.category_id = this.selectedProductCategoryId;
                 formData.append('category_id', this.category_id);
+                
+                if (this.product_subcategory_id) formData.append('sub_category_id', this.product_subcategory_id);
+                if (this.product_sub_subcategory_id) formData.append('sub_sub_category_id', this.product_sub_subcategory_id);
+
                 formData.append('additional_category_ids', '');
             }
             
@@ -3316,7 +4160,7 @@ export default {
             if (this.$refs['my-form']) this.$refs['my-form'].reset();
             Object.assign(this, {
                 name: '', slug: '', seller_id: 0, tax_id: 0, brand: null,
-                description: '', highlights: '', type: 'packet', is_unlimited_stock: 0,
+                description: '', highlights: '', type: 'packet', has_variant: true, is_unlimited_stock: 0,
                 barcode: '', meta_title: '', meta_keywords: '', schema_markup: '',
                 meta_description: '', category_id: '', product_category_id: '', product_subcategory_id: '',
                 product_sub_subcategory_id: '', product_sub_sub_subcategory_id: '', product_type: '',
@@ -3336,9 +4180,30 @@ export default {
         debouncedSave: function () {
             if (this.cacheTimer) clearTimeout(this.cacheTimer);
             this.cacheTimer = setTimeout(() => this.saveCache(), 500);
+        },
+        isCategorySelected(option, list) {
+            return list && list.some(item => item.id === option.id);
+        },
+        onMainCategoriesChange(newVal) {
+            if (this.selected_sub_categories && this.selected_sub_categories.length > 0) {
+                const selectedIds = newVal.map(c => c.id);
+                this.selected_sub_categories = this.selected_sub_categories.filter(sc => selectedIds.includes(sc.parent_id));
+                this.onSubCategoriesChange(this.selected_sub_categories);
+            }
+        },
+        onSubCategoriesChange(newVal) {
+            if (this.selected_sub_sub_categories && this.selected_sub_sub_categories.length > 0) {
+                const selectedIds = newVal.map(c => c.id);
+                this.selected_sub_sub_categories = this.selected_sub_sub_categories.filter(ssc => selectedIds.includes(ssc.parent_id));
+            }
         }
     },
     watch: {
+        has_variant(newVal) {
+            if (!newVal && this.inputs.length > 1) {
+                this.inputs = [this.inputs[0]];
+            }
+        },
         // Watch currentLanguageId to update selected brand name when language changes
         currentLanguageId: function (newVal, oldVal) {
             if (newVal && this.brand && this.translatedBrands && this.translatedBrands.length > 0) {
@@ -3448,8 +4313,68 @@ export default {
 
 };
 </script>
+
+
 <style scoped>
 @import "../../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css";
+
+
+/* Compact UI Overrides for Edit/Create Product Page */
+.page-wrapper {
+    font-size: 0.85rem;
+}
+.card-header {
+    padding: 0.5rem 1rem !important;
+}
+.card-header h5 {
+    font-size: 1rem !important;
+}
+.card-body {
+    padding: 0.75rem 1rem !important;
+}
+.form-group.mb-3 {
+    margin-bottom: 0.5rem !important;
+}
+label {
+    font-size: 0.75rem !important;
+    margin-bottom: 2px !important;
+    font-weight: 600;
+    color: #444;
+}
+.form-control, .form-select, select {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.8rem !important;
+    height: auto !important;
+    min-height: 28px;
+    border-radius: 4px;
+}
+.btn {
+    padding: 0.25rem 0.6rem !important;
+    font-size: 0.8rem !important;
+}
+textarea.form-control {
+    min-height: 60px;
+}
+.multiselect__tags {
+    min-height: 30px !important;
+    padding: 2px 40px 0 8px !important;
+    font-size: 0.8rem !important;
+}
+.multiselect__placeholder {
+    margin-bottom: 2px !important;
+    padding-top: 2px !important;
+}
+.multiselect__single {
+    margin-bottom: 2px !important;
+}
+.nav-tabs .nav-link {
+    padding: 0.3rem 0.8rem !important;
+    font-size: 0.85rem;
+}
+.input-group-text {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+}
 
 /* AI Generate Button Styles */
 .ai-generate-btn {
@@ -3561,4 +4486,227 @@ export default {
         opacity: 0.6;
     }
 }
+
+/* Modern Admin UI Styles */
+.modern-admin-form {
+    background-color: #f4f6f8;
+    padding: 15px;
+    border-radius: 8px;
+}
+.product-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    overflow: visible !important;
+}
+.card-general { grid-column: 1 / 2; grid-row: 1; }
+.card-media { grid-column: 1 / 2; grid-row: 2; }
+.card-description { grid-column: 1 / 2; grid-row: 3; }
+.card-variants { grid-column: 1 / 2; grid-row: 4; }
+.card-seo { grid-column: 1 / 2; grid-row: 5; }
+.card-settings { grid-column: 2 / 3; grid-row: 1 / 6; }
+
+@media (max-width: 991px) {
+    .product-layout {
+        grid-template-columns: 1fr;
+    }
+    .card-settings { grid-column: 1 / 2; grid-row: 2; }
+    .card-media { grid-column: 1 / 2; grid-row: 3; }
+    .card-description { grid-column: 1 / 2; grid-row: 4; }
+    .card-variants { grid-column: 1 / 2; grid-row: 5; }
+    .card-seo { grid-column: 1 / 2; grid-row: 6; }
+}
+
+.modern-card {
+    background: #ffffff;
+    border: 1px solid #e1e3e5;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow: visible !important;
+    transition: box-shadow 0.2s ease-in-out;
+}
+.modern-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.modern-card .card-header {
+    padding: 20px 24px 10px;
+    background-color: transparent;
+}
+.modern-card .card-header h5 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: #202223;
+}
+.modern-card .card-body {
+    padding: 16px 24px 24px;
+    overflow: visible !important;
+}
+.form-compact-row .form-group {
+    margin-bottom: 12px !important;
+}
+.form-compact-row label {
+    font-weight: 600;
+    color: #202223;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+.form-compact-row .form-control, .form-compact-row .multiselect__tags, .form-compact-row select.form-control {
+    border: 1px solid #c9cccf;
+    border-radius: 6px;
+    padding: 8px 12px;
+    height: 40px;
+    font-size: 0.95rem;
+    color: #202223;
+}
+.sticky-bottom-bar {
+    position: sticky;
+    bottom: 0;
+    background: #ffffff;
+    padding: 16px 24px;
+    border-top: 1px solid #e1e3e5;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 100;
+    margin-top: 30px;
+    border-radius: 0 0 12px 12px;
+}
+.btn-save {
+    background-color: #008060;
+    border-color: #008060;
+    font-weight: 600;
+    padding: 10px 30px;
+    border-radius: 6px;
+    color: white;
+}
+.btn-save:hover {
+    background-color: #006e52;
+    border-color: #006e52;
+}
+
+/* Variant Image UI */
+.variant-images-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.variant-image-upload {
+    width: 80px;
+    height: 80px;
+    border: 1px dashed #c9cccf;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #f8fafc;
+    color: #5c5f62;
+    transition: all 0.2s;
+}
+.variant-image-upload:hover {
+    background: #eef4fb;
+    border-color: #008060;
+    color: #008060;
+}
+.variant-image-preview {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #e1e3e5;
+}
+.variant-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.variant-image-preview .btn-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #d82c0d;
+    border: 1px solid #e1e3e5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.variant-image-preview:hover .btn-remove {
+    opacity: 1;
+}
+.variant-image-preview .btn-remove:hover {
+    background: #d82c0d;
+    color: white;
+}
+.variant-card {
+    background: #fafbfb;
+    border: 1px solid #e1e3e5;
+}
+
+/* Compact UI Overrides for Create/Edit View */
+.modern-card {
+    padding: 1rem !important;
+}
+.modern-card h4.card-title,
+.modern-card .card-title,
+.card-header h4 {
+    font-size: 1rem !important;
+    margin-bottom: 0.75rem !important;
+}
+label {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.2rem !important;
+    font-weight: 600 !important;
+}
+.form-control, .form-select, select, input {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.5rem !important;
+    min-height: unset !important;
+    height: auto !important;
+}
+.btn {
+    font-size: 0.75rem !important;
+    padding: 0.3rem 0.75rem !important;
+}
+.form-group {
+    margin-bottom: 0.5rem !important;
+}
+.ql-editor {
+    font-size: 0.75rem !important;
+    min-height: 100px !important;
+}
+small.text-muted {
+    font-size: 0.7rem !important;
+}
+p.error {
+    font-size: 0.75rem !important;
+}
+
+input[type="color"].color-picker-input-swatch {
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 24px !important;
+    border: none !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+input[type="color"].color-picker-input-swatch::-webkit-color-swatch-wrapper {
+    padding: 0 !important;
+}
+input[type="color"].color-picker-input-swatch::-webkit-color-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 4px !important;
+}
+input[type="color"].color-picker-input-swatch::-moz-color-swatch {
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    border-radius: 4px !important;
+}
+
 </style>

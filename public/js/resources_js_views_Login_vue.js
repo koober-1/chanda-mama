@@ -11,9 +11,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Auth.js */ "./resources/js/Auth.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var _Auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Auth.js */ "./resources/js/Auth.js");
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -27,7 +26,7 @@ __webpack_require__.r(__webpack_exports__);
         type: 1
       },
       showPassword: false,
-      loggedUser: _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].user,
+      loggedUser: _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].user,
       setting: "",
       copyrightDetails: window.copyrightDetails
     };
@@ -35,8 +34,6 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     if (this.loggedUser) {
       this.$router.push('/dashboard');
-    } else {
-      this.$router.push('/login')["catch"](function () {});
     }
     var user_theme = sessionStorage.getItem("user-theme");
     this.userTheme = user_theme;
@@ -48,11 +45,11 @@ __webpack_require__.r(__webpack_exports__);
       var vm = this;
       this.isLoading = true;
       var url = this.$apiUrl + '/login';
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post(url, this.user).then(function (res) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(url, this.user).then(function (res) {
         vm.isLoading = false;
         var data = res.data;
         if (data.status === 1) {
-          _Auth_js__WEBPACK_IMPORTED_MODULE_1__["default"].login(data.data.access_token, data.data.user);
+          _Auth_js__WEBPACK_IMPORTED_MODULE_0__["default"].login(data.data.access_token, data.data.user);
           _this.$router.push('/dashboard');
         } else {
           vm.showError(data.message);
@@ -81,8 +78,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
 /* harmony export */ });
 var render = function render() {
   var _vm = this,
@@ -351,7 +348,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.auth .btn-promary-login[data-v-12f5395a],\n.auth .btn-primary[data-v-12f5395a] {\n    background-color: #c5ad24 !important;\n    border-color: #c5ad24 !important;\n    color: #fff;\n}\n.auth .btn-promary-login[data-v-12f5395a]:hover,\n.auth .btn-promary-login[data-v-12f5395a]:focus,\n.auth .btn-primary[data-v-12f5395a]:hover,\n.auth .btn-primary[data-v-12f5395a]:focus {\n    background-color: #b39c20 !important;\n    border-color: #b39c20 !important;\n    color: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.auth .btn-promary-login[data-v-12f5395a],\r\n.auth .btn-primary[data-v-12f5395a] {\r\n    background-color: #c5ad24 !important;\r\n    border-color: #c5ad24 !important;\r\n    color: #fff;\n}\n.auth .btn-promary-login[data-v-12f5395a]:hover,\r\n.auth .btn-promary-login[data-v-12f5395a]:focus,\r\n.auth .btn-primary[data-v-12f5395a]:hover,\r\n.auth .btn-primary[data-v-12f5395a]:focus {\r\n    background-color: #b39c20 !important;\r\n    border-color: #b39c20 !important;\r\n    color: #fff;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -450,8 +447,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_12f5395a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_12f5395a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_12f5395a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_12f5395a_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_12f5395a_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Login.vue?vue&type=template&id=12f5395a&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/views/Login.vue?vue&type=template&id=12f5395a&scoped=true");
 

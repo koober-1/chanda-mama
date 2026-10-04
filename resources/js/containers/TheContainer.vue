@@ -241,33 +241,9 @@ export default {
                     permission: null,
                     submenu: [
                         {
-                            name: __('add_category'),
-                            icon: 'grid-fill',
-                            url: '/manage_categories/create',
-                            permission: 'category_create',
-                        },
-                        {
                             name: __('manage_categories'),
                             icon: 'grid-fill',
                             url: '/manage_categories',
-                            permission: 'category_list',
-                        },
-                        {
-                            name: 'Sub Category',
-                            icon: 'grid-fill',
-                            url: '/manage_subcategories',
-                            permission: 'category_list',
-                        },
-                        {
-                            name: 'Sub Sub Category',
-                            icon: 'grid-fill',
-                            url: '/manage_sub_subcategories',
-                            permission: 'category_list',
-                        },
-                        {
-                            name: 'Sub Sub Sub Category',
-                            icon: 'grid-fill',
-                            url: '/manage_sub_sub_subcategories',
                             permission: 'category_list',
                         },
                         {
