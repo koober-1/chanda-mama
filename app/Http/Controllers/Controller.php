@@ -498,7 +498,7 @@ class Controller extends BaseController
         $measurementId = "";
 
 
-        $app_name = Setting::get_value('app_name') ?? "eGrocer";
+        $app_name = Setting::get_value('app_name') ?? "Chanda Mama";
         $support_email = Setting::get_value('support_email') ?? "";
         $support_number = Setting::get_value('support_number') ?? "";
 

@@ -162,18 +162,18 @@ $copyright_details =
     <script>document.body.classList.toggle('rtl', document.documentElement.classList.contains('rtl'));</script>
     <div id="app">
         <router-view>
-            <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: #ffffff; font-family: 'Nunito', sans-serif; text-align: center; padding: 2rem;">
+            <!-- <div style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: #ffffff; font-family: 'Nunito', sans-serif; text-align: center; padding: 2rem;">
                 <div style="background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 3rem 4rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); max-width: 600px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1.5rem;">
                         <span style="font-size: 3rem;">🛒</span>
-                        <h1 style="font-size: 2.75rem; font-weight: 800; color: #10b981; margin: 0; text-transform: uppercase; letter-spacing: 1px;">eGrocer</h1>
+                        <h1 style="font-size: 2.75rem; font-weight: 800; color: #C5AD24; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Chanda Mama</h1>
                     </div>
-                    <h2 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1rem; color: #f3f4f6;">Welcome to eGrocer Panel</h2>
+                    <h2 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1rem; color: #f3f4f6;">Welcome to Chanda Mama Panel</h2>
                     <p style="color: #9ca3af; font-size: 1.05rem; line-height: 1.6; margin-bottom: 2rem;">
                         Your complete multi-vendor grocery management solution. Manage stores, orders, products, and deliveries seamlessly.
                     </p>
                     <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                        <a href="/login" style="background: #10b981; color: #ffffff; padding: 12px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
+                        <a href="/login" style="background: #C5AD24; color: #ffffff; padding: 12px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
                             Admin / Store Login &rarr;
                         </a>
                         <a href="/seller/login" style="background: rgba(255,255,255,0.1); color: #e5e7eb; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255,255,255,0.2);">
@@ -181,7 +181,7 @@ $copyright_details =
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </router-view>
     </div>
 
