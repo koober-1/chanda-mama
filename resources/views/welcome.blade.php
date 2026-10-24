@@ -30,7 +30,7 @@
     if (isInstalled()) {
         $app_name = \App\Models\Setting::get_value('app_name');
         if ($app_name == '' || $app_name == null) {
-            $app_name = 'eGrocer';
+            $app_name = 'Chanda Mama';
         }
         $support_email = \App\Models\Setting::get_value('support_email');
         if ($support_email == '' || $support_email == null) {
@@ -103,8 +103,8 @@ $copyright_details =
     $currentLang = app()->getLocale();
     $appTitle =
         is_array($appNameArr)
-            ? ($appNameArr[$currentLang] ?? $appNameArr['en'] ?? 'eGrocer')
-            : ($app_name ?: 'eGrocer');
+            ? ($appNameArr[$currentLang] ?? $appNameArr['en'] ?? 'Chanda Mama')
+            : ($app_name ?: 'Chanda Mama');
 @endphp
 
 

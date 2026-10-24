@@ -137,6 +137,14 @@ class SettingApiController extends Controller
 
         $data = CommonHelper::resolveTranslatedSettings($data);
 
+        $firebaseSettings = CommonHelper::getFirebaseKeys();
+        $firebaseData = [];
+        foreach ($firebaseSettings as $fb) {
+            $firebaseData[$fb->variable] = $fb->value;
+        }
+        $data['firebase'] = $firebaseData;
+        $data['apiKey'] = $firebaseData['firebase_apiKey'] ?? '';
+
         if (isset($data['default_city_id']) && $data['default_city_id']) {
             $data["default_city"] = CommonHelper::getDefaultCity();
         }

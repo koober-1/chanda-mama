@@ -290,12 +290,6 @@ export default {
                             permission: 'product_ratings',
                         },
                         {
-                            name: __('media'),
-                            icon: 'grid-fill',
-                            url: '/media',
-                            permission: 'manage_media',
-                        },
-                        {
                             name: __('taxes'),
                             icon: 'grid-fill',
                             url: '/taxes',
@@ -382,6 +376,12 @@ export default {
                             permission: 'home_slider_image_list',
                         }
                     ]
+                },
+                {
+                    name: 'Home Flyers',
+                    icon: 'clone',
+                    url: '/home_flyers',
+                    role: true,
                 },
                 {
                     name: __('offer_image'),

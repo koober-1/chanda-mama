@@ -39,8 +39,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       markers: [],
       city: {
         id: "",
-        latitude: "",
-        longitude: "",
+        latitude: "22.7195687",
+        longitude: "75.8577258",
         name: "",
         state: "",
         zone: "",
@@ -57,23 +57,31 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           price: ""
         }],
         boundary_points: "",
-        geolocation_type: "",
-        radius: ""
+        geolocation_type: "circle",
+        radius: 15000
       },
       boundary_points: "",
       formatted_address: "",
       infoWindow: {
         position: {
-          lat: 0,
-          lng: 0
+          lat: 22.7195687,
+          lng: 75.8577258
         },
         open: false,
         template: ''
       },
-      map: "",
-      drawingManager: "",
+      map: null,
+      drawingManager: null,
+      overlays: [],
+      originalBoundaries: null,
+      activeDrawTool: null,
+      // null (pan mode), 'polygon', 'circle'
+      drawingPolygon: null,
+      drawingPoints: [],
+      drawingMarkers: [],
       vertices: "",
-      geolocation_type: "",
+      geolocation_type: "polygon",
+      radius: 15000,
       googleMapsLoaded: false,
       languages: [],
       translations: {},
@@ -87,63 +95,76 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loadingOverwrite: false
     };
   },
+  watch: {
+    'city.latitude': function cityLatitude(newVal) {
+      if (newVal && this.city.longitude && this.map) {
+        var lat = parseFloat(newVal);
+        var lng = parseFloat(this.city.longitude);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          this.markers = [{
+            position: {
+              lat: lat,
+              lng: lng
+            }
+          }];
+          this.center = {
+            lat: lat,
+            lng: lng
+          };
+        }
+      }
+    },
+    'city.longitude': function cityLongitude(newVal) {
+      if (newVal && this.city.latitude && this.map) {
+        var lat = parseFloat(this.city.latitude);
+        var lng = parseFloat(newVal);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          this.markers = [{
+            position: {
+              lat: lat,
+              lng: lng
+            }
+          }];
+          this.center = {
+            lat: lat,
+            lng: lng
+          };
+        }
+      }
+    }
+  },
   mounted: function mounted() {
     var _this = this;
-    var vm = this;
     this.$refs.mapRef.$mapPromise.then(function (map) {
-      vm.map = map;
-      vm.drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.POLYGON,
-        drawingControl: true,
-        drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
-          drawingModes: [google.maps.drawing.OverlayType.POLYGON, google.maps.drawing.OverlayType.CIRCLE]
-        },
-        polygonOptions: {
-          editable: true
-        },
-        circleOptions: {
-          fillColor: '#666666',
-          fillOpacity: 0.5,
-          strokeWeight: 1,
-          clickable: true,
-          editable: true,
-          draggable: true,
-          zIndex: 1
-        }
-      });
-      vm.drawingManager.setMap(vm.map);
-      google.maps.event.addListener(vm.drawingManager, "overlaycomplete", function (event) {
-        var newShape = event.overlay;
-        newShape.type = event.type;
-      });
-      google.maps.event.addListener(vm.drawingManager, "overlaycomplete", function (event) {
-        if (event.type == "circle") {
-          var circle_points = [];
-          vm.radius = event.overlay.getRadius();
-          var lat = event.overlay.getCenter().lat();
-          var lng = event.overlay.getCenter().lng();
-          circle_points.push({
-            "lat": lat,
-            "lng": lng
-          });
-          vm.geolocation_type = event.type;
-          vm.vertices = JSON.stringify(circle_points);
-        } else {
-          vm.geolocation_type = event.type;
-          vm.vertices = event.overlay.getPath().getArray();
-          vm.overlayClickListener(event.overlay);
-        }
-      });
-      google.maps.event.addListener(_this.drawingManager, "overlaycomplete", function (event) {
-        vm.overlayRemoveListener(event.overlay, false);
-      });
+      _this.map = map;
+      _this.initDrawingManager();
+      _this.setMap();
+      if (!_this.city.id) {
+        _this.reverseGeocode(_this.city.latitude, _this.city.longitude);
+      }
     });
     this.waitForGoogleMaps();
   },
   computed: {
     google: function google() {
       return (0,vue2_google_maps__WEBPACK_IMPORTED_MODULE_0__.gmapApi)(); // This will return the google object once the API is loaded
+    },
+    formattedRadius: function formattedRadius() {
+      var r = parseFloat(this.city.radius || this.radius);
+      if (!r || isNaN(r)) return '';
+      if (r >= 1000) {
+        return (r / 1000).toFixed(2) + ' km';
+      }
+      return Math.round(r) + ' m';
+    },
+    boundaryPointsCount: function boundaryPointsCount() {
+      if (!this.city.boundary_points) return 0;
+      try {
+        var pts = typeof this.city.boundary_points === 'string' ? JSON.parse(this.city.boundary_points) : this.city.boundary_points;
+        return Array.isArray(pts) ? pts.length : 0;
+      } catch (e) {
+        return 0;
+      }
     }
   },
   created: function created() {
@@ -256,52 +277,205 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.city.range_wise_charges.splice(index, 1);
     },
     setPlace: function setPlace(place) {
-      this.currentPlace = place;
-      this.addMarker();
-    },
-    addMarker: function addMarker() {
-      if (this.currentPlace) {
-        var marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
-        };
-        this.markers.push({
-          position: marker
+      if (!place || !place.geometry || !place.geometry.location) {
+        return;
+      }
+      var lat = typeof place.geometry.location.lat === 'function' ? place.geometry.location.lat() : place.geometry.location.lat;
+      var lng = typeof place.geometry.location.lng === 'function' ? place.geometry.location.lng() : place.geometry.location.lng;
+      this.city.latitude = parseFloat(lat).toFixed(7);
+      this.city.longitude = parseFloat(lng).toFixed(7);
+      this.city.formatted_address = place.formatted_address || '';
+      var cityName = place.name || '';
+      var stateName = '';
+      var zoneName = '';
+      if (place.address_components && Array.isArray(place.address_components)) {
+        place.address_components.forEach(function (component) {
+          var types = component.types || [];
+          if (types.includes("locality")) {
+            cityName = component.long_name;
+          } else if (!cityName && (types.includes("administrative_area_level_2") || types.includes("postal_town"))) {
+            cityName = component.long_name;
+          }
+          if (types.includes("administrative_area_level_1")) {
+            stateName = component.long_name;
+          }
+          if (types.includes("sublocality") || types.includes("sublocality_level_1") || types.includes("sublocality_level_2") || types.includes("neighborhood")) {
+            if (!zoneName) {
+              zoneName = component.long_name;
+            }
+          }
         });
-        this.center = marker;
-        this.city.latitude = this.currentPlace.geometry.location.lat();
-        this.city.longitude = this.currentPlace.geometry.location.lng();
-        this.city.name = this.currentPlace.name;
-        var addressArr = this.currentPlace.formatted_address.split(",");
-        this.city.state = addressArr[addressArr.length - 2];
-        this.city.formatted_address = this.currentPlace.formatted_address;
-        this.infoWindow.position = {
-          lat: this.city.latitude,
-          lng: this.city.longitude
-        };
-        this.infoWindow.template = "<b>".concat(this.city.name, "</b><br>").concat(this.city.formatted_address);
+      }
+      if (cityName) {
+        this.city.name = cityName;
+      } else if (place.name) {
+        this.city.name = place.name;
+      }
+      if (stateName) {
+        this.city.state = stateName;
+      } else if (place.formatted_address) {
+        var addressArr = place.formatted_address.split(",");
+        if (addressArr.length >= 2) {
+          this.city.state = addressArr[addressArr.length - 2].trim();
+        }
+      }
+      if (zoneName && this.defaultLanguageId && this.translations[this.defaultLanguageId]) {
+        this.translations[this.defaultLanguageId].zone = zoneName;
+      }
+      var marker = {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng)
+      };
+      this.markers = [{
+        position: marker
+      }];
+      this.center = marker;
+      this.infoWindow.position = marker;
+      this.infoWindow.template = "<b>".concat(this.city.name || 'Selected Location', "</b><br>").concat(this.city.formatted_address);
+      this.infoWindow.open = true;
+    },
+    reverseGeocode: function reverseGeocode(lat, lng) {
+      var _this4 = this;
+      var numLat = parseFloat(lat);
+      var numLng = parseFloat(lng);
+      if (isNaN(numLat) || isNaN(numLng)) return;
+      this.city.latitude = numLat.toFixed(7);
+      this.city.longitude = numLng.toFixed(7);
+      var marker = {
+        lat: numLat,
+        lng: numLng
+      };
+      this.markers = [{
+        position: marker
+      }];
+      this.center = marker;
+      var googleObj = window.google || (this.google ? window.google : null);
+      if (!googleObj || !googleObj.maps || !googleObj.maps.Geocoder) {
+        this.infoWindow.position = marker;
+        this.infoWindow.template = "<b>Coordinates</b><br>".concat(this.city.latitude, ", ").concat(this.city.longitude);
         this.infoWindow.open = true;
-        this.currentPlace = null;
+        return;
+      }
+      var geocoder = new googleObj.maps.Geocoder();
+      geocoder.geocode({
+        location: {
+          lat: numLat,
+          lng: numLng
+        }
+      }, function (results, status) {
+        if (status === "OK" && results && results.length > 0) {
+          var place = results[0];
+          _this4.city.formatted_address = place.formatted_address || '';
+          var cityName = '';
+          var stateName = '';
+          var zoneName = '';
+          if (place.address_components && Array.isArray(place.address_components)) {
+            place.address_components.forEach(function (component) {
+              var types = component.types || [];
+              if (types.includes("locality")) {
+                cityName = component.long_name;
+              } else if (!cityName && (types.includes("administrative_area_level_2") || types.includes("postal_town"))) {
+                cityName = component.long_name;
+              }
+              if (types.includes("administrative_area_level_1")) {
+                stateName = component.long_name;
+              }
+              if (types.includes("sublocality") || types.includes("sublocality_level_1") || types.includes("sublocality_level_2") || types.includes("neighborhood")) {
+                if (!zoneName) {
+                  zoneName = component.long_name;
+                }
+              }
+            });
+          }
+          if (cityName) {
+            _this4.city.name = cityName;
+          }
+          if (stateName) {
+            _this4.city.state = stateName;
+          } else if (place.formatted_address) {
+            var addressArr = place.formatted_address.split(",");
+            if (addressArr.length >= 2) {
+              _this4.city.state = addressArr[addressArr.length - 2].trim();
+            }
+          }
+          if (zoneName && _this4.defaultLanguageId && _this4.translations[_this4.defaultLanguageId]) {
+            _this4.translations[_this4.defaultLanguageId].zone = zoneName;
+          }
+          _this4.infoWindow.position = marker;
+          _this4.infoWindow.template = "<b>".concat(_this4.city.name || 'Selected Location', "</b><br>").concat(_this4.city.formatted_address);
+          _this4.infoWindow.open = true;
+        }
+      });
+    },
+    onMapClick: function onMapClick(event) {
+      if (!event || !event.latLng) return;
+      var lat = typeof event.latLng.lat === 'function' ? event.latLng.lat() : event.latLng.lat;
+      var lng = typeof event.latLng.lng === 'function' ? event.latLng.lng() : event.latLng.lng;
+      if (this.activeDrawTool === 'polygon') {
+        this.addPolygonPoint({
+          lat: lat,
+          lng: lng
+        });
+        return;
+      }
+      if (this.activeDrawTool === 'circle') {
+        this.addCircleOverlay({
+          lat: lat,
+          lng: lng
+        });
+        return;
+      }
+      this.reverseGeocode(lat, lng);
+    },
+    onMarkerDragEnd: function onMarkerDragEnd(event) {
+      if (event && event.latLng) {
+        var lat = typeof event.latLng.lat === 'function' ? event.latLng.lat() : event.latLng.lat;
+        var lng = typeof event.latLng.lng === 'function' ? event.latLng.lng() : event.latLng.lng;
+        this.reverseGeocode(lat, lng);
+      }
+    },
+    locateCurrentPosition: function locateCurrentPosition() {
+      var _this5 = this;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          _this5.reverseGeocode(lat, lng);
+        }, function (error) {
+          console.warn("Geolocation error:", error);
+          _this5.showError("Unable to retrieve your current location. Please allow location permissions.");
+        });
+      } else {
+        this.showError("Geolocation is not supported by your browser.");
+      }
+    },
+    onManualCoordinateChange: function onManualCoordinateChange() {
+      if (this.city.latitude && this.city.longitude) {
+        var lat = parseFloat(this.city.latitude);
+        var lng = parseFloat(this.city.longitude);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          this.reverseGeocode(lat, lng);
+        }
       }
     },
     loadCityWithTranslations: function loadCityWithTranslations() {
-      var _this4 = this;
+      var _this6 = this;
       return axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(this.$apiUrl + '/cities/edit/' + this.city.id).then(function (response) {
         var city = response.data.data;
         if (!city) {
-          _this4.showError("City not found");
+          _this6.showError("City not found");
           return;
         }
 
         // Load base fields
-        Object.keys(_this4.city).forEach(function (key) {
+        Object.keys(_this6.city).forEach(function (key) {
           if (key === 'range_wise_charges') {
-            _this4.city[key] = city[key] ? JSON.parse(city[key]) : [];
+            _this6.city[key] = city[key] ? JSON.parse(city[key]) : [];
           } else if (key !== 'zone') {
-            _this4.city[key] = city[key] || '';
+            _this6.city[key] = city[key] || '';
           }
         });
-        var updatedTranslations = _objectSpread({}, _this4.translations);
+        var updatedTranslations = _objectSpread({}, _this6.translations);
         if (city.translations && Array.isArray(city.translations)) {
           city.translations.forEach(function (trans) {
             updatedTranslations[trans.language_id] = {
@@ -311,7 +485,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }
 
         // Fallback for default language
-        _this4.languages.forEach(function (language) {
+        _this6.languages.forEach(function (language) {
           if (language.is_default) {
             var _updatedTranslations$;
             if (!((_updatedTranslations$ = updatedTranslations[language.id]) !== null && _updatedTranslations$ !== void 0 && _updatedTranslations$.zone)) {
@@ -321,138 +495,579 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             }
           }
         });
-        _this4.translations = updatedTranslations;
+        _this6.translations = updatedTranslations;
 
         // Force re-render 
-        _this4.renderKey++;
-        _this4.setMap();
+        _this6.renderKey++;
+        _this6.setMap();
       })["catch"](function (error) {
         console.error("Error loading city:", error);
-        _this4.showError("Failed to load city");
+        _this6.showError("Failed to load city");
       });
     },
     validateDefaultLanguageForTranslation: function validateDefaultLanguageForTranslation() {
       return this.validateDefaultLanguage();
     },
-    overlayClickListener: function overlayClickListener(overlay) {
-      google.maps.event.addListener(overlay, "mouseup", function (event) {
-        this.vertices = overlay.getPath().getArray();
+    ensureDrawingManager: function ensureDrawingManager() {
+      // Deprecated DrawingManager bypassed in favor of native Google Maps Polygon & Circle API
+      return null;
+    },
+    initDrawingManager: function initDrawingManager() {
+      // Deprecated DrawingManager bypassed in favor of native Google Maps Polygon & Circle API
+      return null;
+    },
+    setDrawingTool: function setDrawingTool(tool) {
+      this.activeDrawTool = tool;
+      if (this.map) {
+        if (tool === 'polygon' || tool === 'circle') {
+          this.map.setOptions({
+            draggableCursor: 'crosshair'
+          });
+        } else {
+          this.map.setOptions({
+            draggableCursor: null
+          });
+        }
+      }
+      if (tool !== 'polygon') {
+        this.cancelCurrentDrawing();
+      }
+    },
+    setDrawingMode: function setDrawingMode(mode) {
+      this.setDrawingTool(mode);
+    },
+    onMapDblClick: function onMapDblClick() {
+      if (this.activeDrawTool === 'polygon' && this.drawingPoints && this.drawingPoints.length >= 3) {
+        this.finishPolygonDrawing();
+      }
+    },
+    addPolygonPoint: function addPolygonPoint(point) {
+      var _this7 = this;
+      if (!this.map || !window.google || !window.google.maps) return;
+
+      // If user clicks near the first point and we have at least 3 points, complete the polygon
+      if (this.drawingPoints.length >= 3) {
+        var firstPt = this.drawingPoints[0];
+        var latDiff = Math.abs(firstPt.lat - point.lat);
+        var lngDiff = Math.abs(firstPt.lng - point.lng);
+        if (latDiff < 0.0015 && lngDiff < 0.0015) {
+          this.finishPolygonDrawing();
+          return;
+        }
+      }
+      this.drawingPoints.push(point);
+
+      // Add draggable point marker so user can drag to replace/reposition anytime
+      var marker = new google.maps.Marker({
+        position: point,
+        map: this.map,
+        draggable: true,
+        cursor: 'move',
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 6,
+          fillColor: this.drawingPoints.length === 1 ? '#28a745' : '#007bff',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2
+        },
+        title: this.drawingPoints.length === 1 ? 'First point (Click to close polygon, or drag to reposition)' : "Point ".concat(this.drawingPoints.length, " (Drag to move/replace, right-click to delete)"),
+        zIndex: 10
+      });
+
+      // When user drags any point marker, replace that point's coordinates in real-time
+      google.maps.event.addListener(marker, 'drag', function (e) {
+        var idx = _this7.drawingMarkers.indexOf(marker);
+        if (idx !== -1) {
+          _this7.drawingPoints[idx] = {
+            lat: parseFloat(e.latLng.lat().toFixed(7)),
+            lng: parseFloat(e.latLng.lng().toFixed(7))
+          };
+          if (_this7.drawingPolygon) {
+            _this7.drawingPolygon.setPaths(_this7.drawingPoints);
+          }
+        }
+      });
+
+      // Right-click on a point marker to delete that specific point
+      google.maps.event.addListener(marker, 'rightclick', function () {
+        var idx = _this7.drawingMarkers.indexOf(marker);
+        if (idx !== -1) {
+          _this7.removeSpecificDrawingPoint(idx);
+        }
+      });
+
+      // If clicking the first point marker, close polygon
+      google.maps.event.addListener(marker, 'click', function () {
+        var idx = _this7.drawingMarkers.indexOf(marker);
+        if (idx === 0 && _this7.drawingPoints.length >= 3) {
+          _this7.finishPolygonDrawing();
+        }
+      });
+      this.drawingMarkers.push(marker);
+      if (this.drawingPoints.length === 1) {
+        return;
+      }
+      if (!this.drawingPolygon) {
+        this.drawingPolygon = new google.maps.Polygon({
+          paths: this.drawingPoints,
+          strokeColor: '#000000',
+          strokeOpacity: 0.85,
+          strokeWeight: 2,
+          fillColor: '#666666',
+          fillOpacity: 0.35,
+          map: this.map,
+          clickable: false,
+          editable: false,
+          zIndex: 2
+        });
+      } else {
+        this.drawingPolygon.setPaths(this.drawingPoints);
+      }
+    },
+    undoLastPoint: function undoLastPoint() {
+      if (!this.drawingPoints || this.drawingPoints.length === 0) return;
+      this.removeSpecificDrawingPoint(this.drawingPoints.length - 1);
+    },
+    removeSpecificDrawingPoint: function removeSpecificDrawingPoint(idx) {
+      if (idx < 0 || idx >= this.drawingPoints.length) return;
+      this.drawingPoints.splice(idx, 1);
+      var m = this.drawingMarkers.splice(idx, 1)[0];
+      if (m) m.setMap(null);
+      if (this.drawingPoints.length === 0) {
+        if (this.drawingPolygon) {
+          this.drawingPolygon.setMap(null);
+          this.drawingPolygon = null;
+        }
+      } else if (this.drawingPolygon) {
+        this.drawingPolygon.setPaths(this.drawingPoints);
+      }
+      this.showMessage('info', 'Point removed');
+    },
+    finishPolygonDrawing: function finishPolygonDrawing() {
+      if (!this.drawingPoints || this.drawingPoints.length < 3) {
+        this.showError('Please click at least 3 points on the map to create a polygon.');
+        return;
+      }
+      this.clearDrawingMarkers();
+      if (this.drawingPolygon) {
+        this.drawingPolygon.setMap(null);
+        this.drawingPolygon = null;
+      }
+
+      // Create permanent editable polygon
+      var poly = new google.maps.Polygon({
+        paths: this.drawingPoints.map(function (p) {
+          return {
+            lat: p.lat,
+            lng: p.lng
+          };
+        }),
+        strokeColor: '#000000',
+        strokeOpacity: 0.85,
+        strokeWeight: 2,
+        fillColor: '#666666',
+        fillOpacity: 0.35,
+        map: this.map,
+        editable: true,
+        clickable: true,
+        geodesic: true,
+        zIndex: 1
+      });
+      poly.type = 'polygon';
+      this.attachPolygonEvents(poly);
+      this.overlays.push(poly);
+      this.drawingPoints = [];
+      this.updateAllBoundaries();
+      this.showMessage('success', "Polygon area ".concat(this.overlays.length, " created! You can now draw another polygon or pan."));
+    },
+    cancelCurrentDrawing: function cancelCurrentDrawing() {
+      this.clearDrawingMarkers();
+      if (this.drawingPolygon) {
+        this.drawingPolygon.setMap(null);
+        this.drawingPolygon = null;
+      }
+      this.drawingPoints = [];
+    },
+    clearDrawingMarkers: function clearDrawingMarkers() {
+      if (this.drawingMarkers && this.drawingMarkers.length > 0) {
+        this.drawingMarkers.forEach(function (m) {
+          if (m) m.setMap(null);
+        });
+        this.drawingMarkers = [];
+      }
+    },
+    addCircleOverlay: function addCircleOverlay(point) {
+      if (!this.map || !window.google || !window.google.maps) return;
+      var circle = new google.maps.Circle({
+        strokeColor: '#000000',
+        strokeOpacity: 0.85,
+        strokeWeight: 2,
+        fillColor: '#666666',
+        fillOpacity: 0.35,
+        map: this.map,
+        center: point,
+        radius: 15000,
+        editable: true,
+        draggable: true,
+        clickable: true,
+        zIndex: 1
+      });
+      circle.type = 'circle';
+      this.attachCircleEvents(circle);
+      this.overlays.push(circle);
+      this.updateAllBoundaries();
+      this.showMessage('success', 'Customer circle created! Drag center or resize edges to adjust.');
+    },
+    attachPolygonEvents: function attachPolygonEvents(polygon) {
+      var _this8 = this;
+      if (!polygon || !polygon.getPath) return;
+      var path = polygon.getPath();
+      ['set_at', 'insert_at', 'remove_at'].forEach(function (eventName) {
+        google.maps.event.addListener(path, eventName, function () {
+          _this8.updateAllBoundaries();
+        });
+      });
+
+      // Right click on a vertex to delete it
+      google.maps.event.addListener(polygon, 'rightclick', function (event) {
+        if (event.vertex !== undefined) {
+          path.removeAt(event.vertex);
+          _this8.updateAllBoundaries();
+        }
       });
     },
-    overlayRemoveListener: function overlayRemoveListener(overlay) {
-      var is_restore = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      var drawed_map = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
-      var not_remove = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-      var boundary_points = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "";
-      var vm = this;
-      if (is_restore == true) {
-        document.getElementById("add-line").addEventListener("click", addLine);
+    attachCircleEvents: function attachCircleEvents(circle) {
+      var _this9 = this;
+      if (!circle) return;
+      google.maps.event.addListener(circle, 'radius_changed', function () {
+        _this9.updateAllBoundaries();
+      });
+      google.maps.event.addListener(circle, 'center_changed', function () {
+        _this9.updateAllBoundaries();
+      });
+    },
+    updateAllBoundaries: function updateAllBoundaries() {
+      if (!this.overlays || this.overlays.length === 0) {
+        this.city.boundary_points = '';
+        this.vertices = '';
+        this.city.geolocation_type = '';
+        this.city.radius = '';
+        this.geolocation_type = '';
+        this.radius = '';
+        return;
       }
-      document.getElementById("clear-line").addEventListener("click", clearLine);
-      if (not_remove == false) {
-        document.getElementById("remove-line").addEventListener("click", removeLine);
-      }
-      function clearLine() {
-        overlay.setMap(null);
-        vm.vertices = "";
-      }
-      function removeLine() {
-        overlay.setMap(null);
-        vm.vertices = "";
-      }
-      function addLine() {
-        if (drawed_map != "") {
-          overlay.setMap(drawed_map);
-        } else {
-          overlay.setMap(map);
+      if (this.overlays.length === 1) {
+        var overlay = this.overlays[0];
+        if (overlay.type === 'circle' || typeof overlay.getRadius === 'function') {
+          var center = overlay.getCenter();
+          var radius = Math.round(overlay.getRadius());
+          var centerLat = center ? parseFloat(center.lat().toFixed(7)) : parseFloat(this.city.latitude);
+          var centerLng = center ? parseFloat(center.lng().toFixed(7)) : parseFloat(this.city.longitude);
+          var pts = [{
+            lat: centerLat,
+            lng: centerLng
+          }];
+          this.city.radius = radius;
+          this.radius = radius;
+          this.city.geolocation_type = 'circle';
+          this.geolocation_type = 'circle';
+          this.city.boundary_points = JSON.stringify(pts);
+          this.vertices = this.city.boundary_points;
+          return;
+        } else if (overlay.getPath) {
+          var path = overlay.getPath();
+          var _pts = [];
+          for (var i = 0; i < path.getLength(); i++) {
+            var pt = path.getAt(i);
+            _pts.push({
+              lat: parseFloat(pt.lat().toFixed(7)),
+              lng: parseFloat(pt.lng().toFixed(7))
+            });
+          }
+          this.city.geolocation_type = 'polygon';
+          this.geolocation_type = 'polygon';
+          this.city.boundary_points = JSON.stringify(_pts);
+          this.vertices = this.city.boundary_points;
+          return;
         }
-        vm.vertices = boundary_points;
+      }
+
+      // Multiple Locations / Multi-polygon
+      var shapes = [];
+      this.overlays.forEach(function (overlay) {
+        if (overlay.type === 'circle' || typeof overlay.getRadius === 'function') {
+          var _center = overlay.getCenter();
+          var _radius = Math.round(overlay.getRadius());
+          shapes.push({
+            type: 'circle',
+            center: {
+              lat: parseFloat(_center.lat().toFixed(7)),
+              lng: parseFloat(_center.lng().toFixed(7))
+            },
+            radius: _radius
+          });
+        } else if (overlay.getPath) {
+          var _path = overlay.getPath();
+          var _pts2 = [];
+          for (var _i = 0; _i < _path.getLength(); _i++) {
+            var _pt = _path.getAt(_i);
+            _pts2.push({
+              lat: parseFloat(_pt.lat().toFixed(7)),
+              lng: parseFloat(_pt.lng().toFixed(7))
+            });
+          }
+          if (_pts2.length > 0) {
+            shapes.push(_pts2);
+          }
+        }
+      });
+      this.city.geolocation_type = 'polygon';
+      this.geolocation_type = 'polygon';
+      this.city.boundary_points = JSON.stringify(shapes);
+      this.vertices = this.city.boundary_points;
+    },
+    removeLastLine: function removeLastLine() {
+      if (this.drawingPoints && this.drawingPoints.length > 0) {
+        this.cancelCurrentDrawing();
+        this.showMessage('info', 'Cancelled in-progress shape');
+        return;
+      }
+      if (this.overlays && this.overlays.length > 0) {
+        var last = this.overlays.pop();
+        if (last) {
+          last.setMap(null);
+        }
+        this.updateAllBoundaries();
+        this.showMessage('info', __('remove_newly_added_line') || 'Removed newly added area');
+      } else {
+        this.showError('No drawn lines or areas to remove');
+      }
+    },
+    clearMap: function clearMap() {
+      this.cancelCurrentDrawing();
+      if (this.overlays && this.overlays.length > 0) {
+        this.overlays.forEach(function (o) {
+          if (o) o.setMap(null);
+        });
+        this.overlays = [];
+      }
+      this.city.boundary_points = '';
+      this.vertices = '';
+      this.city.geolocation_type = '';
+      this.city.radius = '';
+      this.geolocation_type = '';
+      this.radius = '';
+      this.showMessage('info', __('clear_map') || 'Map cleared');
+    },
+    restoreOldMap: function restoreOldMap() {
+      if (!this.originalBoundaries) {
+        this.showError('No saved boundary found to restore');
+        return;
+      }
+      if (this.overlays && this.overlays.length > 0) {
+        this.overlays.forEach(function (o) {
+          if (o) o.setMap(null);
+        });
+        this.overlays = [];
+      }
+      this.city.boundary_points = typeof this.originalBoundaries === 'string' ? this.originalBoundaries : JSON.stringify(this.originalBoundaries);
+      this.vertices = this.city.boundary_points;
+      this.renderSavedBoundaries();
+      this.fitToBoundary();
+      this.showMessage('success', __('restore_old_map') || 'Original map restored');
+    },
+    renderSavedBoundaries: function renderSavedBoundaries() {
+      var _this0 = this;
+      if (!this.map || !window.google || !window.google.maps || !this.city.boundary_points) {
+        return;
+      }
+      if (this.overlays && this.overlays.length > 0) {
+        this.overlays.forEach(function (o) {
+          if (o) o.setMap(null);
+        });
+        this.overlays = [];
+      }
+      var bp = this.city.boundary_points;
+      if (typeof bp === 'string') {
+        try {
+          bp = JSON.parse(bp);
+        } catch (e) {
+          bp = null;
+        }
+      }
+      if (!bp) return;
+      if (this.originalBoundaries === null) {
+        this.originalBoundaries = JSON.parse(JSON.stringify(bp));
+      }
+
+      // Case 1: Multi-polygon or list of shapes
+      if (Array.isArray(bp) && bp.length > 0 && (Array.isArray(bp[0]) || bp[0] && _typeof(bp[0]) === 'object' && !bp[0].lat)) {
+        bp.forEach(function (shape) {
+          if (Array.isArray(shape) && shape.length >= 3) {
+            var poly = new google.maps.Polygon({
+              paths: shape,
+              strokeColor: '#000000',
+              strokeOpacity: 0.85,
+              strokeWeight: 2,
+              fillColor: '#666666',
+              fillOpacity: 0.35,
+              map: _this0.map,
+              editable: true,
+              clickable: true,
+              geodesic: true,
+              zIndex: 1
+            });
+            poly.type = 'polygon';
+            _this0.attachPolygonEvents(poly);
+            _this0.overlays.push(poly);
+          } else if (shape && shape.type === 'circle' && shape.center) {
+            var circle = new google.maps.Circle({
+              strokeColor: '#000000',
+              strokeOpacity: 0.85,
+              strokeWeight: 2,
+              fillColor: '#666666',
+              fillOpacity: 0.35,
+              map: _this0.map,
+              center: shape.center,
+              radius: shape.radius || 15000,
+              editable: true,
+              draggable: true,
+              clickable: true,
+              zIndex: 1
+            });
+            circle.type = 'circle';
+            _this0.attachCircleEvents(circle);
+            _this0.overlays.push(circle);
+          }
+        });
+        return;
+      }
+
+      // Case 2: Single Polygon
+      if (Array.isArray(bp) && bp.length >= 3 && bp[0].lat !== undefined) {
+        var poly = new google.maps.Polygon({
+          paths: bp,
+          strokeColor: '#000000',
+          strokeOpacity: 0.85,
+          strokeWeight: 2,
+          fillColor: '#666666',
+          fillOpacity: 0.35,
+          map: this.map,
+          editable: true,
+          clickable: true,
+          geodesic: true,
+          zIndex: 1
+        });
+        poly.type = 'polygon';
+        this.attachPolygonEvents(poly);
+        this.overlays.push(poly);
+        return;
+      }
+
+      // Case 3: Circle
+      if (this.city.geolocation_type === 'circle' || Array.isArray(bp) && bp.length === 1) {
+        var center = Array.isArray(bp) && bp[0] ? bp[0] : {
+          lat: parseFloat(this.city.latitude),
+          lng: parseFloat(this.city.longitude)
+        };
+        var radius = parseFloat(this.city.radius) || 15000;
+        var circle = new google.maps.Circle({
+          strokeColor: '#000000',
+          strokeOpacity: 0.85,
+          strokeWeight: 2,
+          fillColor: '#666666',
+          fillOpacity: 0.35,
+          map: this.map,
+          center: center,
+          radius: radius,
+          editable: true,
+          draggable: true,
+          clickable: true,
+          zIndex: 1
+        });
+        circle.type = 'circle';
+        this.attachCircleEvents(circle);
+        this.overlays.push(circle);
+      }
+    },
+    fitToBoundary: function fitToBoundary() {
+      if (!this.map || !window.google || !window.google.maps) return;
+      if (this.overlays && this.overlays.length > 0) {
+        var bounds = new google.maps.LatLngBounds();
+        this.overlays.forEach(function (overlay) {
+          if (overlay.getPath) {
+            var path = overlay.getPath();
+            for (var i = 0; i < path.getLength(); i++) {
+              bounds.extend(path.getAt(i));
+            }
+          } else if (overlay.getBounds) {
+            bounds.union(overlay.getBounds());
+          }
+        });
+        if (!bounds.isEmpty()) {
+          this.map.fitBounds(bounds);
+          return;
+        }
+      }
+      if (this.markers.length > 0 && this.markers[0].position) {
+        this.center = this.markers[0].position;
+        this.map.setZoom(13);
       }
     },
     waitForGoogleMaps: function waitForGoogleMaps() {
-      var _this5 = this;
+      var _this1 = this;
+      var attempts = 0;
       var checkGoogleMaps = setInterval(function () {
-        if ((0,vue2_google_maps__WEBPACK_IMPORTED_MODULE_0__.gmapApi)() && (0,vue2_google_maps__WEBPACK_IMPORTED_MODULE_0__.gmapApi)().maps) {
-          _this5.googleMapsLoaded = true;
+        attempts++;
+        if (window.google && window.google.maps || (0,vue2_google_maps__WEBPACK_IMPORTED_MODULE_0__.gmapApi)() && (0,vue2_google_maps__WEBPACK_IMPORTED_MODULE_0__.gmapApi)().maps) {
+          _this1.googleMapsLoaded = true;
           clearInterval(checkGoogleMaps);
-          _this5.setMap();
+          if (_this1.map) {
+            _this1.setMap();
+          }
         }
-      }, 100); // Check every 100ms
+        if (attempts > 30) {
+          clearInterval(checkGoogleMaps);
+        }
+      }, 100);
     },
     setMap: function setMap() {
       if (!this.city.latitude || !this.city.longitude) {
-        return;
+        this.city.latitude = "22.7195687";
+        this.city.longitude = "75.8577258";
       }
       var lat = parseFloat(this.city.latitude);
       var lng = parseFloat(this.city.longitude);
       if (isNaN(lat) || isNaN(lng)) {
-        console.error("Invalid coordinates", this.city.latitude, this.city.longitude);
         return;
       }
       var marker = {
         lat: lat,
         lng: lng
       };
-      this.markers = []; // clear old markers
-      this.markers.push({
+      this.markers = [{
         position: marker
-      });
+      }];
       this.center = marker;
       this.infoWindow.position = marker;
-      this.infoWindow.template = "<b>".concat(this.city.name, "</b><br>").concat(this.city.formatted_address);
-      this.infoWindow.open = true;
-      if (!this.map || !this.city.boundary_points || !this.city.id) {
+      this.infoWindow.template = "<b>".concat(this.city.name || 'Selected Location', "</b><br>").concat(this.city.formatted_address || '');
+      if (!this.map || !window.google || !window.google.maps) {
         return;
       }
-      var boundaryPoints = this.city.boundary_points;
-      if (typeof boundaryPoints === 'string') {
-        try {
-          boundaryPoints = JSON.parse(boundaryPoints);
-        } catch (e) {
-          return;
-        }
+      if (!this.drawingManager) {
+        this.initDrawingManager();
       }
-      if (!boundaryPoints || _typeof(boundaryPoints) !== 'object') {
-        return;
-      }
-      var points = Array.isArray(boundaryPoints) ? boundaryPoints : [boundaryPoints];
-      if (points.length === 0) return;
-      this.geolocation_type = this.city.geolocation_type || 'polygon';
-      this.radius = this.city.radius;
-      if (this.city.geolocation_type === 'circle') {
-        this.vertices = this.city.boundary_points;
-        var cityCircle = new google.maps.Circle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map: this.map,
-          center: points[0],
-          radius: this.city.radius ? Math.sqrt(parseFloat(this.city.radius)) * 100 : 1000
-        });
-        this.overlayRemoveListener(cityCircle, true, this.map, true, this.city.boundary_points);
-      } else {
-        this.vertices = points;
-        var polygon = new google.maps.Polygon({
-          paths: points,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          editable: true,
-          geodesic: true
-        });
-        polygon.setMap(this.map);
-        this.overlayRemoveListener(polygon, true, this.map, true, points);
+      if (this.city.boundary_points) {
+        this.renderSavedBoundaries();
+        this.fitToBoundary();
       }
     },
     switchToDefaultLanguageTab: function switchToDefaultLanguageTab() {
-      var _this6 = this;
+      var _this10 = this;
       var skipError = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var defaultLangIndex = this.languages.findIndex(function (language) {
-        return language.id === _this6.defaultLanguageId;
+        return language.id === _this10.defaultLanguageId;
       });
       if (defaultLangIndex !== -1) {
         if (!skipError) {
@@ -462,117 +1077,130 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
     },
     saveRecord: function saveRecord() {
-      var _this7 = this;
+      var _this11 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-        var cityId, languagesToSave, defaultLang, _i, _languagesToSave, _response$data$data, language, formData, key, _this7$city$key, response, _error$response, _t;
+        var lat, lng, cityId, languagesToSave, defaultLang, _i2, _languagesToSave, _this11$translations$, _response$data$data, language, formData, key, bp, _this11$city$key, response, _error$response, _t;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
-              if (_this7.validateDefaultLanguage()) {
+              if (_this11.validateDefaultLanguage()) {
                 _context.n = 1;
                 break;
               }
               return _context.a(2);
             case 1:
-              if (!_this7.vertices) {
-                if (_this7.city.latitude && _this7.city.longitude) {
-                  var lat = parseFloat(_this7.city.latitude);
-                  var lng = parseFloat(_this7.city.longitude);
-                  _this7.geolocation_type = 'circle';
-                  _this7.radius = 50000;
-                  _this7.vertices = JSON.stringify([{ lat: lat, lng: lng }]);
-                } else {
-                  _this7.showError("Please enter Latitude and Longitude");
-                  return _context.a(2);
-                }
+              _this11.updateAllBoundaries();
+
+              // If no boundary drawn, but lat & lng exist, provide a default circular area
+              if (!(!_this11.city.boundary_points || _this11.city.boundary_points === '' || _this11.city.boundary_points === '[]')) {
+                _context.n = 3;
+                break;
               }
+              if (!(_this11.city.latitude && _this11.city.longitude)) {
+                _context.n = 2;
+                break;
+              }
+              lat = parseFloat(_this11.city.latitude);
+              lng = parseFloat(_this11.city.longitude);
+              _this11.city.geolocation_type = 'circle';
+              _this11.city.radius = 15000;
+              _this11.city.boundary_points = JSON.stringify([{
+                lat: lat,
+                lng: lng
+              }]);
+              _context.n = 3;
+              break;
             case 2:
-              _this7.isLoading = true;
-              cityId = _this7.city.id;
+              _this11.showError("Please enter Latitude and Longitude");
+              return _context.a(2);
+            case 3:
+              _this11.isLoading = true;
+              cityId = _this11.city.id;
               languagesToSave = [];
-              defaultLang = _this7.languages.find(function (l) {
+              defaultLang = _this11.languages.find(function (l) {
                 return l.is_default;
               });
               if (defaultLang) {
                 languagesToSave.push(defaultLang);
               }
-              _this7.languages.forEach(function (language) {
+              _this11.languages.forEach(function (language) {
                 if (language.is_default) return;
-                var trans = _this7.translations[language.id];
-                if (trans.zone && trans.zone.trim() !== '') {
+                var trans = _this11.translations[language.id];
+                if (trans && trans.zone && trans.zone.trim() !== '') {
                   languagesToSave.push(language);
                 }
               });
-              _context.p = 3;
-              _i = 0, _languagesToSave = languagesToSave;
-            case 4:
-              if (!(_i < _languagesToSave.length)) {
-                _context.n = 7;
+              _context.p = 4;
+              _i2 = 0, _languagesToSave = languagesToSave;
+            case 5:
+              if (!(_i2 < _languagesToSave.length)) {
+                _context.n = 8;
                 break;
               }
-              language = _languagesToSave[_i];
-              formData = new FormData(); // Always send ID only if valid
+              language = _languagesToSave[_i2];
+              formData = new FormData();
               if (cityId && cityId !== "") {
                 formData.append("id", cityId);
               }
-
-              // ALWAYS send base fields for default language
               if (language.is_default) {
-                for (key in _this7.city) {
+                for (key in _this11.city) {
                   if (key === 'range_wise_charges') {
-                    formData.append(key, JSON.stringify(_this7.city[key]));
+                    formData.append(key, JSON.stringify(_this11.city[key]));
+                  } else if (key === 'boundary_points') {
+                    bp = _this11.city.boundary_points;
+                    if (typeof bp !== 'string') {
+                      bp = JSON.stringify(bp);
+                    }
+                    formData.append("boundary_points", bp);
+                  } else if (key === 'geolocation_type') {
+                    formData.append("geolocation_type", _this11.city.geolocation_type || 'polygon');
+                  } else if (key === 'radius') {
+                    formData.append("radius", _this11.city.radius !== undefined && _this11.city.radius !== null ? _this11.city.radius : '');
                   } else {
-                    formData.append(key, (_this7$city$key = _this7.city[key]) !== null && _this7$city$key !== void 0 ? _this7$city$key : '');
+                    formData.append(key, (_this11$city$key = _this11.city[key]) !== null && _this11$city$key !== void 0 ? _this11$city$key : '');
                   }
-                }
-                formData.append("geolocation_type", _this7.geolocation_type);
-                formData.append("radius", _this7.radius);
-                if (_this7.geolocation_type === 'circle') {
-                  formData.append("boundary_points", _this7.vertices);
-                } else {
-                  formData.append("boundary_points", JSON.stringify(_this7.vertices));
                 }
               }
 
               // Always send translation fields
               formData.append("language_id", language.id);
-              formData.append("zone", _this7.translations[language.id].zone || '');
-              _context.n = 5;
-              return axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this7.$apiUrl + '/cities/save', formData);
-            case 5:
+              formData.append("zone", ((_this11$translations$ = _this11.translations[language.id]) === null || _this11$translations$ === void 0 ? void 0 : _this11$translations$.zone) || '');
+              _context.n = 6;
+              return axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(_this11.$apiUrl + '/cities/save', formData);
+            case 6:
               response = _context.v;
               if (!cityId && (_response$data$data = response.data.data) !== null && _response$data$data !== void 0 && _response$data$data.id) {
                 cityId = response.data.data.id;
               }
-            case 6:
-              _i++;
-              _context.n = 4;
-              break;
             case 7:
-              _this7.showMessage("success", __('city_saved_successfully'));
+              _i2++;
+              _context.n = 5;
+              break;
+            case 8:
+              _this11.showMessage("success", __('city_saved_successfully'));
               setTimeout(function () {
-                _this7.$router.push({
+                _this11.$router.push({
                   path: '/cities'
                 });
               }, 1500);
-              _context.n = 9;
+              _context.n = 10;
               break;
-            case 8:
-              _context.p = 8;
-              _t = _context.v;
-              if ((_error$response = _t.response) !== null && _error$response !== void 0 && (_error$response = _error$response.data) !== null && _error$response !== void 0 && _error$response.message) {
-                _this7.showError(_t.response.data.message);
-              } else {
-                _this7.showError("Something went wrong!");
-              }
             case 9:
               _context.p = 9;
-              _this7.isLoading = false;
-              return _context.f(9);
+              _t = _context.v;
+              if ((_error$response = _t.response) !== null && _error$response !== void 0 && (_error$response = _error$response.data) !== null && _error$response !== void 0 && _error$response.message) {
+                _this11.showError(_t.response.data.message);
+              } else {
+                _this11.showError("Something went wrong!");
+              }
             case 10:
+              _context.p = 10;
+              _this11.isLoading = false;
+              return _context.f(10);
+            case 11:
               return _context.a(2);
           }
-        }, _callee, null, [[3, 8, 9, 10]]);
+        }, _callee, null, [[4, 9, 10, 11]]);
       }))();
     }
   }
@@ -789,6 +1417,7 @@ var render = function render() {
         value: _vm.city.latitude
       },
       on: {
+        change: _vm.onManualCoordinateChange,
         input: function input($event) {
           if ($event.target.composing) return;
           _vm.$set(_vm.city, "latitude", $event.target.value);
@@ -821,6 +1450,7 @@ var render = function render() {
         value: _vm.city.longitude
       },
       on: {
+        change: _vm.onManualCoordinateChange,
         input: function input($event) {
           if ($event.target.composing) return;
           _vm.$set(_vm.city, "longitude", $event.target.value);
@@ -890,7 +1520,7 @@ var render = function render() {
           _vm.$set(_vm.city, "state", $event.target.value);
         }
       }
-    })]) : _vm._e(), _vm._v(" "), _c("div", {
+    })]) : _vm._e(), _vm._v(" "), _vm.translations[language.id] ? _c("div", {
       staticClass: "form-group"
     }, [_c("label", {
       attrs: {
@@ -922,7 +1552,7 @@ var render = function render() {
           _vm.$set(_vm.translations[language.id], "zone", $event.target.value);
         }
       }
-    })]), _vm._v(" "), language.is_default ? _c("div", {
+    })]) : _vm._e(), _vm._v(" "), language.is_default ? _c("div", {
       staticClass: "form-group"
     }, [_c("label", {
       attrs: {
@@ -1319,35 +1949,229 @@ var render = function render() {
   }, [_vm._v(_vm._s(_vm.__("clear")))])])], 1)])])]), _vm._v(" "), _c("div", {
     staticClass: "col-12 col-md-6 order-md-1 order-last"
   }, [_c("div", {
-    staticClass: "card h-100"
+    staticClass: "card h-100 shadow-sm border-0"
   }, [_c("div", {
-    staticClass: "card-header"
-  }, [_c("h4", [_vm._v(_vm._s(_vm.__("map_view")))])]), _vm._v(" "), _c("div", {
-    staticClass: "card-body"
-  }, [_c("div", {
-    staticClass: "offset-3 mt-1"
+    staticClass: "card-header bg-white pb-2 d-flex justify-content-between align-items-center flex-wrap gap-2 border-bottom"
+  }, [_c("div", [_c("h4", {
+    staticClass: "mb-0 text-dark font-weight-bold"
+  }, [_vm._v(_vm._s(_vm.__("map_view")))])]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex align-items-center gap-2 flex-wrap"
   }, [_c("button", {
-    staticClass: "badge bg-primary",
+    staticClass: "btn btn-sm text-white font-weight-bold shadow-sm",
+    staticStyle: {
+      "background-color": "#f0ad4e",
+      "border-color": "#eea236"
+    },
     attrs: {
       type: "button",
       id: "remove-line"
+    },
+    on: {
+      click: _vm.removeLastLine
     }
-  }, [_vm._v(_vm._s(_vm.__("remove_newly_added_line")))]), _vm._v(" "), _c("button", {
-    staticClass: "badge bg-danger",
+  }, [_vm._v("\n                                " + _vm._s(_vm.__("remove_newly_added_line") || "Remove Newly Added Line") + "\n                            ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-sm text-white font-weight-bold shadow-sm",
+    staticStyle: {
+      "background-color": "#d9534f",
+      "border-color": "#d43f3a"
+    },
     attrs: {
       type: "button",
       id: "clear-line"
+    },
+    on: {
+      click: _vm.clearMap
     }
-  }, [_vm._v(_vm._s(_vm.__("clear_map")))]), _vm._v(" "), _c("button", {
-    staticClass: "badge bg-success",
+  }, [_vm._v("\n                                " + _vm._s(_vm.__("clear_map") || "Clear Map") + "\n                            ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-sm text-white font-weight-bold shadow-sm",
+    staticStyle: {
+      "background-color": "#5cb85c",
+      "border-color": "#4cae4c"
+    },
     attrs: {
       type: "button",
       id: "add-line"
+    },
+    on: {
+      click: _vm.restoreOldMap
     }
-  }, [_vm._v(_vm._s(_vm.__("restore_old_map")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                " + _vm._s(_vm.__("restore_old_map") || "Restore Old Map") + "\n                            ")])])]), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "p-2 mb-2 bg-light rounded border d-flex justify-content-between align-items-center flex-wrap gap-2 shadow-sm"
+  }, [_c("div", {
+    staticClass: "d-flex align-items-center gap-2 flex-wrap"
+  }, [_c("div", {
+    staticClass: "btn-group btn-group-sm",
+    attrs: {
+      role: "group"
+    }
+  }, [_c("button", {
+    staticClass: "btn font-weight-bold",
+    "class": _vm.activeDrawTool === null ? "btn-primary" : "btn-outline-secondary",
+    attrs: {
+      type: "button",
+      title: "Stop drawing & pan or navigate the map"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.setDrawingTool(null);
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-hand-paper-o me-1"
+  }), _vm._v(" Pan Map\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn font-weight-bold",
+    "class": _vm.activeDrawTool === "polygon" ? "btn-primary" : "btn-outline-secondary",
+    attrs: {
+      type: "button",
+      title: "Draw custom polygon shapes anywhere on map"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.setDrawingTool("polygon");
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-pencil me-1"
+  }), _vm._v(" Custom Polygon\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn font-weight-bold",
+    "class": _vm.activeDrawTool === "circle" ? "btn-primary" : "btn-outline-secondary",
+    attrs: {
+      type: "button",
+      title: "Draw custom radius circles anywhere on map"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.setDrawingTool("circle");
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-circle-o me-1"
+  }), _vm._v(" Customer Circle\n                                    ")])]), _vm._v(" "), _vm.activeDrawTool === "polygon" && _vm.drawingPoints.length >= 3 ? _c("div", {
+    staticClass: "btn-group btn-group-sm"
+  }, [_c("button", {
+    staticClass: "btn btn-success font-weight-bold shadow-sm",
+    attrs: {
+      type: "button",
+      title: "Complete this polygon shape (you can draw more polygons after this)"
+    },
+    on: {
+      click: _vm.finishPolygonDrawing
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-check me-1"
+  }), _vm._v(" Finish Area (" + _vm._s(_vm.drawingPoints.length) + " points)\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-warning text-dark font-weight-bold",
+    attrs: {
+      type: "button",
+      title: "Undo / replace last clicked point"
+    },
+    on: {
+      click: _vm.undoLastPoint
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-undo me-1"
+  }), _vm._v(" Undo Point\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-outline-danger",
+    attrs: {
+      type: "button",
+      title: "Cancel this shape"
+    },
+    on: {
+      click: _vm.cancelCurrentDrawing
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-times"
+  })])]) : _vm.activeDrawTool === "polygon" && _vm.drawingPoints.length > 0 ? _c("div", {
+    staticClass: "d-flex align-items-center gap-1"
+  }, [_c("span", {
+    staticClass: "badge bg-warning text-dark px-2 py-1"
+  }, [_vm._v("\n                                        Points: " + _vm._s(_vm.drawingPoints.length) + " (Click 3+ to finish)\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-xs btn-outline-warning py-1 px-2",
+    attrs: {
+      type: "button",
+      title: "Undo / replace last point"
+    },
+    on: {
+      click: _vm.undoLastPoint
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-undo"
+  }), _vm._v(" Undo\n                                    ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-xs btn-outline-danger py-1 px-2",
+    attrs: {
+      type: "button",
+      title: "Cancel this shape"
+    },
+    on: {
+      click: _vm.cancelCurrentDrawing
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-times"
+  }), _vm._v(" Cancel\n                                    ")])]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex align-items-center gap-2 flex-wrap"
+  }, [_c("span", {
+    staticClass: "badge bg-secondary font-weight-normal px-2 py-1"
+  }, [_vm._v("\n                                    Selected Areas: "), _c("strong", [_vm._v(_vm._s(_vm.overlays.length))])]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-xs btn-outline-primary py-1 px-2",
+    attrs: {
+      type: "button",
+      title: "Detect your location"
+    },
+    on: {
+      click: _vm.locateCurrentPosition
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-crosshairs"
+  }), _vm._v(" Current Location\n                                ")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-xs btn-outline-secondary py-1 px-2",
+    attrs: {
+      type: "button",
+      title: "Fit map view to all areas"
+    },
+    on: {
+      click: _vm.fitToBoundary
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-arrows-alt"
+  }), _vm._v(" Fit View\n                                ")])])]), _vm._v(" "), _vm.activeDrawTool === "polygon" ? _c("div", {
+    staticClass: "alert alert-warning border py-2 px-3 mb-2 small d-flex align-items-center justify-content-between flex-wrap gap-2"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "d-flex align-items-center gap-1"
+  }, [_c("span", {
+    staticClass: "badge bg-dark"
+  }, [_vm._v(_vm._s(_vm.drawingPoints.length) + " points")]), _vm._v(" "), _vm.drawingPoints.length > 0 ? _c("button", {
+    staticClass: "btn btn-xs btn-outline-dark py-0 px-1",
+    attrs: {
+      type: "button",
+      title: "Remove last point"
+    },
+    on: {
+      click: _vm.undoLastPoint
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-undo"
+  }), _vm._v(" Undo\n                                ")]) : _vm._e()])]) : _vm.activeDrawTool === "circle" ? _c("div", {
+    staticClass: "alert alert-info border py-2 px-3 mb-2 small d-flex align-items-center justify-content-between flex-wrap gap-2"
+  }, [_vm._m(1)]) : _c("div", {
+    staticClass: "alert alert-light-primary border py-2 px-3 mb-2 small text-muted d-flex align-items-center justify-content-between flex-wrap gap-2"
+  }, [_vm._m(2), _vm._v(" "), _vm.city.formatted_address ? _c("div", {
+    staticClass: "small text-truncate text-muted",
+    staticStyle: {
+      "max-width": "250px"
+    },
+    attrs: {
+      title: _vm.city.formatted_address
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-map-pin text-danger me-1"
+  }), _vm._v(" " + _vm._s(_vm.city.formatted_address) + "\n                            ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticStyle: {
       position: "relative",
-      overflow: "hidden"
+      overflow: "hidden",
+      "border-radius": "8px",
+      border: "1px solid #dee2e6"
     },
     attrs: {
       id: "map"
@@ -1356,14 +2180,16 @@ var render = function render() {
     ref: "mapRef",
     staticStyle: {
       width: "100%",
-      height: "700px",
-      "margin-top": "5px"
+      height: "650px"
     },
     attrs: {
-      zoom: 13,
+      zoom: 12,
       center: _vm.center,
-      mapTypeControl: true,
-      drawingControl: true
+      mapTypeControl: true
+    },
+    on: {
+      click: _vm.onMapClick,
+      dblclick: _vm.onMapDblClick
     }
   }, [_vm._l(_vm.markers, function (m, index) {
     return _c("GmapMarker", {
@@ -1376,7 +2202,8 @@ var render = function render() {
       on: {
         click: function click($event) {
           _vm.center = m.position;
-        }
+        },
+        dragend: _vm.onMarkerDragEnd
       }
     });
   }), _vm._v(" "), _c("gmap-info-window", {
@@ -1400,18 +2227,14 @@ var render = function render() {
     domProps: {
       innerHTML: _vm._s(_vm.infoWindow.template)
     }
-  })])], 2)], 1), _vm._v(" "), _vm.city.formatted_address ? _c("div", [_c("span", {
-    staticClass: "title font-weight-bolder"
-  }, [_vm._v(_vm._s(_vm.city.formatted_address))])]) : _vm._e(), _vm._v(" "), _c("div", {
-    staticClass: "form-group d-none"
+  })])], 2)], 1), _vm._v(" "), _c("div", {
+    staticClass: "form-group d-none mt-2"
   }, [_c("label", {
     staticClass: "control-label",
     attrs: {
       "for": "vertices"
     }
-  }, [_vm._v(_vm._s(_vm.__("boundry_points"))), _c("span", {
-    staticClass: "text-danger text-xs"
-  }, [_vm._v("*")])]), _vm._v(" "), _c("textarea", {
+  }, [_vm._v(_vm._s(_vm.__("boundary_points")))]), _vm._v(" "), _c("textarea", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -1422,8 +2245,6 @@ var render = function render() {
     attrs: {
       name: "vertices",
       id: "vertices",
-      placeholder: "here will be your selected outlines latitude and longitude",
-      cols: "10",
       rows: "2"
     },
     domProps: {
@@ -1437,7 +2258,25 @@ var render = function render() {
     }
   })])])])])])])]);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_c("i", {
+    staticClass: "fa fa-pencil text-dark me-1"
+  }), _vm._v(" "), _c("span", [_c("strong", [_vm._v("Polygon Drawing Mode:")]), _vm._v(" Map par click karke points add karein. Points ko drag karke replace/adjust kar sakte hain, ya "), _c("strong", [_vm._v("Undo Point")]), _vm._v(" karein. Shape khatam karne ke liye "), _c("strong", [_vm._v("Finish Area")]), _vm._v(" dabayein. Iske baad aap aur bhi multiple polygons bana sakte hain.")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_c("i", {
+    staticClass: "fa fa-circle-o text-dark me-1"
+  }), _vm._v(" "), _c("span", [_c("strong", [_vm._v("Customer Circle Mode:")]), _vm._v(" Map par jahan circle banana hai wahan click karein. Ban jane ke baad circle ko drag ya resize kar sakte hain. Multiple circles bhi draw kar sakte hain.")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_c("i", {
+    staticClass: "fa fa-info-circle text-primary me-1"
+  }), _vm._v(" "), _c("span", [_c("strong", [_vm._v("Area Selection:")]), _vm._v(" "), _c("strong", [_vm._v("Custom Polygon")]), _vm._v(" ya "), _c("strong", [_vm._v("Customer Circle")]), _vm._v(" select karke map pe areas draw karein. Multiple areas supported hain.")])]);
+}];
 render._withStripped = true;
 
 

@@ -77,18 +77,20 @@ class CartApiController extends Controller
 
             foreach ($res as $key => $row) {
 
-                if (isset($row->city_id) && $row->city_id != 0 && $row->city_id != "") {
-                    if ($is_self_pickup) {
-                        $row['is_deliverable'] = 1; // Self-pickup is always "deliverable"
-                    } else {
-                        if (CommonHelper::isDeliverable($row->city_id, $request->latitude, $request->longitude)) {
-                            $row['is_deliverable'] = 1;
-                        } else {
-                            $row['is_deliverable'] = 0;
+                if ($is_self_pickup) {
+                    $row['is_deliverable'] = 1; // Self-pickup is always "deliverable"
+                } else {
+                    $isDeliverable = false;
+                    if (isset($row->city_id) && $row->city_id != 0 && $row->city_id != "") {
+                        $isDeliverable = CommonHelper::isDeliverable($row->city_id, $request->latitude, $request->longitude);
+                    }
+                    if (!$isDeliverable && !empty($request->latitude) && !empty($request->longitude)) {
+                        $deliverableCity = CommonHelper::getDeliverableCity($request->latitude, $request->longitude);
+                        if (!empty($deliverableCity)) {
+                            $isDeliverable = true;
                         }
                     }
-                } else {
-                    $row['is_deliverable'] = 0;
+                    $row['is_deliverable'] = $isDeliverable ? 1 : 0;
                 }
 
                 $item = ProductVariant::select(

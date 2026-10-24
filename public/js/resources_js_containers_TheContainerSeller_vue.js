@@ -1111,12 +1111,12 @@ __webpack_require__.r(__webpack_exports__);
 
       // Deterministic mock fallbacks based on notification ID to simulate realism if not enriched
       var seed = parseInt(String(notification.id || '').replace(/\D/g, '')) || 0;
-      var fallbackCustomers = ['Emily Johnson', 'John Smith', 'Michael Brown', 'Sophia Williams', 'David Jones'];
-      var fallbackStores = ['Green Basket', 'FreshMart', 'Local Harvest', 'Daily Needs', 'Super Saver'];
-      var fallbackTotals = ['1,250', '850', '2,400', '150', '580'];
-      var customerName = notification.data.customer_name || fallbackCustomers[seed % fallbackCustomers.length];
-      var storeName = notification.data.store_name || fallbackStores[seed % fallbackStores.length];
-      var total = notification.data.total || fallbackTotals[seed % fallbackTotals.length];
+      var fallbackCustomers = ['Customer'];
+      var fallbackStores = ['Chandamama Store'];
+      var fallbackTotals = ['0'];
+      var customerName = notification.data.customer_name || 'Customer';
+      var storeName = notification.data.store_name || 'Chandamama Store';
+      var total = notification.data.total || '';
       var currency = notification.data.currency || '₹';
       if (type === 'return_request_new' || type === 'return_request_sent' || type === 'return_request_status' || lowerText.includes('return')) {
         title = 'Return Request Received';
@@ -1126,7 +1126,7 @@ __webpack_require__.r(__webpack_exports__);
         body = "".concat(customerName, " cancelled order ").concat(orderId, " from ").concat(storeName);
       } else if (lowerText.includes('receive') || lowerText.includes('place') || lowerText.includes('new order')) {
         title = 'New Order Placed';
-        body = "".concat(customerName, " placed a new grocery order worth ").concat(currency).concat(total, " from ").concat(storeName);
+        body = "".concat(customerName, " placed a new order worth ").concat(currency).concat(total, " from ").concat(storeName);
       } else if (lowerText.includes('assign')) {
         title = 'Order Assigned';
         body = "Order ".concat(orderId, " from ").concat(storeName, " has been assigned to a delivery boy");

@@ -56,6 +56,7 @@ const SellerWalletTransactions = () => import("../views/Seller/WalletTransaction
 //Home Slider Images
 const HomeSliders = () => import("../views/HomeSliders/HomeSliders");
 const HeroSliderVideos = () => import("../views/HomeSliders/HeroSliderVideos");
+const HomeFlyers = () => import("../views/HomeFlyers/HomeFlyers");
 
 //Promo Code
 const PromoCode = () => import("../views/PromoCode/PromoCode");
@@ -802,6 +803,15 @@ function configRoutes() {
                         role: adminRoles,
                         title: 'Hero Slider Videos'
 
+                    },
+                },
+                {
+                    path: "home_flyers",
+                    name: "HomeFlyers",
+                    component: HomeFlyers,
+                    meta: {
+                        role: [roleSuperAdmin],
+                        title: 'Home Flyers'
                     },
                 },
                 {

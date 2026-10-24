@@ -1,7 +1,7 @@
 @php
     $appName = \App\Models\Setting::get_value('app_name');
     if($appName == "" || $appName == null){
-        $appName = "eGrocer";
+        $appName = "Chanda Mama";
     }
 
     $supportEmail = \App\Models\Setting::get_value('support_email');
@@ -117,27 +117,12 @@
         </div>
     </div>
     <hr>
+    @if($order->order_type != 'doorstep')
     <div class="row">
         <div class="col-md-12">
             <div class="well">
-                <div class="row"><strong>Item : {{ count($order_items) }}</strong></div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="col-md-4">
-                        <b>Sold By : </b>
-                        <p>Name: {{ $order->seller_name }}</p>
-                        <p>Email: {{ $order->seller_email }}</p>
-                        <p>Mobile No. : {{ $order->seller_mobile }}</p>
-                    </div>
-                    @if($order->order_type == 'doorstep')
-                    <div class="col-md-3">
-                        @if($order->delivery_boy_name)
-                            <p>Delivery By : {{ $order->delivery_boy_name ?? "" }}</p>
-                        @else
-                            <p>Delivery By : Not Assigned</p>
-                        @endif
-                    </div>
-                    @else
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <strong>
                             <p>Pickup Store: {{ $order->seller_name ?? "" }}</p>
                         </strong>
@@ -168,9 +153,14 @@
                             @endphp
                         </p>
                     </div>
-                    @endif
                 </div>
-                <hr>
+            </div>
+        </div>
+    </div>
+    @endif
+    <div class="row">
+        <div class="col-md-12">
+            <div class="well">
                 <div class="row">
                     <p class="h6 ">Product Details:</p>
                     <div class="row">

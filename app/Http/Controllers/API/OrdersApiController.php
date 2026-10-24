@@ -383,6 +383,17 @@ class OrdersApiController extends Controller
         if (isset($request->id)) {
             $order = Order::find($request->id);
             if ($order) {
+                $orderId = $order->id;
+                // Delete associated panel notifications for this order
+                try {
+                    \App\Models\PanelNotification::where('data', 'like', '%"order_id":' . $orderId . '%')
+                        ->orWhere('data', 'like', '%"order_id": "' . $orderId . '"%')
+                        ->orWhere('data', 'like', '%"order_id":' . $orderId . ',%')
+                        ->delete();
+                } catch (\Exception $e) {
+                    Log::warning("Error deleting panel notifications for order #{$orderId}: " . $e->getMessage());
+                }
+
                 $order->delete();
                 return CommonHelper::responseSuccess('order_deleted_successfully');
             } else {
@@ -396,6 +407,15 @@ class OrdersApiController extends Controller
         if (isset($request->id)) {
             $orderItem = OrderItem::find($request->id);
             if ($orderItem) {
+                $itemId = $orderItem->id;
+                try {
+                    \App\Models\PanelNotification::where('data', 'like', '%"order_item_id":' . $itemId . '%')
+                        ->orWhere('data', 'like', '%"order_item_id": "' . $itemId . '"%')
+                        ->delete();
+                } catch (\Exception $e) {
+                    Log::warning("Error deleting panel notifications for order item #{$itemId}: " . $e->getMessage());
+                }
+
                 $orderItem->delete();
                 return CommonHelper::responseSuccess('order_item_deleted_successfully');
             } else {

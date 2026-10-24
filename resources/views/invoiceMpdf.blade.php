@@ -1,7 +1,7 @@
 @php
     $appName = \App\Models\Setting::get_value('app_name');
     if($appName == "" || $appName == null){
-        $appName = "eGrocer";
+        $appName = "Chanda Mama";
     }
 
     $supportEmail = \App\Models\Setting::get_value('support_email');
@@ -90,19 +90,11 @@
                 </tr>
             </table>
             <br>
+            @if($order->order_type != 'doorstep')
             <div class="well">
                 <table width="100%">
                     <tr>
-                        <td width="50%"><div>
-                                <p style="font-weight: bold;">Sold By</p>
-                                <strong>{{ $order->store_name }}</strong>
-                                <p>Name: {{ $order->seller_name }}</p>
-                                <p>Email: {{ $order->seller_email }}</p>
-                                <p>Mobile No. : {{ $order->seller_mobile }}</p>
-                            </div></td>
-                        <td width="50%" style="padding-left: 150px;"><div>
-                                @if($order->order_type == 'doorstep')
-                                @else
+                        <td width="100%"><div>
                                 <strong>
                                     <p>Pickup Store: {{ $order->seller_name ?? "" }}</p>
                                     <p>Pickup Address: 
@@ -132,18 +124,11 @@
                                         @endphp
                                     </p>
                                 </strong>
-                                @endif
-                                @if($order->order_type == 'doorstep')
-                                    @if($order->delivery_boy_name)
-                                        <p>Delivery By : {{ $order->delivery_boy_name ?? "" }}</p>
-                                    @else
-                                        <p>Delivery By : Not Assigned</p>
-                                    @endif
-                                @endif
                             </div></td>
                     </tr>
                 </table>
             </div>
+            @endif
             <div class="well">
                 <h4>Product Details:</h4><br>
                 <style>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Customer;
 
 use App\Helpers\CommonHelper;
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -33,6 +34,14 @@ class AddressApiController extends Controller
         $total = $addresses->count();
         $addresses = $addresses->orderBy("is_default","DESC")->offset($offset)->limit($limit)->get();
         if(count($addresses)>0){
+            foreach ($addresses as $addr) {
+                $deliverableCity = CommonHelper::getDeliverableCity($addr->latitude, $addr->longitude);
+                $addr->is_deliverable = $deliverableCity ? 1 : 0;
+                if ($deliverableCity && empty($addr->city_id)) {
+                    $addr->city_id = $deliverableCity->id;
+                    $addr->save();
+                }
+            }
             return CommonHelper::responseWithData($addresses,$total);
         }else{
             return CommonHelper::responseError('address_not_found');
@@ -46,8 +55,6 @@ class AddressApiController extends Controller
             'mobile' => 'required',
             'type' => 'required',
             'address' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
             'pincode' => 'required',
             'city' => 'required',
             'state' => 'required',
@@ -58,22 +65,16 @@ class AddressApiController extends Controller
             return CommonHelper::responseError($validator->errors()->first());
         }
 
-        $lat = $request->latitude ?? 0;
-        $lng = $request->longitude ?? 0;
-        if (empty($lat) || floatval($lat) == 0) {
-            $matchedCity = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
-            if ($matchedCity) {
-                $lat = $matchedCity->latitude;
-                $lng = $matchedCity->longitude;
-                $input['latitude'] = $lat;
-                $input['longitude'] = $lng;
-            }
-        }
+        $lat = $request->latitude ?? null;
+        $lng = $request->longitude ?? null;
 
         $city = CommonHelper::getDeliverableCity($lat, $lng);
-        if (!$city) {
-            $city = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+        if (!$city && !empty($request->city)) {
+            $city = City::where('name', 'like', '%' . $request->city . '%')->first();
         }
+
+        $input['latitude'] = (string)($lat ?? '0');
+        $input['longitude'] = (string)($lng ?? '0');
         
         $user_id = auth()->user()->id;
         $count = UserAddress::where('user_id',$user_id)->count();
@@ -87,6 +88,10 @@ class AddressApiController extends Controller
 
         $input['user_id'] = $user_id;
         $input['city_id'] = $city->id ?? 0;
+        $input['alternate_mobile'] = $input['alternate_mobile'] ?? '';
+        $input['landmark'] = $input['landmark'] ?? '';
+        $input['area'] = $input['area'] ?? '';
+
         $address = UserAddress::create($input);
 
         $address->is_default = ($address->is_default == "0")?0:1; // this for type casting
@@ -112,22 +117,16 @@ class AddressApiController extends Controller
             return CommonHelper::responseError($validator->errors()->first());
         }
 
-        $lat = $request->latitude ?? 0;
-        $lng = $request->longitude ?? 0;
-        if (empty($lat) || floatval($lat) == 0) {
-            $matchedCity = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
-            if ($matchedCity) {
-                $lat = $matchedCity->latitude;
-                $lng = $matchedCity->longitude;
-                $input['latitude'] = $lat;
-                $input['longitude'] = $lng;
-            }
-        }
+        $lat = $request->latitude ?? null;
+        $lng = $request->longitude ?? null;
 
         $city = CommonHelper::getDeliverableCity($lat, $lng);
-        if (!$city) {
-            $city = City::where('name', 'like', '%' . $request->city . '%')->first() ?? City::first();
+        if (!$city && !empty($request->city)) {
+            $city = City::where('name', 'like', '%' . $request->city . '%')->first();
         }
+
+        $input['latitude'] = (string)($lat ?? '0');
+        $input['longitude'] = (string)($lng ?? '0');
 
         if(isset($request->is_default) && $request->is_default == 1 ){
             $user_id = auth()->user()->id;
@@ -140,6 +139,10 @@ class AddressApiController extends Controller
         }
 
         $input['city_id'] = $city->id ?? 0;
+        $input['alternate_mobile'] = $input['alternate_mobile'] ?? '';
+        $input['landmark'] = $input['landmark'] ?? '';
+        $input['area'] = $input['area'] ?? '';
+
         $address->update($input);
 
         $address->is_default = ($address->is_default == "0")?0:1; // this for type casting

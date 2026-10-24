@@ -1,24 +1,46 @@
+# Dependencies
 /node_modules
-/node_modules-1
-/node_modules-2
-/public/hot
+/node_modules/
+node_modules/
+/node_modules-*
+/vendor
+/vendor/
+vendor/
+
+# Storage
+storage
+/storage
+/storage/
+storage/
+storage/*
+/storage/*
 /public/storage
 /storage/*.key
-/vendor
-.env
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-.vscode
-/public/my-logs
-storage
 storage/framework/cache/data/*
 storage/framework/sessions/*
 storage/framework/testing/*
 storage/framework/views/*
 storage/logs/*
+
+# Environment files
+.env
+.env.*
+.env*.local
+.env.backup
+.env.production
+!.env.example
+
+# Logs and cache
+/public/hot
+/public/my-logs
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
+
+# System & IDE files
+Homestead.json
+Homestead.yaml
+.vscode
 .DS_Store
 **/.DS_Store
 test_models*.php

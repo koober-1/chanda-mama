@@ -626,10 +626,6 @@ class BasicApiController extends Controller
 
         $city = CommonHelper::getDeliverableCity($request->latitude, $request->longitude);
 
-        if (empty($city) && isDemoMode()) {
-            $city = CommonHelper::getDefaultCity();
-        }
-
         if (empty($city)) {
             return CommonHelper::responseError('we_doesnt_delivery_at_selected_city');
         }

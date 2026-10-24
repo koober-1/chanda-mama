@@ -1299,19 +1299,51 @@ class ProductApisController extends Controller
                 $product->tags()->sync($allTagIds);
             }
 
-            // Handle multi-category support
+            // Handle multi-category, sub-category & sub-sub-category support
             $additionalCategoryIds = [];
-            if ($request->has('additional_category_ids')) {
-                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) use ($request) {
-                    return $value !== '' && is_numeric($value) && $value != $request->category_id;
-                });
+            if ($request->has('additional_category_ids') && !empty($request->additional_category_ids)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric')
+                );
+            }
+            if ($request->has('sub_category_id') && !empty($request->sub_category_id)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->sub_category_id)), 'is_numeric')
+                );
+            }
+            if ($request->has('sub_sub_category_id') && !empty($request->sub_sub_category_id)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->sub_sub_category_id)), 'is_numeric')
+                );
+            }
+
+            // Extract primary single sub_category_id and sub_sub_category_id (to avoid SQL truncation on integer column)
+            $primarySubCategoryId = null;
+            if (!empty($request->sub_category_id)) {
+                $subParts = explode(',', (string)$request->sub_category_id);
+                $firstSub = trim($subParts[0]);
+                if (is_numeric($firstSub)) {
+                    $primarySubCategoryId = (int)$firstSub;
+                }
+            }
+
+            $primarySubSubCategoryId = null;
+            if (!empty($request->sub_sub_category_id)) {
+                $subSubParts = explode(',', (string)$request->sub_sub_category_id);
+                $firstSubSub = trim($subSubParts[0]);
+                if (is_numeric($firstSubSub)) {
+                    $primarySubSubCategoryId = (int)$firstSubSub;
+                }
             }
 
             // Sync all categories including the primary one
             $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
-            $allCategoryIds = array_unique(array_filter($allCategoryIds, function($value) {
+            $allCategoryIds = array_values(array_unique(array_filter($allCategoryIds, function($value) {
                 return !empty($value) && is_numeric($value);
-            }));
+            })));
 
             if (!empty($allCategoryIds)) {
                 $syncData = [];
@@ -1319,8 +1351,8 @@ class ProductApisController extends Controller
                     // Only attach sub_category_id and sub_sub_category_id to the primary category record
                     if ($catId == $request->category_id) {
                         $syncData[$catId] = [
-                            'sub_category_id' => $request->sub_category_id ?? null,
-                            'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
+                            'sub_category_id' => $primarySubCategoryId,
+                            'sub_sub_category_id' => $primarySubSubCategoryId,
                         ];
                     } else {
                         $syncData[$catId] = [
@@ -1902,19 +1934,51 @@ class ProductApisController extends Controller
                 $product->tags()->sync($allTagIds);
             }
 
-            // Handle multi-category support
+            // Handle multi-category, sub-category & sub-sub-category support
             $additionalCategoryIds = [];
-            if ($request->has('additional_category_ids')) {
-                $additionalCategoryIds = array_filter(array_map('trim', explode(',', $request->additional_category_ids)), function ($value) use ($request) {
-                    return $value !== '' && is_numeric($value) && $value != $request->category_id;
-                });
+            if ($request->has('additional_category_ids') && !empty($request->additional_category_ids)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric')
+                );
+            }
+            if ($request->has('sub_category_id') && !empty($request->sub_category_id)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->sub_category_id)), 'is_numeric')
+                );
+            }
+            if ($request->has('sub_sub_category_id') && !empty($request->sub_sub_category_id)) {
+                $additionalCategoryIds = array_merge(
+                    $additionalCategoryIds,
+                    array_filter(array_map('trim', explode(',', (string)$request->sub_sub_category_id)), 'is_numeric')
+                );
+            }
+
+            // Extract primary single sub_category_id and sub_sub_category_id (to avoid SQL truncation on integer column)
+            $primarySubCategoryId = null;
+            if (!empty($request->sub_category_id)) {
+                $subParts = explode(',', (string)$request->sub_category_id);
+                $firstSub = trim($subParts[0]);
+                if (is_numeric($firstSub)) {
+                    $primarySubCategoryId = (int)$firstSub;
+                }
+            }
+
+            $primarySubSubCategoryId = null;
+            if (!empty($request->sub_sub_category_id)) {
+                $subSubParts = explode(',', (string)$request->sub_sub_category_id);
+                $firstSubSub = trim($subSubParts[0]);
+                if (is_numeric($firstSubSub)) {
+                    $primarySubSubCategoryId = (int)$firstSubSub;
+                }
             }
 
             // Sync all categories including the primary one
             $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
-            $allCategoryIds = array_unique(array_filter($allCategoryIds, function($value) {
+            $allCategoryIds = array_values(array_unique(array_filter($allCategoryIds, function($value) {
                 return !empty($value) && is_numeric($value);
-            }));
+            })));
 
             if (!empty($allCategoryIds)) {
                 $syncData = [];
@@ -1922,8 +1986,8 @@ class ProductApisController extends Controller
                     // Only attach sub_category_id and sub_sub_category_id to the primary category record
                     if ($catId == $request->category_id) {
                         $syncData[$catId] = [
-                            'sub_category_id' => $request->sub_category_id ?? null,
-                            'sub_sub_category_id' => $request->sub_sub_category_id ?? null,
+                            'sub_category_id' => $primarySubCategoryId,
+                            'sub_sub_category_id' => $primarySubSubCategoryId,
                         ];
                     } else {
                         $syncData[$catId] = [

@@ -22,18 +22,34 @@ class GeminiAIService
             \App\Models\ApiCallTracking::incrementCallCount('google_gemini', $source);
         }
 
-        $apiKey = env('MIX_GEMINI_API_KEY');
+        // 1. First priority: Check database settings (text_gen_key / gemini_key)
+        $apiKey = Setting::get_value('text_gen_key');
         if (empty($apiKey)) {
-            $apiKey = Setting::get_value('text_gen_key');
+            $apiKey = Setting::get_value('gemini_key');
         }
-        $apiKey = trim($apiKey);
+        if (empty($apiKey)) {
+            $apiKey = Setting::get_value('gemini_api_key');
+        }
+
+        // 2. Second priority: Fallback to .env configuration
+        if (empty($apiKey)) {
+            $apiKey = env('MIX_GEMINI_API_KEY') ?: env('GEMINI_API_KEY');
+        }
+
+        $apiKey = trim($apiKey ?? '');
 
         if (empty($apiKey)) {
-            throw new \Exception('Google Gemini API key not configured in store settings or .env.');
+            throw new \Exception('Google Gemini API key not configured in store settings (Third Party API Credentials) or .env.');
         }
 
-        // Gemini API endpoint with gemini-3.5-flash-lite
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent';
+        // Available fast models for automatic fallback during high-demand spikes (503/429)
+        $models = [
+            'gemini-3.8-flash',
+            'gemini-3.5-flash',
+            'gemini-3.5-flash-lite',
+            'gemini-2.5-flash-lite',
+            'gemini-3.1-flash-lite',
+        ];
 
         $payload = [
             'contents' => [
@@ -48,35 +64,52 @@ class GeminiAIService
             ]
         ];
 
-        $ch = curl_init($url);
-        curl_setopt_array($ch, [
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($payload),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_TIMEOUT => 60,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'x-goog-api-key: ' . $apiKey
-            ],
-        ]);
+        $lastError = '';
+        $response = null;
+        $httpCode = 0;
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError = curl_error($ch);
-        curl_close($ch);
+        foreach ($models as $model) {
+            $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent';
 
-        if ($curlError) {
-            Log::error('Gemini API Network Error: ' . $curlError);
-            throw new \Exception('Network error: ' . $curlError);
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_TIMEOUT => 45,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'x-goog-api-key: ' . $apiKey
+                ],
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
+            curl_close($ch);
+
+            if ($curlError) {
+                $lastError = 'Network error: ' . $curlError;
+                continue;
+            }
+
+            // If 200 OK, break and use this response
+            if ($httpCode === 200 && !empty($response)) {
+                break;
+            }
+
+            // Log model failure and try next model
+            $lastError = "Model $model returned HTTP $httpCode: $response";
+            Log::warning("Gemini model $model failed with HTTP $httpCode, trying next fallback model...");
         }
 
         if ($httpCode !== 200 || empty($response)) {
-            Log::error("Gemini API Error (HTTP $httpCode)", [
-                'response' => $response,
+            Log::error("Gemini API Error across all fallback models", [
+                'last_error' => $lastError,
                 'payload' => $payload
             ]);
-            throw new \Exception('Failed to generate content from Gemini API (HTTP ' . $httpCode . ') Response: ' . $response);
+            throw new \Exception('Failed to generate content from Gemini API (HTTP ' . $httpCode . ') ' . $lastError);
         }
 
         $data = json_decode($response, true);

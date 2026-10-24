@@ -52,6 +52,7 @@ Route::get('cities', [\App\Http\Controllers\API\CityApiController::class, 'getCi
 Route::get('policies', [\App\Http\Controllers\SellerController::class, 'getPolicies']);
 
 Route::get('home_slider_images', [\App\Http\Controllers\API\HomeSliderImagesApiController::class, 'index']);
+Route::get('home_flyers', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'getPublicFlyers']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('admin_settings', [\App\Http\Controllers\Controller::class, 'getAdminSettings']);
@@ -190,6 +191,14 @@ Route::middleware('auth:api')->group(function () {
         Route::post('save', [\App\Http\Controllers\API\HeroSliderVideosApiController::class, 'save'])->name('hero_slider_videos.save');
         Route::post('update', [\App\Http\Controllers\API\HeroSliderVideosApiController::class, 'update'])->name('hero_slider_videos.update');
         Route::post('delete', [\App\Http\Controllers\API\HeroSliderVideosApiController::class, 'delete'])->name('hero_slider_videos.delete');
+    });
+
+    Route::group(['prefix' => 'home_flyers'], function () {
+        Route::get('list', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'index'])->name('home_flyers.list');
+        Route::post('save', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'save'])->name('home_flyers.save');
+        Route::post('update', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'update'])->name('home_flyers.update');
+        Route::post('delete', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'delete'])->name('home_flyers.delete');
+        Route::post('update_status', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'updateStatus'])->name('home_flyers.update_status');
     });
 
     Route::group(['prefix' => 'promo_code'], function () {

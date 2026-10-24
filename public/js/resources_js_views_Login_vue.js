@@ -348,7 +348,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.auth .btn-promary-login[data-v-12f5395a],\r\n.auth .btn-primary[data-v-12f5395a] {\r\n    background-color: #c5ad24 !important;\r\n    border-color: #c5ad24 !important;\r\n    color: #fff;\n}\n.auth .btn-promary-login[data-v-12f5395a]:hover,\r\n.auth .btn-promary-login[data-v-12f5395a]:focus,\r\n.auth .btn-primary[data-v-12f5395a]:hover,\r\n.auth .btn-primary[data-v-12f5395a]:focus {\r\n    background-color: #b39c20 !important;\r\n    border-color: #b39c20 !important;\r\n    color: #fff;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.auth .btn-promary-login[data-v-12f5395a],\n.auth .btn-primary[data-v-12f5395a] {\n    background-color: #c5ad24 !important;\n    border-color: #c5ad24 !important;\n    color: #fff;\n}\n.auth .btn-promary-login[data-v-12f5395a]:hover,\n.auth .btn-promary-login[data-v-12f5395a]:focus,\n.auth .btn-primary[data-v-12f5395a]:hover,\n.auth .btn-primary[data-v-12f5395a]:focus {\n    background-color: #b39c20 !important;\n    border-color: #b39c20 !important;\n    color: #fff;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

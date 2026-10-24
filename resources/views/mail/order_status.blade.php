@@ -299,41 +299,146 @@
             @endphp
         @else
 
-            <p style="line-height: 24px; margin-bottom:15px;">
-                Dear, {{ $admin->name }}
+            <p style="line-height: 24px; margin-bottom:15px; font-size: 15px;">
+                Dear <strong>{{ $admin->name ?? 'Admin' }}</strong>,
             </p>
 
             @if($order->active_status == \App\Models\OrderStatusList::$received)
-                <p style="line-height: 24px; margin-bottom:15px;">
-                    You have just received new order, #{{ $order->id }}
-                </p>
+                <div style="background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 12px 16px; margin-bottom: 20px; border-radius: 4px;">
+                    <strong style="color: #2e7d32; font-size: 16px;">🔔 New Order Received (Admin Tracking Alert)</strong>
+                    <p style="margin: 6px 0 0 0; color: #333; font-size: 14px; line-height: 20px;">
+                        A new order <strong>#{{ $order->id }}</strong> has been placed on <strong>{{ $order->created_at }}</strong>.
+                    </p>
+                </div>
             @else
                 <p style="line-height: 24px; margin-bottom:15px;">
                     {{ $subject }}
                 </p>
             @endif
+
+            {{-- Customer Information Box --}}
+            @php
+                $orderCustomer = $order->user ?? ($user ?? ($customer ?? null));
+            @endphp
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                <p style="font-size: 15px; font-weight: 700; margin: 0 0 12px 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+                    👤 Customer & Delivery Details:
+                </p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px; line-height: 22px;">
+                    <tr>
+                        <td style="width: 35%; color: #64748b; padding: 4px 0;">Customer Name:</td>
+                        <td style="width: 65%; color: #0f172a; font-weight: 600; padding: 4px 0;">{{ $orderCustomer->name ?? 'Customer' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Mobile / Phone:</td>
+                        <td style="color: #0f172a; font-weight: 600; padding: 4px 0;">{{ $orderCustomer->mobile ?? ($order->mobile ?? 'N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Email:</td>
+                        <td style="color: #0f172a; padding: 4px 0;">{{ $orderCustomer->email ?? ($order->user_email ?? 'N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Delivery Type:</td>
+                        <td style="color: #0f172a; font-weight: 600; padding: 4px 0;">{{ ucfirst($order->order_type ?? 'delivery') }}</td>
+                    </tr>
+                    @if(!empty($order->delivery_time))
+                    <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Delivery Time / Slot:</td>
+                        <td style="color: #0f172a; padding: 4px 0;">{{ $order->delivery_time }}</td>
+                    </tr>
+                    @endif
+                    <tr>
+                        <td style="color: #64748b; padding: 4px 0; vertical-align: top;">Delivery Address:</td>
+                        <td style="color: #0f172a; padding: 4px 0;">{{ $order->address ?? 'N/A' }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            {{-- Products Table --}}
+            @if(isset($order->items) && count($order->items) > 0)
+                <p style="font-size: 15px; font-weight: 700; margin: 0 0 10px 0; color: #1e293b;">📦 Ordered Items:</p>
+                <div style="max-width: 100%; overflow-x: auto; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; font-size: 13px;">
+                        <thead>
+                            <tr style="background-color: #f1f5f9; color: #334155;">
+                                <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">#</th>
+                                <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Item</th>
+                                <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">Variant</th>
+                                <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">Price</th>
+                                <th style="padding: 8px; text-align: center; border: 1px solid #ddd;">Qty</th>
+                                <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">SubTotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($order->items as $idx => $item)
+                                <tr>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">{{ $idx + 1 }}</td>
+                                    <td style="padding: 8px; text-align: left; border: 1px solid #ddd; font-weight: 500;">{{ $item->product_name }}</td>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">{{ $item->variant_name }}</td>
+                                    <td style="padding: 8px; text-align: right; border: 1px solid #ddd;">{{ $currency }}{{ $item->discounted_price > 0 ? $item->discounted_price : $item->price }}</td>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #ddd; font-weight: 600;">{{ $item->quantity }}</td>
+                                    <td style="padding: 8px; text-align: right; border: 1px solid #ddd; font-weight: 600;">{{ $currency }}{{ $item->sub_total }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            {{-- Financial Summary Table --}}
+            <p style="font-size: 15px; font-weight: 700; margin: 0 0 10px 0; color: #1e293b;">💰 Order Summary & Payment:</p>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; font-size: 14px; margin-bottom: 25px;">
+                <tbody>
+                    <tr style="background-color: #fff;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Payment Method:</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd; font-weight: 700; color: #0f172a;">{{ strtoupper($order->payment_method ?? 'COD') }}</td>
+                    </tr>
+                    <tr style="background-color: #f8fafc;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Total Items Price:</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd;">{{ $currency }}{{ $order->remaining_total ?? $order->total }}</td>
+                    </tr>
+                    <tr style="background-color: #fff;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Delivery Charge:</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd;">{{ $currency }}{{ $order->delivery_charge ?? 0 }}</td>
+                    </tr>
+                    @if(($order->discount ?? 0) > 0)
+                    <tr style="background-color: #f8fafc;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Discount ({{ $order->discount }}%):</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd; color: #16a34a;">- {{ $currency }}{{ round(($order->remaining_total * $order->discount) / 100, 2) }}</td>
+                    </tr>
+                    @endif
+                    @if(($order->promo_discount ?? 0) > 0)
+                    <tr style="background-color: #f8fafc;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Promo Discount ({{ $order->promo_code }}):</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd; color: #16a34a;">- {{ $currency }}{{ $order->promo_discount }}</td>
+                    </tr>
+                    @endif
+                    @if(($order->wallet_balance ?? 0) > 0)
+                    <tr style="background-color: #fff;">
+                        <th style="padding: 8px 12px; text-align: left; border: 1px solid #ddd; font-weight: normal; color: #475569;">Wallet Balance Used:</th>
+                        <td style="padding: 8px 12px; text-align: right; border: 1px solid #ddd; color: #16a34a;">- {{ $currency }}{{ $order->wallet_balance }}</td>
+                    </tr>
+                    @endif
+                    <tr style="background-color: #0f172a; color: #ffffff; font-weight: 700; font-size: 15px;">
+                        <th style="padding: 10px 12px; text-align: left; border: 1px solid #0f172a;">Final Amount Payable:</th>
+                        <td style="padding: 10px 12px; text-align: right; border: 1px solid #0f172a;">{{ $currency }}{{ ceil($order->remaining_final ?? $order->final_total) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
             @php
                 $redirect_url = (isset($order->id)) ? url('/orders/view/'.$order->id): url('/orders');
             @endphp
-        @endif
 
-        <a href="{{ $redirect_url }}" style="color: #ffffff; text-decoration: none;">
-            <table border="0" align="center" width="180" cellpadding="0" cellspacing="0" bgcolor="#37a279" style="margin-bottom:20px;">
-                <tr>
-                    <td height="10" style="font-size: 10px; line-height: 10px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td align="center" style="color: #ffffff; font-size: 14px; font-family: 'Work Sans', Calibri, sans-serif; line-height: 22px; letter-spacing: 2px;">
-                        <!-- main section button -->
-                        <div style="line-height: 22px;">
-                            Check it out
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td height="10" style="font-size: 10px; line-height: 10px;">&nbsp;</td>
-                </tr>
-            </table>
-        </a>
+            <div style="text-align: center; margin: 25px 0;">
+                <a href="{{ $redirect_url }}" style="background-color: #10b981; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; display: inline-block;">
+                    🔍 View Order #{{ $order->id }} in Admin Panel &rarr;
+                </a>
+            </div>
+
+            <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                <em>This is an automated administrative order tracking alert sent by the {{ $app_name ?? 'Chanda Mama' }} system.<br>Please do not reply directly to this no-reply notification email.</em>
+            </p>
+        @endif
     @endif
 @endif

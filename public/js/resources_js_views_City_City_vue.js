@@ -85,8 +85,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       tableKey: 0,
       // For forcing table re-render
       currentLanguageId: null,
-      activeLanguages: []
+      activeLanguages: [],
+      showBoundaryModal: false,
+      selectedCity: null,
+      previewCenter: {
+        lat: 0,
+        lng: 0
+      },
+      previewOverlays: []
     };
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.clearPreviewOverlays();
   },
   mounted: function mounted() {},
   created: function created() {
@@ -215,6 +225,312 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           });
         }
       });
+    },
+    formatRadius: function formatRadius(meters) {
+      var m = parseFloat(meters);
+      if (!m || isNaN(m)) return '';
+      if (m >= 1000) {
+        return (m / 1000).toFixed(1) + ' km';
+      }
+      return Math.round(m) + ' m';
+    },
+    getPointsCount: function getPointsCount(boundaryPoints) {
+      if (!boundaryPoints) return 0;
+      try {
+        var pts = typeof boundaryPoints === 'string' ? JSON.parse(boundaryPoints) : boundaryPoints;
+        if (!Array.isArray(pts)) return 0;
+        if (pts.length > 0 && Array.isArray(pts[0])) {
+          return pts.reduce(function (sum, p) {
+            return sum + (Array.isArray(p) ? p.length : 0);
+          }, 0);
+        }
+        return pts.length;
+      } catch (e) {
+        return 0;
+      }
+    },
+    getShapeInfo: function getShapeInfo(city) {
+      if (!city) return {
+        type: 'none',
+        count: 0,
+        text: 'Not Drawn',
+        details: ''
+      };
+      var bp = city.boundary_points;
+      if (typeof bp === 'string' && bp.trim() !== '') {
+        try {
+          bp = JSON.parse(bp);
+        } catch (e) {
+          bp = null;
+        }
+      }
+
+      // Check if multi-shapes (array of polygons / circles)
+      if (Array.isArray(bp) && bp.length > 0 && (Array.isArray(bp[0]) || bp[0] && _typeof(bp[0]) === 'object' && bp[0].type === 'circle')) {
+        var polyCount = 0;
+        var circleCount = 0;
+        var totalPolyPoints = 0;
+        bp.forEach(function (s) {
+          if (Array.isArray(s)) {
+            polyCount++;
+            totalPolyPoints += s.length;
+          } else if (s && s.type === 'circle') {
+            circleCount++;
+          }
+        });
+        var total = polyCount + circleCount;
+        if (total > 1) {
+          var parts = [];
+          if (polyCount > 0) parts.push("".concat(polyCount, " polygon").concat(polyCount > 1 ? 's' : ''));
+          if (circleCount > 0) parts.push("".concat(circleCount, " circle").concat(circleCount > 1 ? 's' : ''));
+          return {
+            type: 'multi',
+            count: total,
+            text: "Multi-Area (".concat(total, ")"),
+            details: parts.join(' + ')
+          };
+        } else if (total === 1) {
+          if (circleCount === 1) {
+            var c = bp.find(function (s) {
+              return s && s.type === 'circle';
+            });
+            var rad = c && c.radius ? this.formatRadius(c.radius) : city.radius ? this.formatRadius(city.radius) : '';
+            return {
+              type: 'circle',
+              count: 1,
+              text: 'Circle',
+              details: rad ? "Radius: ".concat(rad) : ''
+            };
+          } else if (polyCount === 1) {
+            return {
+              type: 'polygon',
+              count: totalPolyPoints,
+              text: "Polygon (".concat(totalPolyPoints, " pts)"),
+              details: "".concat(totalPolyPoints, " points")
+            };
+          }
+        }
+      }
+
+      // Single polygon
+      if (city.geolocation_type === 'polygon' || Array.isArray(bp) && bp.length >= 3 && bp[0] && bp[0].lat !== undefined) {
+        var count = Array.isArray(bp) ? bp.length : 0;
+        return {
+          type: 'polygon',
+          count: count,
+          text: count > 0 ? "Polygon (".concat(count, " pts)") : 'Polygon',
+          details: count > 0 ? "".concat(count, " points") : ''
+        };
+      }
+
+      // Single circle
+      if (city.geolocation_type === 'circle' || Array.isArray(bp) && bp.length === 1 && bp[0] && bp[0].lat !== undefined || city.radius) {
+        var _rad = this.formatRadius(city.radius);
+        return {
+          type: 'circle',
+          count: 1,
+          text: _rad ? "Circle (".concat(_rad, ")") : 'Circle',
+          details: _rad ? "Radius: ".concat(_rad) : ''
+        };
+      }
+      return {
+        type: 'none',
+        count: 0,
+        text: 'Not Drawn',
+        details: ''
+      };
+    },
+    getBadgeClass: function getBadgeClass(city) {
+      var info = this.getShapeInfo(city);
+      if (info.type === 'multi') return 'bg-info text-white';
+      if (info.type === 'polygon') return 'bg-success text-white';
+      if (info.type === 'circle') return 'bg-primary text-white';
+      return 'bg-secondary text-white';
+    },
+    previewBoundary: function previewBoundary(city) {
+      var _this6 = this;
+      this.selectedCity = city;
+      this.showBoundaryModal = true;
+      var lat = parseFloat(city.latitude);
+      var lng = parseFloat(city.longitude);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        this.previewCenter = {
+          lat: lat,
+          lng: lng
+        };
+      }
+      this.$nextTick(function () {
+        if (_this6.$refs.previewMapRef) {
+          _this6.$refs.previewMapRef.$mapPromise.then(function (map) {
+            setTimeout(function () {
+              if (window.google && window.google.maps) {
+                google.maps.event.trigger(map, 'resize');
+              }
+              _this6.renderPreviewOverlay(map, city);
+            }, 150);
+          });
+        }
+      });
+    },
+    clearPreviewOverlays: function clearPreviewOverlays() {
+      if (this.previewOverlays && this.previewOverlays.length > 0) {
+        this.previewOverlays.forEach(function (o) {
+          if (o && typeof o.setMap === 'function') {
+            o.setMap(null);
+          }
+        });
+      }
+      this.previewOverlays = [];
+    },
+    renderPreviewOverlay: function renderPreviewOverlay(map, city) {
+      var _this7 = this;
+      this.clearPreviewOverlays();
+      if (!window.google || !window.google.maps || !city) return;
+      var boundaryPoints = city.boundary_points;
+      if (typeof boundaryPoints === 'string' && boundaryPoints.trim() !== '') {
+        try {
+          boundaryPoints = JSON.parse(boundaryPoints);
+        } catch (e) {
+          boundaryPoints = null;
+        }
+      }
+      var bounds = new google.maps.LatLngBounds();
+
+      // Case 1: Multi-polygon and circles collection
+      if (Array.isArray(boundaryPoints) && boundaryPoints.length > 0 && (Array.isArray(boundaryPoints[0]) || boundaryPoints[0] && _typeof(boundaryPoints[0]) === 'object' && boundaryPoints[0].type === 'circle')) {
+        boundaryPoints.forEach(function (shape) {
+          if (Array.isArray(shape) && shape.length >= 3) {
+            var polygonPoints = shape.map(function (p) {
+              return {
+                lat: parseFloat(p.lat),
+                lng: parseFloat(p.lng)
+              };
+            }).filter(function (p) {
+              return !isNaN(p.lat) && !isNaN(p.lng);
+            });
+            if (polygonPoints.length >= 3) {
+              var poly = new google.maps.Polygon({
+                paths: polygonPoints,
+                strokeColor: '#000000',
+                strokeOpacity: 0.85,
+                strokeWeight: 2,
+                fillColor: '#666666',
+                fillOpacity: 0.35,
+                map: map,
+                zIndex: 1
+              });
+              _this7.previewOverlays.push(poly);
+              polygonPoints.forEach(function (pt) {
+                return bounds.extend(pt);
+              });
+            }
+          } else if (shape && shape.type === 'circle' && shape.center) {
+            var cLat = parseFloat(shape.center.lat);
+            var cLng = parseFloat(shape.center.lng);
+            if (!isNaN(cLat) && !isNaN(cLng)) {
+              var center = {
+                lat: cLat,
+                lng: cLng
+              };
+              var radiusMeters = parseFloat(shape.radius) || 15000;
+              var circle = new google.maps.Circle({
+                strokeColor: '#000000',
+                strokeOpacity: 0.85,
+                strokeWeight: 2,
+                fillColor: '#666666',
+                fillOpacity: 0.35,
+                map: map,
+                center: center,
+                radius: radiusMeters,
+                zIndex: 1
+              });
+              _this7.previewOverlays.push(circle);
+              if (circle.getBounds) {
+                bounds.union(circle.getBounds());
+              } else {
+                bounds.extend(center);
+              }
+            }
+          }
+        });
+        if (!bounds.isEmpty()) {
+          map.fitBounds(bounds);
+        } else {
+          this.centerMapToCity(map, city);
+        }
+        return;
+      }
+
+      // Case 2: Single Polygon
+      if (Array.isArray(boundaryPoints) && boundaryPoints.length >= 3 && boundaryPoints[0] && boundaryPoints[0].lat !== undefined) {
+        var polygonPoints = boundaryPoints.map(function (p) {
+          return {
+            lat: parseFloat(p.lat),
+            lng: parseFloat(p.lng)
+          };
+        }).filter(function (p) {
+          return !isNaN(p.lat) && !isNaN(p.lng);
+        });
+        if (polygonPoints.length >= 3) {
+          var poly = new google.maps.Polygon({
+            paths: polygonPoints,
+            strokeColor: '#000000',
+            strokeOpacity: 0.85,
+            strokeWeight: 2,
+            fillColor: '#666666',
+            fillOpacity: 0.35,
+            map: map,
+            zIndex: 1
+          });
+          this.previewOverlays.push(poly);
+          polygonPoints.forEach(function (pt) {
+            return bounds.extend(pt);
+          });
+          map.fitBounds(bounds);
+          return;
+        }
+      }
+
+      // Case 3: Single Circle Serviceable Area
+      var points = Array.isArray(boundaryPoints) ? boundaryPoints : boundaryPoints ? [boundaryPoints] : [];
+      var centerLat = points.length > 0 && points[0].lat !== undefined ? parseFloat(points[0].lat) : parseFloat(city.latitude);
+      var centerLng = points.length > 0 && points[0].lng !== undefined ? parseFloat(points[0].lng) : parseFloat(city.longitude);
+      if (!isNaN(centerLat) && !isNaN(centerLng)) {
+        var center = {
+          lat: centerLat,
+          lng: centerLng
+        };
+        var radiusMeters = parseFloat(city.radius) || 15000;
+        var circle = new google.maps.Circle({
+          strokeColor: '#000000',
+          strokeOpacity: 0.85,
+          strokeWeight: 2,
+          fillColor: '#666666',
+          fillOpacity: 0.35,
+          map: map,
+          center: center,
+          radius: radiusMeters,
+          zIndex: 1
+        });
+        this.previewOverlays.push(circle);
+        if (circle.getBounds) {
+          map.fitBounds(circle.getBounds());
+        } else {
+          map.setCenter(center);
+          map.setZoom(12);
+        }
+      }
+    },
+    centerMapToCity: function centerMapToCity(map, city) {
+      var lat = parseFloat(city.latitude);
+      var lng = parseFloat(city.longitude);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        map.setCenter({
+          lat: lat,
+          lng: lng
+        });
+        map.setZoom(12);
+      }
     }
   }
 });
@@ -380,11 +696,62 @@ var render = function render() {
       },
       proxy: true
     }, {
+      key: "cell(geolocation_type)",
+      fn: function fn(row) {
+        return [_c("div", {
+          staticClass: "d-flex align-items-center gap-1"
+        }, [_vm.getShapeInfo(row.item).type === "multi" ? _c("span", {
+          staticClass: "badge bg-light-info text-info fw-bold d-inline-flex align-items-center gap-1 px-2 py-1"
+        }, [_c("i", {
+          staticClass: "fa fa-map-o"
+        }), _vm._v(" Multi-Area\n                                            "), _c("small", {
+          staticClass: "text-muted ms-1"
+        }, [_vm._v("(" + _vm._s(_vm.getShapeInfo(row.item).count) + " areas)")])]) : _vm.getShapeInfo(row.item).type === "polygon" ? _c("span", {
+          staticClass: "badge bg-light-success text-success fw-bold d-inline-flex align-items-center gap-1 px-2 py-1"
+        }, [_c("i", {
+          staticClass: "fa fa-pencil-square-o"
+        }), _vm._v(" Polygon\n                                            "), _vm.getShapeInfo(row.item).count > 0 ? _c("small", {
+          staticClass: "text-muted ms-1"
+        }, [_vm._v("\n                                                (" + _vm._s(_vm.getShapeInfo(row.item).count) + " pts)\n                                            ")]) : _vm._e()]) : _vm.getShapeInfo(row.item).type === "circle" ? _c("span", {
+          staticClass: "badge bg-light-primary text-primary fw-bold d-inline-flex align-items-center gap-1 px-2 py-1"
+        }, [_c("i", {
+          staticClass: "fa fa-circle-o"
+        }), _vm._v(" Circle\n                                            "), row.item.radius ? _c("small", {
+          staticClass: "text-muted ms-1"
+        }, [_vm._v("\n                                                (" + _vm._s(_vm.formatRadius(row.item.radius)) + ")\n                                            ")]) : _vm._e()]) : _c("span", {
+          staticClass: "badge bg-light text-muted px-2 py-1"
+        }, [_vm._v("\n                                            Not Drawn\n                                        ")])])];
+      }
+    }, {
       key: "cell(actions)",
       fn: function fn(row) {
         return [_c("div", {
           staticClass: "d-flex gap-2"
-        }, [_vm.$can("city_update") ? _c("router-link", {
+        }, [row.item.boundary_points || row.item.latitude && row.item.longitude ? _c("button", {
+          directives: [{
+            name: "b-tooltip",
+            rawName: "v-b-tooltip.hover",
+            modifiers: {
+              hover: true
+            }
+          }],
+          staticClass: "figma-action-btn",
+          attrs: {
+            title: _vm.__("view_serviceable_area") || "View Serviceable Area"
+          },
+          on: {
+            click: function click($event) {
+              return _vm.previewBoundary(row.item);
+            }
+          }
+        }, [_c("base-icon", {
+          attrs: {
+            name: "Eye",
+            hoverName: "Type=Hover (1)",
+            width: "24",
+            height: "24"
+          }
+        })], 1) : _vm._e(), _vm._v(" "), _vm.$can("city_update") ? _c("router-link", {
           directives: [{
             name: "b-tooltip",
             rawName: "v-b-tooltip.hover",
@@ -437,7 +804,63 @@ var render = function render() {
         })], 1) : _vm._e()], 1)];
       }
     }])
-  })], 1), _vm._v(" "), _c("div", {
+  })], 1), _vm._v(" "), _c("b-modal", {
+    attrs: {
+      id: "boundary-preview-modal",
+      title: _vm.selectedCity ? "".concat(_vm.selectedCity.name, " - Serviceable Area Preview") : "Serviceable Area",
+      size: "lg",
+      "ok-only": "",
+      "ok-title": "Close",
+      "ok-variant": "secondary",
+      centered: ""
+    },
+    on: {
+      hidden: _vm.clearPreviewOverlays
+    },
+    model: {
+      value: _vm.showBoundaryModal,
+      callback: function callback($$v) {
+        _vm.showBoundaryModal = $$v;
+      },
+      expression: "showBoundaryModal"
+    }
+  }, [_vm.selectedCity ? _c("div", [_c("div", {
+    staticClass: "d-flex justify-content-between align-items-center mb-2 px-1 small flex-wrap gap-2"
+  }, [_c("div", [_c("strong", [_vm._v("Type:")]), _vm._v(" "), _c("span", {
+    staticClass: "badge",
+    "class": _vm.getBadgeClass(_vm.selectedCity)
+  }, [_vm._v("\n                                            " + _vm._s(_vm.getShapeInfo(_vm.selectedCity).text) + "\n                                        ")]), _vm._v(" "), _vm.getShapeInfo(_vm.selectedCity).details ? _c("span", {
+    staticClass: "ms-2 text-muted"
+  }, [_vm._v("\n                                            (" + _vm._s(_vm.getShapeInfo(_vm.selectedCity).details) + ")\n                                        ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "text-muted text-truncate",
+    staticStyle: {
+      "max-width": "350px"
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-map-pin text-danger me-1"
+  }), _vm._v(" " + _vm._s(_vm.selectedCity.formatted_address || "".concat(_vm.selectedCity.latitude, ", ").concat(_vm.selectedCity.longitude)) + "\n                                    ")])]), _vm._v(" "), _c("div", {
+    staticStyle: {
+      height: "450px",
+      width: "100%",
+      "border-radius": "6px",
+      overflow: "hidden",
+      border: "1px solid #dee2e6"
+    }
+  }, [_c("GmapMap", {
+    ref: "previewMapRef",
+    staticStyle: {
+      width: "100%",
+      height: "100%"
+    },
+    attrs: {
+      zoom: 12,
+      center: _vm.previewCenter
+    }
+  }, [_vm.previewCenter.lat && _vm.previewCenter.lng ? _c("GmapMarker", {
+    attrs: {
+      position: _vm.previewCenter
+    }
+  }) : _vm._e()], 1)], 1)]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "figma-table-footer flex-wrap gap-3 mt-4"
   }, [_c("div", {
     staticClass: "showing-results-text small"
@@ -468,7 +891,7 @@ var render = function render() {
       },
       expression: "currentPage"
     }
-  })], 1)])])])])])])]);
+  })], 1)])], 1)])])])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

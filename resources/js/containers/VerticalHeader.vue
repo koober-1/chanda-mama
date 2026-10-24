@@ -873,13 +873,13 @@ export default {
 
             // Deterministic mock fallbacks based on notification ID to simulate realism if not enriched
             const seed = parseInt(String(notification.id || '').replace(/\D/g, '')) || 0;
-            const fallbackCustomers = ['Emily Johnson', 'John Smith', 'Michael Brown', 'Sophia Williams', 'David Jones'];
-            const fallbackStores = ['Green Basket', 'FreshMart', 'Local Harvest', 'Daily Needs', 'Super Saver'];
-            const fallbackTotals = ['1,250', '850', '2,400', '150', '580'];
+            const fallbackCustomers = ['Customer'];
+            const fallbackStores = ['Chandamama Store'];
+            const fallbackTotals = ['0'];
 
-            const customerName = notification.data.customer_name || fallbackCustomers[seed % fallbackCustomers.length];
-            const storeName = notification.data.store_name || fallbackStores[seed % fallbackStores.length];
-            const total = notification.data.total || fallbackTotals[seed % fallbackTotals.length];
+            const customerName = notification.data.customer_name || 'Customer';
+            const storeName = notification.data.store_name || 'Chandamama Store';
+            const total = notification.data.total || '';
             const currency = notification.data.currency || '₹';
 
             if (type === 'return_request_new' || type === 'return_request_sent' || type === 'return_request_status' || lowerText.includes('return')) {
@@ -890,7 +890,7 @@ export default {
                 body = `${customerName} cancelled order ${orderId} from ${storeName}`;
             } else if (lowerText.includes('receive') || lowerText.includes('place') || lowerText.includes('new order')) {
                 title = 'New Order Placed';
-                body = `${customerName} placed a new grocery order worth ${currency}${total} from ${storeName}`;
+                body = `${customerName} placed a new order worth ${currency}${total} from ${storeName}`;
             } else if (lowerText.includes('assign')) {
                 title = 'Order Assigned';
                 body = `Order ${orderId} from ${storeName} has been assigned to a delivery boy`;

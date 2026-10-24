@@ -161,21 +161,25 @@ class CustomerAuthController extends Controller
         }
 
         if (in_array($request->type, ['google', 'apple'])) {
-
-            $user =  User::where('email', $request->id)
-                ->where('type', $request->type)
-                ->where('status', 0)
-                ->first();
-            if ($user) {
-                return CommonHelper::responseSuccess('user_deactivated');
-            }
             $user = User::where('email', $request->id)->first();
 
             if ($user) {
-                if (strtolower($user->type) !== strtolower($request->type)) {
-                    Auth::login($user);
-                    return CommonHelper::responseError('user_exist_with_' . $user->type);
+                if ($user->status == 0 || $user->status == User::$deactive) {
+                    return CommonHelper::responseError(__('this_customer_account_is_deactivated_kindly_contact_admin'));
                 }
+            } else {
+                // Auto-create user for Google/Apple sign in if not exists
+                $referral_code = strtoupper(substr(sha1(microtime()), 0, 6));
+                $user = new User();
+                $user->name = $request->get('name') ?: strstr($request->id, '@', true);
+                $user->email = $request->id;
+                $user->referral_code = $referral_code;
+                $user->status = 1;
+                $user->type = $request->type;
+                $user->is_verified = true;
+                $user->email_verification_code = null;
+                $user->save();
+                CommonHelper::setDefaultMailSetting($user->id, 0);
             }
         }
 
@@ -188,7 +192,6 @@ class CustomerAuthController extends Controller
                 ->first();
         } elseif (in_array($request->type, ['google', 'apple'])) {
             $user = User::select('id', 'name', 'email', 'country_code', 'mobile', 'profile', 'balance', 'referral_code', 'status', 'type')
-                ->where('type', $request->type)
                 ->where('email', $request->id)
                 ->first();
         } elseif ($request->type === 'email') {

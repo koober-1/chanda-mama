@@ -238,10 +238,12 @@
                 <div class="text-muted small">
                     {{ __('Showing Result') }}: <strong class="text-dark">{{ pageEnd }}</strong> {{ __('of') }} <strong class="text-dark">{{ totalRows }}</strong>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <div class="d-flex align-items-center gap-1">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="product-per-page-box d-flex align-items-center gap-1">
                         <span class="text-muted small">Per page:</span>
-                        <b-form-select v-model="perPage" :options="pageOptions" class="form-select form-select-sm border-0 bg-light" style="width: 70px; padding: 0.1rem 0.4rem; height: 26px;"></b-form-select>
+                        <select v-model="perPage" class="product-page-select-field">
+                            <option v-for="opt in pageOptions" :key="opt" :value="opt">{{ opt }}</option>
+                        </select>
                     </div>
                     <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" class="mb-0 pagination-sm compact-pagination" hide-goto-end-buttons hide-ellipsis prev-text="<" next-text=">"></b-pagination>
                 </div>
@@ -788,26 +790,76 @@ export default {
     font-weight: 500;
 }
 
+/* Specific Per Page Container & Select (Overrides global form-select rules) */
+.product-per-page-box .product-page-select-field,
+.dense-layout .product-per-page-box .product-page-select-field,
+select.product-page-select-field {
+    width: auto !important;
+    min-width: 65px !important;
+    height: 32px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding: 4px 9px !important;
+    line-height: normal !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    background-color: #ffffff !important;
+    cursor: pointer !important;
+    color: #212529 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 8px center !important;
+    background-size: 10px 10px !important;
+    padding-right: 24px !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+.product-per-page-box .product-page-select-field:focus,
+select.product-page-select-field:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.15) !important;
+}
+
 /* Pagination */
 .compact-pagination ::v-deep .page-link {
-    font-size: 11.5px !important;
-    padding: 3px 8px !important;
-    height: 26px !important;
-    min-width: 26px;
+    font-size: 12px !important;
+    padding: 3px 10px !important;
+    height: 30px !important;
+    min-width: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid #dee2e6;
     margin: 0 2px;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #495057;
+    background-color: #fff;
+    transition: all 0.15s ease;
+}
+
+.compact-pagination ::v-deep .page-link:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
 }
 
 .compact-pagination ::v-deep .page-item.active .page-link {
-    background-color: #e2e8f0;
-    border-color: #cbd5e1;
-    color: #0f172a;
+    background-color: #212529 !important;
+    border-color: #212529 !important;
+    color: #ffffff !important;
     font-weight: 600;
+}
+
+.compact-pagination ::v-deep .page-item.disabled .page-link {
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    border-color: #e9ecef;
 }
 
 /* Overrides */

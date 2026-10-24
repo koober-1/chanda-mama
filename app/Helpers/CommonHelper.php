@@ -686,40 +686,95 @@ class CommonHelper
         return self::validatePromoCode($user_id, $code->promo_code, $total);
     }
 
-    public static function getDeliverableCity($latitude, $longitude)
+    public static function isPointInCityBoundary($point, $city)
     {
-        $point = ['lat' => $latitude, 'lng' => $longitude];
+        if (empty($city)) {
+            return false;
+        }
 
-        // Retrieve cities with boundary points
-        $cities = City::all();
+        $pLat = $point['lat'] ?? $point['latitude'] ?? null;
+        $pLng = $point['lng'] ?? $point['longitude'] ?? null;
+        if ($pLat === null || $pLng === null || !is_numeric($pLat) || !is_numeric($pLng)) {
+            return false;
+        }
+        $checkPoint = ['lat' => (float)$pLat, 'lng' => (float)$pLng];
 
-        $cityIds = '';
+        $boundaryPoints = $city->boundary_points;
+        if (is_string($boundaryPoints) && trim($boundaryPoints) !== '') {
+            $boundaryPoints = json_decode($boundaryPoints, true);
+        }
 
-        foreach ($cities as $city) {
-            if ($city->geolocation_type == 'polygon') {
-                $polygon = json_decode($city->boundary_points, true);
+        // 1. If boundary_points are specified (polygons, circles, or collection of shapes)
+        if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
+            // Check via isPointInPolygon (which handles multi-polygon arrays, polygon vertices, and circle objects)
+            if (self::isPointInPolygon($checkPoint, $boundaryPoints)) {
+                return true;
+            }
 
-                if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
-                    $cityIds = $city->id;
-                }
-            } elseif ($city->geolocation_type == 'circle') {
-                $boundaryPoints  = json_decode($city->boundary_points, true);
-                $radius = $city->radius; // Assuming radius is stored in meters
-
-                if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
-                    $center = $boundaryPoints[0]; // Assuming the first element is the center point
-                    if (self::isPointInCircle($point, $center, $radius)) {
-                        $cityIds = $city->id;
+            // Also check each element in boundaryPoints in case of mixed formats
+            foreach ($boundaryPoints as $shape) {
+                if (is_array($shape)) {
+                    // Check if shape is a circle object: {type: 'circle', center: {lat, lng}, radius: ...}
+                    if ((isset($shape['type']) && $shape['type'] === 'circle') || isset($shape['center'])) {
+                        $center = $shape['center'] ?? $shape;
+                        $radius = $shape['radius'] ?? $city->radius ?? 15000;
+                        if (self::isPointInCircle($checkPoint, $center, $radius)) {
+                            return true;
+                        }
+                    } elseif (isset($shape[0]) && is_array($shape[0])) {
+                        // Sub-array representing polygon vertices
+                        if (self::isPointInPolygon($checkPoint, $shape)) {
+                            return true;
+                        }
+                    } elseif (isset($shape['lat']) || isset($shape['latitude'])) {
+                        // Single point inside boundaryPoints (e.g. circle center)
+                        if ($city->geolocation_type === 'circle' || count($boundaryPoints) === 1) {
+                            $radius = $shape['radius'] ?? $city->radius ?? 15000;
+                            if (self::isPointInCircle($checkPoint, $shape, $radius)) {
+                                return true;
+                            }
+                        }
                     }
+                }
+            }
+
+            // If it's a single circle defined with boundary_points = [{"lat": ..., "lng": ...}] and city radius
+            if ($city->geolocation_type === 'circle' || count($boundaryPoints) === 1) {
+                $center = $boundaryPoints[0]['center'] ?? $boundaryPoints[0];
+                $radius = $boundaryPoints[0]['radius'] ?? $city->radius ?? 15000;
+                if (self::isPointInCircle($checkPoint, $center, $radius)) {
+                    return true;
                 }
             }
         }
 
-        $city = city::select('cities.*')
-            ->leftJoin("sellers", "sellers.city_id", "cities.id")
-            ->where("cities.id", $cityIds)
-            ->first();
-        return $city;
+        // 2. If city is defined as circle by city center and radius (when no boundary_points)
+        if ($city->geolocation_type === 'circle' && !empty($city->latitude) && !empty($city->longitude)) {
+            $radius = $city->radius ?? 15000;
+            return self::isPointInCircle($checkPoint, ['lat' => (float)$city->latitude, 'lng' => (float)$city->longitude], $radius);
+        }
+
+        return false;
+    }
+
+    public static function getDeliverableCity($latitude, $longitude)
+    {
+        if ($latitude === null || $longitude === null || $latitude === '' || $longitude === '') {
+            return null;
+        }
+
+        $point = ['lat' => (float)$latitude, 'lng' => (float)$longitude];
+
+        // Retrieve cities
+        $cities = City::all();
+
+        foreach ($cities as $city) {
+            if (self::isPointInCityBoundary($point, $city)) {
+                return $city;
+            }
+        }
+
+        return null;
     }
     function boundaryPointsToPolygon($boundaryPoints)
     {
@@ -732,32 +787,13 @@ class CommonHelper
 
     public static function getSellerIds($latitude, $longitude)
     {
-
-        // Helper function to convert boundary points to polygon WKT
         $point = ['lat' => $latitude, 'lng' => $longitude];
-
-        // Retrieve cities with boundary points
         $cities = City::all();
-
         $cityIds = [];
 
         foreach ($cities as $city) {
-            if ($city->geolocation_type == 'polygon') {
-                $polygon = json_decode($city->boundary_points, true);
-
-                if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
-                    $cityIds[] = $city->id;
-                }
-            } elseif ($city->geolocation_type == 'circle') {
-                $boundaryPoints  = json_decode($city->boundary_points, true);
-                $radius = $city->radius; // Assuming radius is stored in meters
-
-                if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
-                    $center = $boundaryPoints[0]; // Assuming the first element is the center point
-                    if (self::isPointInCircle($point, $center, $radius)) {
-                        $cityIds[] = $city->id;
-                    }
-                }
+            if (self::isPointInCityBoundary($point, $city)) {
+                $cityIds[] = $city->id;
             }
         }
 
@@ -809,8 +845,40 @@ class CommonHelper
             return false; // Return false if polygon data is not valid
         }
 
-        $x = $point['lng'];
-        $y = $point['lat'];
+        // Check if multi-polygon or list of multiple shapes
+        // In a single polygon, vertices are coordinate arrays/objects with 'lat' and 'lng'
+        // In a multi-polygon, polygon[0] is an array of points (without a direct scalar 'lat')
+        if (isset($polygon[0]) && is_array($polygon[0]) && (!isset($polygon[0]['lat']) && !isset($polygon[0]['latitude']))) {
+            foreach ($polygon as $singlePoly) {
+                if (is_array($singlePoly)) {
+                    if (isset($singlePoly['type']) && $singlePoly['type'] === 'circle') {
+                        $center = $singlePoly['center'] ?? $singlePoly;
+                        $radius = $singlePoly['radius'] ?? 15000;
+                        if (self::isPointInCircle($point, $center, $radius)) {
+                            return true;
+                        }
+                    } elseif (isset($singlePoly['type']) && $singlePoly['type'] === 'polygon' && isset($singlePoly['points'])) {
+                        if (self::isPointInPolygon($point, $singlePoly['points'])) {
+                            return true;
+                        }
+                    } elseif (self::isPointInPolygon($point, $singlePoly)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // Single circle object in shape collection
+        if (isset($polygon['type']) && $polygon['type'] === 'circle') {
+            return self::isPointInCircle($point, $polygon['center'] ?? $polygon, $polygon['radius'] ?? 15000);
+        }
+
+        $x = $point['lng'] ?? $point['longitude'] ?? null;
+        $y = $point['lat'] ?? $point['latitude'] ?? null;
+        if ($x === null || $y === null) {
+            return false;
+        }
 
         $vertices = $polygon;
         $count = count($vertices);
@@ -820,12 +888,16 @@ class CommonHelper
         }
 
         $inside = false;
-        $p1x = $vertices[0]['lng'];
-        $p1y = $vertices[0]['lat'];
+        $p1x = $vertices[0]['lng'] ?? $vertices[0]['longitude'] ?? null;
+        $p1y = $vertices[0]['lat'] ?? $vertices[0]['latitude'] ?? null;
 
         for ($i = 1; $i <= $count; $i++) {
-            $p2x = $vertices[$i % $count]['lng'];
-            $p2y = $vertices[$i % $count]['lat'];
+            $p2x = $vertices[$i % $count]['lng'] ?? $vertices[$i % $count]['longitude'] ?? null;
+            $p2y = $vertices[$i % $count]['lat'] ?? $vertices[$i % $count]['latitude'] ?? null;
+
+            if ($p1x === null || $p1y === null || $p2x === null || $p2y === null) {
+                continue;
+            }
 
             if ($y > min($p1y, $p2y)) {
                 if ($y <= max($p1y, $p2y)) {
@@ -850,10 +922,30 @@ class CommonHelper
     {
         $earthRadius = 6371000; // Earth's radius in meters
 
-        $latFrom = deg2rad((float)$center['lat']);
-        $lngFrom = deg2rad((float)$center['lng']);
-        $latTo = deg2rad((float)$point['lat']);
-        $lngTo = deg2rad((float)$point['lng']);
+        if (isset($center['center']) && is_array($center['center'])) {
+            $center = $center['center'];
+        }
+
+        $cLat = $center['lat'] ?? $center['latitude'] ?? null;
+        $cLng = $center['lng'] ?? $center['longitude'] ?? null;
+        $pLat = $point['lat'] ?? $point['latitude'] ?? null;
+        $pLng = $point['lng'] ?? $point['longitude'] ?? null;
+
+        if ($cLat === null || $cLng === null || $pLat === null || $pLng === null) {
+            return false;
+        }
+
+        $radiusMeters = (float)$radius;
+        if ($radiusMeters > 0 && $radiusMeters < 500) {
+            $radiusMeters *= 1000; // Convert km to meters
+        } elseif ($radiusMeters <= 0) {
+            $radiusMeters = 15000; // Default: 15 km
+        }
+
+        $latFrom = deg2rad((float)$cLat);
+        $lngFrom = deg2rad((float)$cLng);
+        $latTo = deg2rad((float)$pLat);
+        $lngTo = deg2rad((float)$pLng);
 
         $latDelta = $latTo - $latFrom;
         $lngDelta = $lngTo - $lngFrom;
@@ -863,7 +955,7 @@ class CommonHelper
 
         $distance = $angle * $earthRadius;
 
-        return $distance <= $radius;
+        return $distance <= $radiusMeters;
     }
     public static function getSellerIdsfromCityIds(array $cityIds)
     {
@@ -1035,58 +1127,45 @@ class CommonHelper
 
     public static function isDeliverable($city_id, $latitudeTo, $longitudeTo, $unit = 'K')
     {
-        $point = ['lat' => $latitudeTo, 'lng' => $longitudeTo];
-
-        // Retrieve cities with boundary points
-        $checkcityIds = explode(',', $city_id);
-        $cities = City::whereIn('id', $checkcityIds)->get();
-        $cityIds = [];
-
-        foreach ($cities as $city) {
-            if ($city->geolocation_type == 'polygon') {
-                $polygon = json_decode($city->boundary_points, true);
-
-                if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
-                    $cityIds[] = $city->id;
-                }
-            } elseif ($city->geolocation_type == 'circle') {
-                $boundaryPoints  = json_decode($city->boundary_points, true);
-                $radius = $city->radius; // Radius in meters
-
-                if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
-                    $center = $boundaryPoints[0]; // Center point
-                    if (self::isPointInCircle($point, $center, $radius)) {
-                        $cityIds[] = $city->id;
-                    }
-                }
-            }
-        }
-        // Return whether the point is deliverable in any of the specified cities
-        return $isDeliverable = !empty($cityIds);
-    }
-
-    public static function isDeliverableOrder($address_id, $latitude, $longitude, $seller_id)
-    {
-        if (!empty($seller_id) || $seller_id != "") {
-
-            // get seller points
-            $seller = Seller::select("latitude", "longitude")->where("id", "=", $seller_id)->first();
-
-            $address =  UserAddress::select("latitude", "longitude", DB::raw("6371 * acos(cos(radians(" . $seller->latitude . "))
-                                * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $seller->longitude . "))
-                                + sin(radians(" . $seller->latitude . ")) * sin(radians(latitude))) AS distance"))
-                ->where("id", "=", $address_id)->first();
-
-            $city = self::getDeliverableCity($latitude, $longitude);
-
-            if (!empty($city)) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (empty($latitudeTo) || empty($longitudeTo)) {
             return false;
         }
+
+        $point = ['lat' => (float)$latitudeTo, 'lng' => (float)$longitudeTo];
+        $checkcityIds = explode(',', $city_id);
+        $cities = City::whereIn('id', $checkcityIds)->get();
+
+        foreach ($cities as $city) {
+            if (self::isPointInCityBoundary($point, $city)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function isDeliverableOrder($address_id, $latitude, $longitude, $seller_id = null)
+    {
+        // 1. Direct coordinate check
+        if (!empty($latitude) && !empty($longitude) && is_numeric($latitude) && is_numeric($longitude)) {
+            $city = self::getDeliverableCity($latitude, $longitude);
+            if (!empty($city)) {
+                return true;
+            }
+        }
+
+        // 2. Address ID check
+        if (!empty($address_id)) {
+            $address = UserAddress::where("id", "=", $address_id)->first();
+            if ($address && !empty($address->latitude) && !empty($address->longitude) && is_numeric($address->latitude) && is_numeric($address->longitude)) {
+                $city = self::getDeliverableCity($address->latitude, $address->longitude);
+                if (!empty($city)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static function convertToParent($measurement, $measurement_unit_id)
@@ -1904,34 +1983,26 @@ class CommonHelper
     public static function getDeliveryCharge($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $cityIdsString, $sub_total)
     {
         // Convert the string to an array
-        $cityIds = explode(',', $cityIdsString);
+        $cityIds = !empty($cityIdsString) ? explode(',', (string)$cityIdsString) : [];
 
-        // Retrieve cities with specified IDs
-        $cities = City::whereIn('id', $cityIds)->get();
-        $point = ['lat' => $latitudeFrom, 'lng' => $longitudeFrom];
+        // Verify customer's delivery address ($latitudeFrom, $longitudeFrom) falls inside a serviceable area
+        $city = self::getDeliverableCity($latitudeFrom, $longitudeFrom);
 
-        $cityId = '';
-
-        foreach ($cities as $city) {
-            if ($city->geolocation_type == 'polygon') {
-                $polygon = json_decode($city->boundary_points, true);
-
-                if (is_array($polygon) && !empty($polygon) && self::isPointInPolygon($point, $polygon)) {
-                    $cityId = $city->id;
-                }
-            } elseif ($city->geolocation_type == 'circle') {
-                $boundaryPoints  = json_decode($city->boundary_points, true);
-                $radius = $city->radius; // Assuming radius is stored in meters
-
-                if (is_array($boundaryPoints) && !empty($boundaryPoints)) {
-                    $center = $boundaryPoints[0]; // Assuming the first element is the center point
-                    if (self::isPointInCircle($point, $center, $radius)) {
-                        $cityId = $city->id;
-                    }
+        if (!$city && !empty($cityIds)) {
+            $cities = City::whereIn('id', $cityIds)->get();
+            foreach ($cities as $c) {
+                if (self::isPointInCityBoundary(['lat' => $latitudeFrom, 'lng' => $longitudeFrom], $c)) {
+                    $city = $c;
+                    break;
                 }
             }
         }
-        $city = City::where('id', $cityId)->first();
+
+        if (!$city) {
+            $response['error'] = true;
+            $response['message'] = __('sorry_we_are_not_delivering_on_selected_address') ?: 'Sorry, We are not delivering on selected address';
+            return $response;
+        }
         if ($city) {
             $charge = 0;
             $charge_method = $city['delivery_charge_method'];
@@ -2012,6 +2083,16 @@ class CommonHelper
                                 + sin(radians(" . $latitudeFrom . ")) * sin(radians(sellers.latitude))) AS distance"))
             ->leftJoin("cities", "sellers.city_id", "cities.id")->whereIn('sellers.id', $seller_ids)
             ->get();
+
+        if ($sellers->isEmpty()) {
+            $sellers = Seller::whereIn('id', $seller_ids)->get();
+        }
+        if ($sellers->isEmpty()) {
+            $firstSeller = Seller::first();
+            if ($firstSeller) {
+                $sellers = collect([$firstSeller]);
+            }
+        }
 
         if ($sellers->isNotEmpty()) {
 
@@ -2653,34 +2734,59 @@ class CommonHelper
 
     public static function sendMail($to, $subject, $data)
     {
+        if (empty($to) || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            Log::warning("[sendMail] Invalid or empty recipient email: " . ($to ?? 'NULL'));
+            return;
+        }
 
-        $mailer = Setting::get_value('mailer') ?: 'smtp';
+        $mailer = Setting::get_value('mailer') ?: config('mail.default', 'smtp');
+        $smtp_host = Setting::get_value('smtp_host') ?: config('mail.mailers.smtp.host', 'smtp.gmail.com');
+        $smtp_from_mail = Setting::get_value('smtp_from_mail') ?: config('mail.mailers.smtp.username', 'chandamamagkp@gmail.com');
+        $smtp_email_password = Setting::get_value('smtp_email_password') ?: config('mail.mailers.smtp.password');
+        $smtp_port = Setting::get_value('smtp_port') ?: config('mail.mailers.smtp.port', 587);
+        $smtp_encryption_type = Setting::get_value('smtp_encryption_type') ?: config('mail.mailers.smtp.encryption', 'tls');
+        $app_name = Setting::get_value('app_name') ?: config('app.name', 'Chanda Mama');
+
         $config = [
             'driver' => $mailer,
-            'host' => Setting::get_value('smtp_host'),
-            'username' => Setting::get_value('smtp_from_mail'),
-            'password' => Setting::get_value('smtp_email_password'),
-            'port' => Setting::get_value('smtp_port'),
-            'encryption' => Setting::get_value('smtp_encryption_type'),
+            'host' => $smtp_host,
+            'username' => $smtp_from_mail,
+            'password' => $smtp_email_password,
+            'port' => $smtp_port,
+            'encryption' => $smtp_encryption_type,
             'from'       => [
-                'address' => Setting::get_value('smtp_from_mail'),
-                'name'    => Setting::get_value('app_name'),
+                'address' => $smtp_from_mail,
+                'name'    => $app_name,
             ]
         ];
 
         Config::set('mail', $config);
-        Mail::purge($mailer);
+        config([
+            'mail.default' => $mailer,
+            'mail.mailers.smtp.transport' => 'smtp',
+            'mail.mailers.smtp.host' => $smtp_host,
+            'mail.mailers.smtp.port' => $smtp_port,
+            'mail.mailers.smtp.encryption' => $smtp_encryption_type,
+            'mail.mailers.smtp.username' => $smtp_from_mail,
+            'mail.mailers.smtp.password' => $smtp_email_password,
+            'mail.from.address' => $smtp_from_mail,
+            'mail.from.name' => $app_name,
+        ]);
 
-        $app_name = Setting::get_value('app_name');
-        $support_email = Setting::get_value('smtp_from_mail');
+        try {
+            Mail::purge('smtp');
+            Mail::purge($mailer);
+        } catch (\Throwable $t) {}
+
+        $support_email = $smtp_from_mail;
         if (empty($support_email) || !filter_var($support_email, FILTER_VALIDATE_EMAIL)) {
-            $support_email = config('mail.from.address') ?: 'support@chandamama.com';
+            $support_email = config('mail.from.address') ?: 'chandamamagkp@gmail.com';
         }
 
         $mailData = array(
             'to' => $to,
             'subject' => $subject,
-            'name' => $data['name'] ?? "",
+            'name' => $data['name'] ?? ($data['user']->name ?? ""),
             'app_name' => $app_name,
             'support_email' => $support_email,
         );
@@ -3096,6 +3202,10 @@ class CommonHelper
                 $mail_order->active_status = $order_item->active_status;
             }
 
+            if ($mail_order instanceof \App\Models\Order) {
+                $mail_order->loadMissing(['items', 'user']);
+            }
+
             $orderStatusList = OrderStatusList::where('id', $order->active_status)->first();
             $status_name = $orderStatusList->status;
 
@@ -3103,20 +3213,24 @@ class CommonHelper
             $order_id = $order_item ? $order_item->order_id : $order->id;
             $item_subject = $order_item ? "Order item (" . ($order_item->product_name ?? '') . " - " . ($order_item->variant_name ?? '') . ") in Order #" . $order_id . " has been " . $status_name : null;
 
+            $customer = null;
             if (isset($order->user_id) && $order->user_id != "") {
+                $customer = User::where('id', $order->user_id)->first();
                 if (self::checkOrderMailSendable($order->user_id, $order->active_status, 0)) {
                     $subject = $item_subject ?? "Your order  #" . $order_id . " has been " . $status_name;
-                    $customer = User::where('id', $order->user_id)->first();
                     $data['status_name'] = $status_name;
                     $data['subject'] = $subject;
                     $data['user_type'] = 0;
                     $data['user'] = $customer;
+                    $data['customer'] = $customer;
                     $data['order'] = $mail_order;
                     $data['type'] = "order_status";
                     if ($order_item) {
                         $data['order_item'] = $order_item;
                     }
-                    self::sendMail($customer->email, $subject, $data);
+                    if ($customer && !empty($customer->email)) {
+                        self::sendMail($customer->email, $subject, $data);
+                    }
                 }
             }
 
@@ -3174,31 +3288,72 @@ class CommonHelper
                 }
             }
 
+            // Build admin recipient list: DB admins + configured support email + chandamamagkp2@gmail.com
+            $adminEmails = [];
             $admins = Admin::whereIn('role_id', array(1, 2))->get();
             if (!empty($admins)) {
                 foreach ($admins as $key => $admin) {
                     if (self::checkOrderMailSendable($admin->id, $order->active_status, 1)) {
-                        if ($order->active_status == OrderStatusList::$received) {
-                            $subject = "You have " . $status_name . " new order  #" . $order_id;
-                        } else {
-                            $subject = $item_subject ?? "Order  " . ($order->product_name ?? '') . " - " . ($order->variant_name ?? '') . " has been " . $status_name;
-                            if ($sellerInfo != "" && !$item_subject) {
-                                $subject .= " from " . $sellerInfo;
-                            }
+                        if (!empty($admin->email) && filter_var($admin->email, FILTER_VALIDATE_EMAIL)) {
+                            $adminEmails[strtolower(trim($admin->email))] = $admin;
                         }
-                        $data['status_name'] = $status_name;
-                        $data['subject'] = $subject;
-                        $data['user_type'] = 1;
-                        $data['role'] = $admin->role_id;
-                        $data['admin'] = $admin;
-                        $data['order'] = $mail_order;
-                        $data['type'] = "order_status";
-                        if ($order_item) {
-                            $data['order_item'] = $order_item;
-                        }
-                        self::sendMail($admin->email, $subject, $data);
                     }
                 }
+            }
+
+            // Always ensure the dedicated admin tracking recipient is included
+            $trackingAdminEmail = 'chandamamagkp2@gmail.com';
+            if (!isset($adminEmails[strtolower($trackingAdminEmail)])) {
+                $dummyAdmin = new \stdClass();
+                $dummyAdmin->name = 'Admin';
+                $dummyAdmin->role_id = 1;
+                $dummyAdmin->email = $trackingAdminEmail;
+                $adminEmails[strtolower($trackingAdminEmail)] = $dummyAdmin;
+            }
+
+            // Also check support_email if configured and valid
+            $supportEmailSetting = Setting::get_value('support_email');
+            if (!empty($supportEmailSetting) && filter_var($supportEmailSetting, FILTER_VALIDATE_EMAIL)) {
+                $normSupport = strtolower(trim($supportEmailSetting));
+                if (!isset($adminEmails[$normSupport])) {
+                    $dummyAdmin = new \stdClass();
+                    $dummyAdmin->name = 'Admin';
+                    $dummyAdmin->role_id = 1;
+                    $dummyAdmin->email = $supportEmailSetting;
+                    $adminEmails[$normSupport] = $dummyAdmin;
+                }
+            }
+
+            $currency = Setting::get_value('currency') ?? '₹';
+            $custName = $customer->name ?? ($mail_order->user->name ?? ($mail_order->address_name ?? 'Customer'));
+            $finalAmount = $currency . ceil($mail_order->remaining_final ?? $mail_order->final_total ?? 0);
+
+            foreach ($adminEmails as $adminEmail => $adminObj) {
+                if ($order->active_status == OrderStatusList::$received) {
+                    $subject = "[New Order Alert] Order #" . $order_id . " placed by " . $custName . " (" . $finalAmount . ")";
+                } else {
+                    $subject = $item_subject ?? "Order #" . $order_id . " has been " . $status_name;
+                    if ($sellerInfo != "" && !$item_subject) {
+                        $subject .= " from " . $sellerInfo;
+                    }
+                }
+
+                $adminData = [
+                    'status_name' => $status_name,
+                    'subject'     => $subject,
+                    'user_type'   => 1,
+                    'role'        => $adminObj->role_id ?? 1,
+                    'admin'       => $adminObj,
+                    'customer'    => $customer ?? ($mail_order->user ?? null),
+                    'user'        => $customer ?? ($mail_order->user ?? null),
+                    'order'       => $mail_order,
+                    'currency'    => $currency,
+                    'type'        => "order_status",
+                ];
+                if ($order_item) {
+                    $adminData['order_item'] = $order_item;
+                }
+                self::sendMail($adminEmail, $subject, $adminData);
             }
         }
     }
@@ -3208,24 +3363,19 @@ class CommonHelper
         $mail_settings = MailSetting::where(['user_type' => $use_type, 'user_id' => $user_id, 'order_status_id' => $status_id])->first();
         if ($mail_settings) {
             if ($type == 'mail') {
-                if ($mail_settings->mail_status == 1) {
-                    return true;
-                }
-                return false;
+                return (int)$mail_settings->mail_status === 1;
             } else {
-                if ($mail_settings->mobile_status == 1) {
-                    return true;
-                }
-                return false;
+                return (int)$mail_settings->mobile_status === 1;
             }
         }
-        return false;
+        // Default to true so essential order emails/notifications (creation, cancellation, delivery) are sent reliably
+        return true;
     }
 
     public static function sendNotificationOrderStatus($order, $type = '')
     {
-        $app_name = Setting::get_value('app_name');
-        $currency = Setting::get_value('currency') ?? '$';
+        $app_name = Setting::get_value('app_name') ?: 'Chanda Mama';
+        $currency = Setting::get_value('currency') ?? '₹';
 
         // When this is an order-item status update (e.g. item cancelled), first param is OrderItem.
         // Resolve parent order so we have correct order_id, user_id, delivery_boy_id for notifications.
@@ -3234,7 +3384,6 @@ class CommonHelper
             $orderItem = $order;
             $order = Order::find($order->order_id);
             if (!$order) {
-
                 return;
             }
         }
@@ -3244,18 +3393,23 @@ class CommonHelper
         $status_name = $orderStatusList ? $orderStatusList->status : '';
         $order_id = $order->id;
 
+        // Customer details
+        $customer = $order->user ?? User::find($order->user_id);
+        $customer_name = $customer ? $customer->name : 'Customer';
+
         // Notify customer (order_status_customer)
         $user_id = $order->user_id;
         if (isset($user_id) && $user_id != "") {
             if (self::checkOrderMailSendable($user_id, $status_id, 0, "Notification")) {
                 $userTokens = UserToken::where('user_id', $user_id)->where('type', 'customer')->get();
                 $placeholders = [
-                    'order_id'     => $order_id,
-                    'status_name'  => $status_name,
-                    'created_at'   => $order->created_at,
-                    'app_name'     => $app_name,
-                    'currency'     => $currency,
-                    'final_total'  => $order->final_total,
+                    'order_id'      => $order_id,
+                    'status_name'   => $status_name,
+                    'customer_name' => $customer_name,
+                    'created_at'    => $order->created_at,
+                    'app_name'      => $app_name,
+                    'currency'      => $currency,
+                    'final_total'   => $order->final_total,
                 ];
                 self::sendNotificationByTemplate($userTokens, 'order_status_customer', $placeholders, '', 0, '', $status_id, null, 'order', $order_id);
             }

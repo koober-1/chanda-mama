@@ -689,7 +689,6 @@
     <table class="table table-bordered table-sm variant-table" style="font-size: 0.85rem; vertical-align: middle;">
         <thead class="bg-light">
             <tr>
-                <th style="width: 60px;">Image</th>
                 <th style="min-width: 150px;">Details (Name, Barcode, Color)</th>
                 <th style="min-width: 120px;">Unit & Meas.</th>
                 <th style="min-width: 120px;">Pur. Price & MRP</th>
@@ -700,80 +699,197 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(input, k) in inputs" :key="'packet_table_'+k">
-                <td class="text-center p-1">
-                    <div class="variant-image-upload mx-auto" @click="openVariantImagePicker(k, 'packet')" style="width: 50px; height: 50px; border: 1px dashed #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer;" title="Add/View Images">
-                        <img v-if="variantImages[k] && variantImages[k].length" :src="variantImages[k][0].url" style="width:100%; height:100%; object-fit:cover;" />
-                        <img v-else-if="input.images && input.images.length" :src="$storageUrl + input.images[0].image" style="width:100%; height:100%; object-fit:cover;" />
-                        <i v-else class="fa fa-image text-muted"></i>
-                    </div>
-                    <small v-if="(variantImages[k] ? variantImages[k].length : 0) + (input.images ? input.images.length : 0) > 1" class="text-muted d-block" style="font-size: 10px;">
-                        +{{ (variantImages[k] ? variantImages[k].length : 0) + (input.images ? input.images.length : 0) - 1 }} more
-                    </small>
-                    <input type="file" accept="image/*" :ref="'packet_variant_images_' + k" multiple class="d-none" v-on:change="variantImagesChanges(k)">
-                </td>
-                <td class="p-1">
-                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Variant Name" v-model="input.variant_name">
-                    <input type="text" class="form-control form-control-sm mb-1" placeholder="Barcode" v-model="input.barcodes[0]" v-if="input.barcodes">
-                    <div class="color-picker-component">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text p-0 overflow-hidden" style="width: 32px; height: 31px; min-width: 32px; background: #fff;" title="Click to open color palette">
-                                <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
-                            </span>
-                            <select class="form-control form-control-sm" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
-                                <option value="">Select Color</option>
-                                <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
-                                <option value="__custom__">🎨 Other / Custom Color...</option>
-                            </select>
-                        </div>
-                        <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light" style="font-size: 11px; height: 22px;">
-                            <span class="d-inline-block rounded-circle me-1 border shadow-sm" :style="{ width: '12px', height: '12px', minWidth: '12px', backgroundColor: getColorHex(input) }"></span>
-                            <span class="text-dark text-truncate me-1" style="font-size: 10px; font-weight: 500;">{{ getColorLabel(input) }}</span>
-                            <span class="text-muted ms-auto font-monospace" style="font-size: 10px;">{{ getColorHex(input) }}</span>
-                        </div>
-                        <div v-if="isCustomColor(input)" class="mt-1 p-1 rounded border bg-light">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="text-muted font-weight-bold" style="font-size: 9px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</span>
-                                <span class="badge badge-light border text-muted py-0 px-1" style="font-size: 9px;">CUSTOM</span>
+            <template v-for="(input, k) in inputs">
+                <tr :key="'packet_table_row_' + k">
+                    <td class="p-1">
+                        <input type="text" class="form-control form-control-sm mb-1" placeholder="Variant Name" v-model="input.variant_name">
+                        <input type="text" class="form-control form-control-sm mb-1" placeholder="Barcode" v-model="input.barcodes[0]" v-if="input.barcodes">
+                        <div class="color-picker-component">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text p-0 overflow-hidden" style="width: 32px; height: 31px; min-width: 32px; background: #fff;" title="Click to open color palette">
+                                    <input type="color" class="color-picker-input-swatch border-0 p-0 w-100 h-100" style="cursor: pointer; background: transparent;" :value="getColorHex(input)" @input="onColorPickerChange(input, $event.target.value)">
+                                </span>
+                                <select class="form-control form-control-sm" :value="getColorSelectValue(input)" @change="handleColorChange(input, $event.target.value)">
+                                    <option value="">Select Color</option>
+                                    <option v-for="color in colorVariantOptions" :key="color.code" :value="color.code">{{ color.emoji }} {{ color.label }} ({{ color.code }})</option>
+                                    <option value="__custom__">🎨 Other / Custom Color...</option>
+                                </select>
                             </div>
-                            <input type="text" class="form-control form-control-sm" placeholder="Color Name (e.g. Olive Green)" maxlength="40" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                            <div v-if="(input.color_variant || input.color_name) && getColorHex(input) !== '#000000'" class="d-flex align-items-center mt-1 px-1 py-0 rounded border bg-light" style="font-size: 11px; height: 22px;">
+                                <span class="d-inline-block rounded-circle me-1 border shadow-sm" :style="{ width: '12px', height: '12px', minWidth: '12px', backgroundColor: getColorHex(input) }"></span>
+                                <span class="text-dark text-truncate me-1" style="font-size: 10px; font-weight: 500;">{{ getColorLabel(input) }}</span>
+                                <span class="text-muted ms-auto font-monospace" style="font-size: 10px;">{{ getColorHex(input) }}</span>
+                            </div>
+                            <div v-if="isCustomColor(input)" class="mt-1 p-1 rounded border bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="text-muted font-weight-bold" style="font-size: 9px; letter-spacing: 0.5px;">CUSTOM COLOR NAME:</span>
+                                    <span class="badge badge-light border text-muted py-0 px-1" style="font-size: 9px;">CUSTOM</span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" placeholder="Color Name (e.g. Olive Green)" maxlength="40" :value="input.color_name || ''" @input="onCustomNameInput(input, $event.target.value)">
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td class="p-1">
-                    <select class="form-control form-control-sm mb-1" @change="changeUnits()" v-model="input.packet_stock_unit_id">
-                        <option value="">Unit</option>
-                        <option v-for="(unit, key) in units" :value="unit.id">{{ unit.short_code }}</option>
-                    </select>
-                    <input type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Measurement" v-model="input.packet_measurement">
-                </td>
-                <td class="p-1">
-                    <input type="number" min="0" step="any" class="form-control form-control-sm mb-1" placeholder="Pur. Price" v-model="input.packet_purchase_price">
-                    <input type="number" min="0" step="any" class="form-control form-control-sm border-primary" placeholder="MRP *" v-model="input.packet_price" @input="syncPacketSalePriceFromDiscount(input)" required>
-                </td>
-                <td class="p-1">
-                    <div class="input-group input-group-sm mb-1">
-                        <select class="form-select form-select-sm" style="max-width: 60px; padding: 0 5px;" :value="input.discount_type || 'percent'" @input="$set(input, 'discount_type', $event.target.value); if($event.target.value==='percent'){input.discounted_price='';setPacketDiscountMode(input, 'percent');}else{input.discount_percentage='';setPacketDiscountMode(input, 'amount');}">
-                            <option value="percent">%</option>
-                            <option value="amount">Rs</option>
+                    </td>
+                    <td class="p-1">
+                        <select class="form-control form-control-sm mb-1" @change="changeUnits()" v-model="input.packet_stock_unit_id">
+                            <option value="">Unit</option>
+                            <option v-for="(unit, key) in units" :value="unit.id">{{ unit.short_code }}</option>
                         </select>
-                        <input v-if="(input.discount_type || 'percent') === 'percent'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc %" v-model="input.discount_percentage" @input="setPacketDiscountMode(input, 'percent')">
-                        <input v-if="(input.discount_type || 'percent') === 'amount'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc Rs" v-model="input.discounted_price" @input="setPacketDiscountMode(input, 'amount')">
-                    </div>
-                    <input type="number" min="0" step="any" class="form-control form-control-sm bg-light" placeholder="Sale Price" v-model="input.packet_sale_price" @input="setPacketSalePrice(input)">
-                    <span v-if="input.validationErrorSalePrice" class="text-danger d-block" style="font-size: 10px;">{{ input.validationErrorSalePrice }}</span>
-                </td>
-                <td class="p-1" v-if="is_unlimited_stock != 1">
-                    <input type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Stock" v-model="input.packet_stock">
-                </td>
-                <td class="p-1">
-                    <input type="text" class="form-control form-control-sm mb-1 bg-light text-success" :value="getPacketProfitPercentage(input)" readonly placeholder="Prof %">
-                    <input type="text" class="form-control form-control-sm bg-light text-success" :value="getPacketProfit(input)" readonly placeholder="Prof Rs">
-                </td>
-                <td class="p-1 text-center">
-                    <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i></button>
-                </td>
-            </tr>
+                        <input type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Measurement" v-model="input.packet_measurement">
+                    </td>
+                    <td class="p-1">
+                        <input type="number" min="0" step="any" class="form-control form-control-sm mb-1" placeholder="Pur. Price" v-model="input.packet_purchase_price">
+                        <input type="number" min="0" step="any" class="form-control form-control-sm border-primary" placeholder="MRP *" v-model="input.packet_price" @input="syncPacketSalePriceFromDiscount(input)" required>
+                    </td>
+                    <td class="p-1">
+                        <div class="input-group input-group-sm mb-1">
+                            <select class="form-select form-select-sm" style="max-width: 60px; padding: 0 5px;" :value="input.discount_type || 'percent'" @input="$set(input, 'discount_type', $event.target.value); if($event.target.value==='percent'){input.discounted_price='';setPacketDiscountMode(input, 'percent');}else{input.discount_percentage='';setPacketDiscountMode(input, 'amount');}">
+                                <option value="percent">%</option>
+                                <option value="amount">Rs</option>
+                            </select>
+                            <input v-if="(input.discount_type || 'percent') === 'percent'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc %" v-model="input.discount_percentage" @input="setPacketDiscountMode(input, 'percent')">
+                            <input v-if="(input.discount_type || 'percent') === 'amount'" type="number" min="0" step="any" class="form-control form-control-sm" placeholder="Disc Rs" v-model="input.discounted_price" @input="setPacketDiscountMode(input, 'amount')">
+                        </div>
+                        <input type="number" min="0" step="any" class="form-control form-control-sm bg-light" placeholder="Sale Price" v-model="input.packet_sale_price" @input="setPacketSalePrice(input)">
+                        <span v-if="input.validationErrorSalePrice" class="text-danger d-block" style="font-size: 10px;">{{ input.validationErrorSalePrice }}</span>
+                    </td>
+                    <td class="p-1" v-if="is_unlimited_stock != 1">
+                        <input type="number" step="any" min="0" class="form-control form-control-sm" placeholder="Stock" v-model="input.packet_stock">
+                    </td>
+                    <td class="p-1">
+                        <input type="text" class="form-control form-control-sm mb-1 bg-light text-success" :value="getPacketProfitPercentage(input)" readonly placeholder="Prof %">
+                        <input type="text" class="form-control form-control-sm bg-light text-success" :value="getPacketProfit(input)" readonly placeholder="Prof Rs">
+                    </td>
+                    <td class="p-1 text-center">
+                        <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i></button>
+                    </td>
+                </tr>
+
+                <!-- Variant Images Sub-row: Under all inputs of this variant -->
+                <tr :key="'packet_table_img_' + k" class="variant-images-subrow">
+                    <td :colspan="is_unlimited_stock != 1 ? 7 : 6" class="p-2 border-top-0" style="background-color: #f8fafc;">
+                        <div class="variant-image-manager p-2 rounded bg-white border shadow-sm">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="badge bg-light text-primary border fw-semibold px-2 py-1" style="font-size: 12px;">
+                                        <i class="fa fa-images me-1"></i> Variant {{ k + 1 }} Images ({{ getAllVariantImages(k, 'packet').length }})
+                                    </span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 d-inline-flex align-items-center gap-1 shadow-none"
+                                        @click="openVariantImagePicker(k, 'packet')" title="Upload multiple images for this variant">
+                                        <i class="fa fa-camera"></i>
+                                        <span>{{ getAllVariantImages(k, 'packet').length > 0 ? 'Add More Images' : 'Upload Images' }}</span>
+                                    </button>
+                                    <input type="file" accept="image/*" :ref="'packet_variant_images_' + k" multiple class="d-none" @change="variantImagesChanges(k)">
+                                    <span v-if="getAllVariantImages(k, 'packet').length === 0" class="text-muted small">
+                                        No images added yet. Click 'Upload Images' to add 1 or more images.
+                                    </span>
+                                </div>
+                                <div v-if="getAllVariantImages(k, 'packet').length > 4" class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-xs btn-link text-decoration-none text-primary fw-semibold p-0"
+                                        @click="toggleVariantGallery(k)">
+                                        <i :class="expandedVariantGallery[k] ? 'fa fa-compress me-1' : 'fa fa-arrows-left-right me-1'"></i>
+                                        {{ expandedVariantGallery[k] ? 'Compact View (1-4)' : 'Scrollable View (' + getAllVariantImages(k, 'packet').length + ' images)' }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Image Thumbnails Strip -->
+                            <div v-if="getAllVariantImages(k, 'packet').length > 0" class="variant-images-strip-wrapper mt-2">
+                                <!-- COMPACT VIEW: 1 to 4 images (or 3 + '+N more') -->
+                                <div v-if="!expandedVariantGallery[k]" class="d-flex align-items-center gap-2 flex-wrap">
+                                    <!-- 4 or fewer images: show all -->
+                                    <template v-if="getAllVariantImages(k, 'packet').length <= 4">
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'packet')" :key="'compact_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 9px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 18px; height: 18px; font-size: 10px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'packet')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </template>
+
+                                    <!-- More than 4 images: show first 3, then '+N more' card -->
+                                    <template v-else>
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'packet').slice(0, 3)" :key="'compact_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 9px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 18px; height: 18px; font-size: 10px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'packet')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- More Card: Clicking toggles scrollable view -->
+                                        <div class="variant-more-card rounded border border-primary border-dashed d-flex flex-column align-items-center justify-content-center bg-light text-primary shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="toggleVariantGallery(k)"
+                                            title="Click to view all images in horizontal scroll">
+                                            <i class="fa fa-images" style="font-size: 13px;"></i>
+                                            <span class="fw-bold" style="font-size: 11px;">+{{ getAllVariantImages(k, 'packet').length - 3 }}</span>
+                                            <span style="font-size: 8px; text-transform: uppercase;">more...</span>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- EXPANDED HORIZONTAL SCROLLABLE GALLERY -->
+                                <div v-else class="variant-expanded-gallery p-2 bg-light rounded border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+                                        <span class="small fw-semibold text-secondary">
+                                            <i class="fa fa-arrows-left-right text-primary me-1"></i> Scroll horizontally to browse all {{ getAllVariantImages(k, 'packet').length }} images
+                                        </span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @click="scrollGallery('packet_' + k, -180)" title="Scroll Left">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @click="scrollGallery('packet_' + k, 180)" title="Scroll Right">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-outline-dark py-0 px-2 ms-2" @click="toggleVariantGallery(k)" title="Collapse view">
+                                                <i class="fa fa-compress me-1"></i> Compact View
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div :ref="'gallery_scroll_packet_' + k" class="variant-horizontal-strip d-flex gap-2 align-items-center overflow-auto py-1"
+                                        style="scroll-behavior: smooth; overflow-x: auto; white-space: nowrap;">
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'packet')" :key="'exp_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border bg-white shadow-sm"
+                                            style="width: 72px; height: 72px; min-width: 72px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 10px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 20px; height: 20px; font-size: 11px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'packet')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
     <button type="button" class="btn btn-sm btn-primary mt-2" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
@@ -783,7 +899,6 @@
     <table class="table table-bordered table-sm variant-table" style="font-size: 0.85rem; vertical-align: middle;">
         <thead class="bg-light">
             <tr>
-                <th style="width: 60px;">Image</th>
                 <th style="min-width: 150px;">Details (Name, Barcode, Color)</th>
                 <th style="min-width: 120px;">Unit & Meas.</th>
                 <th style="min-width: 120px;">Pur. Price & MRP</th>
@@ -793,18 +908,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(input, k) in inputs" :key="'loose_table_'+k">
-                <td class="text-center p-1">
-                    <div class="variant-image-upload mx-auto" @click="openVariantImagePicker(k, 'loose')" style="width: 50px; height: 50px; border: 1px dashed #ccc; display:flex; align-items:center; justify-content:center; cursor:pointer;" title="Add/View Images">
-                        <img v-if="variantImages[k] && variantImages[k].length" :src="variantImages[k][0].url" style="width:100%; height:100%; object-fit:cover;" />
-                        <img v-else-if="input.loose_images && input.loose_images.length" :src="$storageUrl + input.loose_images[0].image" style="width:100%; height:100%; object-fit:cover;" />
-                        <i v-else class="fa fa-image text-muted"></i>
-                    </div>
-                    <small v-if="(variantImages[k] ? variantImages[k].length : 0) + (input.loose_images ? input.loose_images.length : 0) > 1" class="text-muted d-block" style="font-size: 10px;">
-                        +{{ (variantImages[k] ? variantImages[k].length : 0) + (input.loose_images ? input.loose_images.length : 0) - 1 }} more
-                    </small>
-                    <input type="file" accept="image/*" :ref="'loose_variant_images_' + k" multiple class="d-none" v-on:change="variantImagesChanges(k)">
-                </td>
+            <template v-for="(input, k) in inputs">
+                <tr :key="'loose_table_row_' + k">
                 <td class="p-1">
                     <input type="text" class="form-control form-control-sm mb-1" placeholder="Variant Name" v-model="input.variant_name">
                     <input type="text" class="form-control form-control-sm mb-1" placeholder="Barcode" v-model="input.barcodes[0]" v-if="input.barcodes">
@@ -863,7 +968,134 @@
                 <td class="p-1 text-center">
                     <button v-if="k !== 0" type="button" class="btn btn-sm btn-outline-danger" @click="remove(k)"><i class="fa fa-times"></i></button>
                 </td>
-            </tr>
+                </tr>
+
+                <!-- Variant Images Sub-row: Under all inputs of this variant -->
+                <tr :key="'loose_table_img_' + k" class="variant-images-subrow">
+                    <td colspan="6" class="p-2 border-top-0" style="background-color: #f8fafc;">
+                        <div class="variant-image-manager p-2 rounded bg-white border shadow-sm">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="badge bg-light text-primary border fw-semibold px-2 py-1" style="font-size: 12px;">
+                                        <i class="fa fa-images me-1"></i> Variant {{ k + 1 }} Images ({{ getAllVariantImages(k, 'loose').length }})
+                                    </span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary py-1 px-2 d-inline-flex align-items-center gap-1 shadow-none"
+                                        @click="openVariantImagePicker(k, 'loose')" title="Upload multiple images for this variant">
+                                        <i class="fa fa-camera"></i>
+                                        <span>{{ getAllVariantImages(k, 'loose').length > 0 ? 'Add More Images' : 'Upload Images' }}</span>
+                                    </button>
+                                    <input type="file" accept="image/*" :ref="'loose_variant_images_' + k" multiple class="d-none" @change="variantImagesChanges(k)">
+                                    <span v-if="getAllVariantImages(k, 'loose').length === 0" class="text-muted small">
+                                        No images added yet. Click 'Upload Images' to add 1 or more images.
+                                    </span>
+                                </div>
+                                <div v-if="getAllVariantImages(k, 'loose').length > 4" class="d-flex align-items-center gap-2">
+                                    <button type="button" class="btn btn-xs btn-link text-decoration-none text-primary fw-semibold p-0"
+                                        @click="toggleVariantGallery(k)">
+                                        <i :class="expandedVariantGallery[k] ? 'fa fa-compress me-1' : 'fa fa-arrows-left-right me-1'"></i>
+                                        {{ expandedVariantGallery[k] ? 'Compact View (1-4)' : 'Scrollable View (' + getAllVariantImages(k, 'loose').length + ' images)' }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Image Thumbnails Strip -->
+                            <div v-if="getAllVariantImages(k, 'loose').length > 0" class="variant-images-strip-wrapper mt-2">
+                                <!-- COMPACT VIEW: 1 to 4 images (or 3 + '+N more') -->
+                                <div v-if="!expandedVariantGallery[k]" class="d-flex align-items-center gap-2 flex-wrap">
+                                    <!-- 4 or fewer images: show all -->
+                                    <template v-if="getAllVariantImages(k, 'loose').length <= 4">
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'loose')" :key="'compact_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 9px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 18px; height: 18px; font-size: 10px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'loose')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </template>
+
+                                    <!-- More than 4 images: show first 3, then '+N more' card -->
+                                    <template v-else>
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'loose').slice(0, 3)" :key="'compact_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 9px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 18px; height: 18px; font-size: 10px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'loose')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- More Card: Clicking toggles scrollable view -->
+                                        <div class="variant-more-card rounded border border-primary border-dashed d-flex flex-column align-items-center justify-content-center bg-light text-primary shadow-sm"
+                                            style="width: 58px; height: 58px; cursor: pointer; flex-shrink: 0;"
+                                            @click="toggleVariantGallery(k)"
+                                            title="Click to view all images in horizontal scroll">
+                                            <i class="fa fa-images" style="font-size: 13px;"></i>
+                                            <span class="fw-bold" style="font-size: 11px;">+{{ getAllVariantImages(k, 'loose').length - 3 }}</span>
+                                            <span style="font-size: 8px; text-transform: uppercase;">more...</span>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <!-- EXPANDED HORIZONTAL SCROLLABLE GALLERY -->
+                                <div v-else class="variant-expanded-gallery p-2 bg-light rounded border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+                                        <span class="small fw-semibold text-secondary">
+                                            <i class="fa fa-arrows-left-right text-primary me-1"></i> Scroll horizontally to browse all {{ getAllVariantImages(k, 'loose').length }} images
+                                        </span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @click="scrollGallery('loose_' + k, -180)" title="Scroll Left">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2" @click="scrollGallery('loose_' + k, 180)" title="Scroll Right">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-outline-dark py-0 px-2 ms-2" @click="toggleVariantGallery(k)" title="Collapse view">
+                                                <i class="fa fa-compress me-1"></i> Compact View
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div :ref="'gallery_scroll_loose_' + k" class="variant-horizontal-strip d-flex gap-2 align-items-center overflow-auto py-1"
+                                        style="scroll-behavior: smooth; overflow-x: auto; white-space: nowrap;">
+                                        <div v-for="(imgItem, imgIdx) in getAllVariantImages(k, 'loose')" :key="'exp_img_' + k + '_' + imgIdx"
+                                            class="position-relative variant-thumb-card rounded overflow-hidden border bg-white shadow-sm"
+                                            style="width: 72px; height: 72px; min-width: 72px; cursor: pointer; flex-shrink: 0;"
+                                            @click="previewImage(imgItem.url, 'Variant ' + (k + 1) + ' Image #' + (imgIdx + 1))"
+                                            title="Click to preview full image">
+                                            <img :src="imgItem.url" class="w-100 h-100" style="object-fit: cover;" />
+                                            <span class="badge bg-dark bg-opacity-75 text-white position-absolute start-0 bottom-0 m-1 px-1 py-0" style="font-size: 10px;">
+                                                #{{ imgIdx + 1 }}
+                                            </span>
+                                            <button type="button" class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 p-0 rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 20px; height: 20px; font-size: 11px; line-height: 1;"
+                                                @click.stop="removeVariantImage(imgItem, k, 'loose')"
+                                                title="Delete image">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
     <button type="button" class="btn btn-sm btn-primary mt-2" @click="addRow"><i class="fa fa-plus-square"></i> {{ __('add_variant') }}</button>
@@ -1260,90 +1492,142 @@
                             <div class="card-body">
                                 <div class="row">
                                     <!-- Row: Category, Product type, Product status -->
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>{{ __('categories') }} <i class="text-danger">*</i></label>
-                                            <multiselect
-                                                v-model="selected_categories"
-                                                :options="mainCategories"
-                                                :placeholder="__('select_categories')"
-                                                label="name"
-                                                track-by="id"
-                                                :multiple="true"
-                                                :searchable="true"
-                                                :close-on-select="false"
-                                                :taggable="false"
-                                                @input="onMainCategoriesChange">
-                                                <template slot="singleLabel" slot-scope="props">
-                                                    <span class="option__desc">
-                                                        <span class="option__title">{{ props.option.name }}</span>
-                                                    </span>
-                                                </template>
-                                                <template slot="option" slot-scope="props">
-                                                    <div class="option__desc d-flex align-items-center">
-                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_categories)" class="me-2">
-                                                        <span class="option__title">{{ props.option.name }}</span>
+                                    <!-- Category Hierarchy Flow (Grouped Dropdowns) -->
+                                    <div class="col-12 mb-3">
+                                        <div class="category-selection-wrapper p-3 rounded border bg-white shadow-xs">
+                                            <div class="row align-items-center g-3 category-flow-row">
+                                                <!-- 1. Category -->
+                                                <div class="col-lg col-md-12">
+                                                    <div class="form-group mb-0">
+                                                        <label class="fw-bold d-flex align-items-center justify-content-between mb-1">
+                                                            <span><i class="fa fa-folder text-primary me-2"></i>{{ __('categories') }} <i class="text-danger">*</i></span>
+                                                            <span class="badge bg-light text-secondary border small">{{ (selected_categories || []).length }} selected</span>
+                                                        </label>
+                                                        <multiselect
+                                                            v-model="selected_categories"
+                                                            :options="mainCategories"
+                                                            :placeholder="__('select_categories')"
+                                                            label="name"
+                                                            track-by="id"
+                                                            :multiple="true"
+                                                            :searchable="true"
+                                                            :close-on-select="false"
+                                                            :taggable="false"
+                                                            @input="onMainCategoriesChange">
+                                                            <template slot="singleLabel" slot-scope="props">
+                                                                <span class="option__desc">
+                                                                    <span class="option__title">{{ props.option.name }}</span>
+                                                                </span>
+                                                            </template>
+                                                            <template slot="option" slot-scope="props">
+                                                                <div class="option__desc d-flex align-items-center">
+                                                                    <input type="checkbox" :checked="isCategorySelected(props.option, selected_categories)" class="me-2 child-checkbox" style="pointer-events: none;">
+                                                                    <span class="option__title">{{ props.option.name }}</span>
+                                                                </div>
+                                                            </template>
+                                                        </multiselect>
+                                                        <small class="text-muted d-block mt-1">{{ __('select_one_or_more_categories_for_product') }}</small>
                                                     </div>
-                                                </template>
-                                            </multiselect>
-                                            <small class="text-muted">{{ __('select_one_or_more_categories_for_product') }}</small>
-                                        </div>
-                                    </div>
+                                                </div>
 
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>Sub Categories</label>
-                                            <multiselect
-                                                v-model="selected_sub_categories"
-                                                :options="filteredSubCategories"
-                                                placeholder="Select Sub Categories"
-                                                label="name"
-                                                track-by="id"
-                                                :multiple="true"
-                                                :searchable="true"
-                                                :close-on-select="false"
-                                                :taggable="false"
-                                                @input="onSubCategoriesChange">
-                                                <template slot="singleLabel" slot-scope="props">
-                                                    <span class="option__desc">
-                                                        <span class="option__title">{{ props.option.name }}</span>
-                                                    </span>
-                                                </template>
-                                                <template slot="option" slot-scope="props">
-                                                    <div class="option__desc d-flex align-items-center">
-                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_categories)" class="me-2">
-                                                        <span class="option__title">{{ props.option.name }}</span>
-                                                    </div>
-                                                </template>
-                                            </multiselect>
-                                        </div>
-                                    </div>
+                                                <!-- Arrow 1 -->
+                                                <div class="col-auto d-none d-lg-flex align-items-center justify-content-center text-success category-flow-arrow pt-2">
+                                                    <i class="fa fa-arrow-right fs-5 text-success"></i>
+                                                </div>
 
-                                    <div class="col-md-4">
-                                        <div class="form-group mb-3">
-                                            <label>Sub Sub Categories</label>
-                                            <multiselect
-                                                v-model="selected_sub_sub_categories"
-                                                :options="filteredSubSubCategories"
-                                                placeholder="Select Sub Sub Categories"
-                                                label="name"
-                                                track-by="id"
-                                                :multiple="true"
-                                                :searchable="true"
-                                                :close-on-select="false"
-                                                :taggable="false">
-                                                <template slot="singleLabel" slot-scope="props">
-                                                    <span class="option__desc">
-                                                        <span class="option__title">{{ props.option.name }}</span>
-                                                    </span>
-                                                </template>
-                                                <template slot="option" slot-scope="props">
-                                                    <div class="option__desc d-flex align-items-center">
-                                                        <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_sub_categories)" class="me-2">
-                                                        <span class="option__title">{{ props.option.name }}</span>
+                                                <!-- 2. Sub Categories (Grouped per Category) -->
+                                                <div class="col-lg col-md-12">
+                                                    <div class="form-group mb-0">
+                                                        <label class="fw-bold d-flex align-items-center justify-content-between mb-1">
+                                                            <span><i class="fa fa-sitemap text-info me-2"></i>Sub Categories</span>
+                                                            <span class="badge bg-light text-secondary border small">{{ (selected_sub_categories || []).length }} selected</span>
+                                                        </label>
+                                                        <multiselect
+                                                            class="multiselect-grouped"
+                                                            v-model="selected_sub_categories"
+                                                            :options="groupedSubCategories"
+                                                            group-values="subcategories"
+                                                            group-label="category_name"
+                                                            :group-select="false"
+                                                            placeholder="Select Sub Categories"
+                                                            label="name"
+                                                            track-by="id"
+                                                            :multiple="true"
+                                                            :searchable="true"
+                                                            :close-on-select="false"
+                                                            :taggable="false"
+                                                            :disabled="!selected_categories || selected_categories.length === 0"
+                                                            @input="onSubCategoriesChange">
+                                                            <template slot="option" slot-scope="props">
+                                                                <div v-if="props.option.$isLabel" 
+                                                                     class="multiselect-group-header" 
+                                                                     :class="getGroupThemeClass(props.option.$groupLabel)"
+                                                                     @click.stop.prevent 
+                                                                     @mousedown.stop.prevent>
+                                                                    <i class="fa fa-layer-group me-2"></i>
+                                                                    <span class="fw-bold">{{ props.option.$groupLabel }}</span>
+                                                                </div>
+                                                                <div v-else class="multiselect-child-option d-flex align-items-center py-1">
+                                                                    <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_categories)" class="me-2 child-checkbox" style="pointer-events: none;">
+                                                                    <span class="option__title">{{ props.option.name }}</span>
+                                                                </div>
+                                                            </template>
+                                                            <span slot="noOptions">Select a category first to view sub categories</span>
+                                                            <span slot="noResult">No sub categories found</span>
+                                                        </multiselect>
+                                                        <small class="text-muted d-block mt-1">Grouped by selected categories</small>
                                                     </div>
-                                                </template>
-                                            </multiselect>
+                                                </div>
+
+                                                <!-- Arrow 2 -->
+                                                <div class="col-auto d-none d-lg-flex align-items-center justify-content-center text-success category-flow-arrow pt-2">
+                                                    <i class="fa fa-arrow-right fs-5 text-success"></i>
+                                                </div>
+
+                                                <!-- 3. Sub Sub Categories (Grouped per Sub Category) -->
+                                                <div class="col-lg col-md-12">
+                                                    <div class="form-group mb-0">
+                                                        <label class="fw-bold d-flex align-items-center justify-content-between mb-1">
+                                                            <span><i class="fa fa-folder-open text-success me-2"></i>Sub Sub Categories</span>
+                                                            <span class="badge bg-light text-secondary border small">{{ (selected_sub_sub_categories || []).length }} selected</span>
+                                                        </label>
+                                                        <multiselect
+                                                            class="multiselect-grouped"
+                                                            v-model="selected_sub_sub_categories"
+                                                            :options="groupedSubSubCategories"
+                                                            group-values="sub_sub_categories"
+                                                            group-label="sub_category_name"
+                                                            :group-select="false"
+                                                            placeholder="Select Sub Sub Categories"
+                                                            label="name"
+                                                            track-by="id"
+                                                            :multiple="true"
+                                                            :searchable="true"
+                                                            :close-on-select="false"
+                                                            :taggable="false"
+                                                            :disabled="!selected_sub_categories || selected_sub_categories.length === 0"
+                                                            @input="onSubSubCategoriesChange">
+                                                            <template slot="option" slot-scope="props">
+                                                                <div v-if="props.option.$isLabel" 
+                                                                     class="multiselect-group-header" 
+                                                                     :class="getGroupThemeClass(props.option.$groupLabel)"
+                                                                     @click.stop.prevent 
+                                                                     @mousedown.stop.prevent>
+                                                                    <i class="fa fa-sitemap me-2"></i>
+                                                                    <span class="fw-bold">{{ props.option.$groupLabel }}</span>
+                                                                </div>
+                                                                <div v-else class="multiselect-child-option d-flex align-items-center py-1">
+                                                                    <input type="checkbox" :checked="isCategorySelected(props.option, selected_sub_sub_categories)" class="me-2 child-checkbox" style="pointer-events: none;">
+                                                                    <span class="option__title">{{ props.option.name }}</span>
+                                                                </div>
+                                                            </template>
+                                                            <span slot="noOptions">Select sub categories first to view sub sub categories</span>
+                                                            <span slot="noResult">No sub sub categories found</span>
+                                                        </multiselect>
+                                                        <small class="text-muted d-block mt-1">Grouped by selected sub categories</small>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -1607,6 +1891,21 @@
             </div>
         </div>
         <edit-brand ref="editBrandModal" @saved="handleBrandCreated"></edit-brand>
+
+        <!-- Image Preview Lightbox Modal -->
+        <div v-if="showImagePreviewModal" class="image-preview-modal-overlay" @click="showImagePreviewModal = false">
+            <div class="image-preview-modal-dialog" @click.stop>
+                <div class="image-preview-modal-header d-flex justify-content-between align-items-center p-2 px-3 border-bottom bg-light">
+                    <h6 class="mb-0 fw-bold text-dark">{{ previewModalTitle || 'Image Preview' }}</h6>
+                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" @click="showImagePreviewModal = false">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="image-preview-modal-body p-3 text-center bg-white">
+                    <img :src="previewModalUrl" class="img-fluid rounded shadow-sm" style="max-height: 75vh; max-width: 100%; object-fit: contain;" />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -1779,6 +2078,10 @@ export default {
             other_images: null,
             images: [],
             variantImages: {},
+            expandedVariantGallery: {},
+            showImagePreviewModal: false,
+            previewModalUrl: '',
+            previewModalTitle: '',
             draggedMedia: null,
             id: null,
             record: null,
@@ -2003,6 +2306,42 @@ export default {
             // Fallback for backward compatibility
             return this.product_sub_sub_subcategory_id || this.product_sub_subcategory_id || this.product_subcategory_id || this.product_category_id || '';
         },
+        groupedSubCategories() {
+            if (!this.selected_categories || this.selected_categories.length === 0) {
+                return [];
+            }
+            const groups = [];
+            this.selected_categories.forEach(cat => {
+                const subCats = this.allCategoriesFlat.filter(c => parseInt(c.parent_id) === parseInt(cat.id));
+                if (subCats.length > 0) {
+                    groups.push({
+                        category_name: cat.name,
+                        category_id: cat.id,
+                        subcategories: subCats
+                    });
+                }
+            });
+            return groups;
+        },
+        groupedSubSubCategories() {
+            if (!this.selected_sub_categories || this.selected_sub_categories.length === 0) {
+                return [];
+            }
+            const groups = [];
+            this.selected_sub_categories.forEach(subCat => {
+                const subSubCats = this.allCategoriesFlat.filter(c => parseInt(c.parent_id) === parseInt(subCat.id));
+                if (subSubCats.length > 0) {
+                    const parentCat = this.mainCategories.find(c => parseInt(c.id) === parseInt(subCat.parent_id));
+                    const parentLabel = parentCat ? ` (${parentCat.name})` : '';
+                    groups.push({
+                        sub_category_name: `${subCat.name}${parentLabel}`,
+                        sub_category_id: subCat.id,
+                        sub_sub_categories: subSubCats
+                    });
+                }
+            });
+            return groups;
+        }
     },
 
     created: function () {
@@ -2384,12 +2723,6 @@ export default {
                 return;
             }
 
-            const apiKey = process.env.MIX_GEMINI_API_KEY || this.textGenKey;
-            if (!apiKey) {
-                this.showMessage("error", "Text generation API key is not configured.");
-                return;
-            }
-
             const hasVariants = !!this.has_variant;
             const isPacket = this.type === 'packet';
 
@@ -2537,6 +2870,25 @@ export default {
 
             this.inputs.push(duplicate);
             Vue.set(this.variantImages, this.inputs.length - 1, []);
+            Vue.set(this.expandedVariantGallery, this.inputs.length - 1, false);
+        },
+        removeVariantIndexState(index) {
+            const newVariantImages = {};
+            const newExpanded = {};
+            let newIdx = 0;
+            for (let i = 0; i < this.inputs.length; i++) {
+                if (i !== index) {
+                    if (this.variantImages[i]) {
+                        newVariantImages[newIdx] = this.variantImages[i];
+                    }
+                    if (this.expandedVariantGallery[i]) {
+                        newExpanded[newIdx] = this.expandedVariantGallery[i];
+                    }
+                    newIdx++;
+                }
+            }
+            this.variantImages = newVariantImages;
+            this.expandedVariantGallery = newExpanded;
         },
         remove(index) {
             let variant_id = (this.inputs[index].id) ? this.inputs[index].id : "";
@@ -2558,13 +2910,15 @@ export default {
                         axios.post(this.$apiUrl + '/products/delete', postData)
                             .then((response) => {
                                 let data = response.data;
-                                this.inputs.splice(index, 1)
-                                this.showSuccess(data.message)
+                                this.removeVariantIndexState(index);
+                                this.inputs.splice(index, 1);
+                                this.showSuccess(data.message);
                             });
                     }
                 });
             } else {
-                this.inputs.splice(index, 1)
+                this.removeVariantIndexState(index);
+                this.inputs.splice(index, 1);
             }
         },
 
@@ -2698,23 +3052,23 @@ export default {
             const files = fileInput && fileInput.files ? Array.from(fileInput.files) : [];
             const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
             const maxSizeInBytes = 5 * 1024 * 1024;
-            const tempImages = [];
+            const existing = this.variantImages[index] ? [...this.variantImages[index]] : [];
+            const tempImages = [...existing];
 
             this.variantImageerror = null;
-            Vue.set(this.variantImages, index, []);
 
             for (const file of files) {
                 const extension = file.name.split('.').pop().toLowerCase();
 
                 if (!validExtensions.includes(extension)) {
                     this.variantImageerror = "Invalid file type. Please upload a JPEG, PNG, JPG, GIF or WEBP image.";
-                    fileInput.value = '';
+                    if (fileInput) fileInput.value = '';
                     return;
                 }
 
                 if (file.size > maxSizeInBytes) {
                     this.variantImageerror = "Each variant image must be 5 MB or smaller.";
-                    fileInput.value = '';
+                    if (fileInput) fileInput.value = '';
                     return;
                 }
 
@@ -2726,6 +3080,67 @@ export default {
             }
 
             Vue.set(this.variantImages, index, tempImages);
+            if (fileInput) fileInput.value = '';
+        },
+        getAllVariantImages(k, type) {
+            const list = [];
+            const existing = type === 'packet'
+                ? (this.inputs[k] && this.inputs[k].images ? this.inputs[k].images : [])
+                : (this.inputs[k] && this.inputs[k].loose_images ? this.inputs[k].loose_images : []);
+            existing.forEach((img, idx) => {
+                list.push({
+                    isNew: false,
+                    index: idx,
+                    id: img.id,
+                    url: this.$storageUrl + img.image,
+                    raw: img
+                });
+            });
+            const newImgs = this.variantImages[k] || [];
+            newImgs.forEach((img, idx) => {
+                list.push({
+                    isNew: true,
+                    index: idx,
+                    id: null,
+                    url: img.url,
+                    name: img.name,
+                    raw: img
+                });
+            });
+            return list;
+        },
+        removeVariantImage(imgItem, k, type) {
+            if (imgItem.isNew) {
+                if (this.variantImages[k]) {
+                    const idx = this.variantImages[k].indexOf(imgItem.raw);
+                    if (idx !== -1) {
+                        this.variantImages[k].splice(idx, 1);
+                    } else if (imgItem.index !== undefined) {
+                        this.variantImages[k].splice(imgItem.index, 1);
+                    }
+                }
+            } else {
+                const existing = type === 'packet'
+                    ? (this.inputs[k] && this.inputs[k].images ? this.inputs[k].images : [])
+                    : (this.inputs[k] && this.inputs[k].loose_images ? this.inputs[k].loose_images : []);
+                const idx = existing.findIndex(img => img.id === imgItem.id);
+                this.deleteImage(idx !== -1 ? idx : imgItem.index, imgItem.id, false, k);
+            }
+        },
+        toggleVariantGallery(k) {
+            this.$set(this.expandedVariantGallery, k, !this.expandedVariantGallery[k]);
+        },
+        scrollGallery(key, amount) {
+            const el = this.$refs['gallery_scroll_' + key];
+            const domEl = Array.isArray(el) ? el[0] : el;
+            if (domEl) {
+                domEl.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        },
+        previewImage(url, title = 'Image Preview') {
+            this.previewModalUrl = url;
+            this.previewModalTitle = title;
+            this.showImagePreviewModal = true;
         },
         getMediaList(group, variantIndex = null) {
             if (group === 'other-new') return this.images;
@@ -4182,20 +4597,46 @@ export default {
             this.cacheTimer = setTimeout(() => this.saveCache(), 500);
         },
         isCategorySelected(option, list) {
-            return list && list.some(item => item.id === option.id);
+            return list && list.some(item => parseInt(item.id) === parseInt(option.id));
+        },
+        getGroupThemeClass(groupLabel) {
+            if (!groupLabel) return 'group-theme-0';
+            const idx = (this.selected_categories || []).findIndex(c => c.name === groupLabel);
+            if (idx !== -1) {
+                return `group-theme-${idx % 6}`;
+            }
+            const subIdx = (this.selected_sub_categories || []).findIndex(c => groupLabel.startsWith(c.name));
+            if (subIdx !== -1) {
+                return `group-theme-${subIdx % 6}`;
+            }
+            let hash = 0;
+            for (let i = 0; i < groupLabel.length; i++) {
+                hash = (hash << 5) - hash + groupLabel.charCodeAt(i);
+            }
+            return `group-theme-${Math.abs(hash) % 6}`;
         },
         onMainCategoriesChange(newVal) {
+            this.selected_categories = newVal || [];
             if (this.selected_sub_categories && this.selected_sub_categories.length > 0) {
-                const selectedIds = newVal.map(c => c.id);
-                this.selected_sub_categories = this.selected_sub_categories.filter(sc => selectedIds.includes(sc.parent_id));
+                const selectedIds = (newVal || []).map(c => parseInt(c.id));
+                this.selected_sub_categories = this.selected_sub_categories.filter(sc => selectedIds.includes(parseInt(sc.parent_id)));
                 this.onSubCategoriesChange(this.selected_sub_categories);
             }
         },
         onSubCategoriesChange(newVal) {
+            this.selected_sub_categories = newVal || [];
             if (this.selected_sub_sub_categories && this.selected_sub_sub_categories.length > 0) {
-                const selectedIds = newVal.map(c => c.id);
-                this.selected_sub_sub_categories = this.selected_sub_sub_categories.filter(ssc => selectedIds.includes(ssc.parent_id));
+                const selectedIds = (newVal || []).map(c => parseInt(c.id));
+                this.selected_sub_sub_categories = this.selected_sub_sub_categories.filter(ssc => selectedIds.includes(parseInt(ssc.parent_id)));
             }
+        },
+        onSubSubCategoriesChange(newVal) {
+            this.selected_sub_sub_categories = newVal || [];
+        },
+        getCategoryParentName(parentId) {
+            if (!parentId) return '';
+            const parent = this.allCategoriesFlat.find(c => parseInt(c.id) === parseInt(parentId));
+            return parent ? parent.name : '';
         }
     },
     watch: {
@@ -4709,4 +5150,173 @@ input[type="color"].color-picker-input-swatch::-moz-color-swatch {
     border-radius: 4px !important;
 }
 
+/* Variant Image Manager & Scrollable Gallery Styles */
+.variant-images-subrow {
+    transition: background-color 0.2s ease;
+}
+.variant-image-manager {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+.variant-thumb-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid #cbd5e1;
+    background-color: #f1f5f9;
+}
+.variant-thumb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    border-color: #3b82f6;
+}
+.variant-more-card {
+    border-style: dashed !important;
+    border-width: 1.5px !important;
+    transition: all 0.2s ease;
+}
+.variant-more-card:hover {
+    background-color: #e0e7ff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.variant-horizontal-strip {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f8fafc;
+}
+.variant-horizontal-strip::-webkit-scrollbar {
+    height: 6px;
+}
+.variant-horizontal-strip::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 4px;
+}
+.variant-horizontal-strip::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+.variant-horizontal-strip::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Category Hierarchy Selection Styles */
+.category-selection-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+.category-flow-arrow {
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Grouped Multiselect Styles */
+.multiselect-grouped .multiselect__content {
+    padding: 4px;
+}
+.multiselect-grouped .multiselect__element {
+    margin-bottom: 2px;
+}
+.multiselect-grouped .multiselect__option--group {
+    background: transparent !important;
+    padding: 2px 4px !important;
+    min-height: unset !important;
+    cursor: default !important;
+}
+.multiselect-grouped .multiselect__option--group::after {
+    display: none !important;
+}
+.multiselect-grouped .multiselect-group-header {
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    cursor: default;
+    user-select: none;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+/* Consecutive distinct category group header themes */
+.group-theme-0 {
+    background-color: #e8f0fe !important;
+    color: #1967d2 !important;
+    border-left: 4px solid #1a73e8 !important;
+}
+.group-theme-1 {
+    background-color: #f3e8fd !important;
+    color: #7b1fa2 !important;
+    border-left: 4px solid #7b1fa2 !important;
+}
+.group-theme-2 {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border-left: 4px solid #2e7d32 !important;
+}
+.group-theme-3 {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+    border-left: 4px solid #e65100 !important;
+}
+.group-theme-4 {
+    background-color: #e0f2f1 !important;
+    color: #00796b !important;
+    border-left: 4px solid #00796b !important;
+}
+.group-theme-5 {
+    background-color: #fce4ec !important;
+    color: #c2185b !important;
+    border-left: 4px solid #c2185b !important;
+}
+
+.multiselect-grouped .multiselect-child-option {
+    padding-left: 8px;
+    font-size: 13px;
+    color: #334155;
+}
+.multiselect-grouped .child-checkbox {
+    width: 15px;
+    height: 15px;
+    accent-color: #008060;
+}
+
+/* Image Preview Lightbox Modal */
+.image-preview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    padding: 20px;
+}
+.image-preview-modal-dialog {
+    background: #ffffff;
+    border-radius: 12px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+    animation: zoomInModal 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes zoomInModal {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 </style>

@@ -1,7 +1,7 @@
 @php
     $appName = \App\Models\Setting::get_value('app_name');
     if($appName == "" || $appName == null){
-        $appName = "eGrocer";
+        $appName = "Chanda Mama";
     }
 
     $supportEmail = \App\Models\Setting::get_value('support_email');
@@ -120,17 +120,7 @@
                     <div class="col-md-12">
                         <div class="well">
                             {{-- <div class="row"><strong>Items: {{ count($order_items) }}</strong></div> --}}
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="col-md-4">
-                                    <p>Sold By</p>
-                                    <strong>{{ $order->store_name ?? 'Store' }}</strong>
-                                    @if(isset($order->seller_email))
-                                    <p>Email: {{ $order->seller_email }}</p>
-                                    @endif
-                                    @if(isset($order->seller_mobile))
-                                    <p>Mobile No. : {{ $order->seller_mobile }}</p>
-                                    @endif
-                                </div>
+                            <div class="d-flex justify-content-end align-items-center">
                                 <div class="invoice-col">
                                     Invoice
                                    <address>

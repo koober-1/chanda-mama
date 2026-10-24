@@ -54,13 +54,49 @@ class DeliveryBoyController extends BaseController
     }
 
     public function getTopNotifications(){
-        $notifications = PanelNotification::where('notifiable_id',auth()->user()->id);
-        $unReadCount = (clone $notifications)->where('read_at',NULL)->get()->count();
-        $notifications = $notifications->orderBy('created_at','DESC')->get();
+        $notificationsQuery = PanelNotification::where('notifiable_id', auth()->user()->id);
+        $notifications = $notificationsQuery->orderBy('created_at', 'DESC')->limit(50)->get();
+
+        $orderIds = $notifications->map(function($notification) {
+            return $notification->data['order_id'] ?? null;
+        })->filter()->unique()->values()->all();
+
+        $orders = [];
+        if (!empty($orderIds)) {
+            $orders = Order::with(['user', 'items.seller'])->whereIn('id', $orderIds)->get()->keyBy('id');
+        }
+
+        $currency = Setting::get_value('currency') ?? '₹';
+        $validNotifications = collect();
+
+        foreach ($notifications as $notification) {
+            $data = $notification->data;
+            if (isset($data['order_id'])) {
+                $orderId = $data['order_id'];
+                $order = $orders[$orderId] ?? null;
+                if (!$order) {
+                    PanelNotification::where('id', $notification->id)->delete();
+                    continue;
+                }
+                $customerName = $order->user ? $order->user->name : ($order->user_name ?? ($data['customer_name'] ?? 'Customer'));
+                $storeName = 'Store';
+                if ($order->items->isNotEmpty() && $order->items->first()->seller) {
+                    $storeName = $order->items->first()->seller->store_name;
+                }
+                $data['customer_name'] = $customerName;
+                $data['store_name'] = $storeName;
+                $data['total'] = $order->total;
+                $data['currency'] = $currency;
+            }
+            $notification->data = $data;
+            $validNotifications->push($notification);
+        }
+
+        $unReadCount = $validNotifications->whereNull('read_at')->count();
 
         $data = array();
         $data['unread'] = $unReadCount;
-        $data['notifications'] = $notifications;
+        $data['notifications'] = $validNotifications->values()->take(20);
         return CommonHelper::responseWithData($data);
     }
 

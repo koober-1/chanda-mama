@@ -328,7 +328,7 @@ class OrderApiController extends Controller
 
             if ($order_type == 'doorstep') {
                 $seller_ids = array_values(array_unique(array_column($item_details->toArray(), "seller_id")));
-                if (!CommonHelper::isDeliverableOrder($address_id, $latitude, $longitude, $seller_ids[0]) && !isDemoMode()) {
+                if (!CommonHelper::isDeliverableOrder($address_id, $latitude, $longitude, $seller_ids[0] ?? null)) {
                     return CommonHelper::responseError(__('sorry_we_are_not_delivering_on_selected_address'));
                 }
             }
@@ -628,13 +628,22 @@ class OrderApiController extends Controller
                     $productVariant->save();
                 }
             }
+            // Delete associated panel notifications for this order
+            try {
+                \App\Models\PanelNotification::where('data', 'like', '%"order_id":' . $order->id . '%')
+                    ->orWhere('data', 'like', '%"order_id": "' . $order->id . '"%')
+                    ->orWhere('data', 'like', '%"order_id":' . $order->id . ',%')
+                    ->delete();
+            } catch (\Exception $e) {
+                Log::warning("Error deleting panel notifications for order #{$order->id}: " . $e->getMessage());
+            }
+
             $order->delete();
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             Log::info("Error : " . $e->getMessage());
-            throw $e;
             return CommonHelper::responseError(__('something_went_wrong'));
         }
         return CommonHelper::responseSuccess(__('order_deleted_successfully'));
@@ -833,6 +842,13 @@ class OrderApiController extends Controller
             }
             // Return the hosted payment page URL for redirection
             return CommonHelper::responseWithData($dpo_redirect_url);
+        } else if (
+            $request->payment_method == "COD" ||
+            strtolower($request->payment_method) == "cod" ||
+            $request->payment_method == "Wallet" ||
+            strtolower($request->payment_method) == "wallet"
+        ) {
+            return CommonHelper::responseSuccess("Order placed successfully");
         } else {
             return CommonHelper::responseError("Invalid payment methods.");
         }

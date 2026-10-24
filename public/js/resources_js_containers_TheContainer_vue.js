@@ -244,11 +244,6 @@ __webpack_require__.r(__webpack_exports__);
           url: '/product_ratings',
           permission: 'product_ratings'
         }, {
-          name: __('media'),
-          icon: 'grid-fill',
-          url: '/media',
-          permission: 'manage_media'
-        }, {
           name: __('taxes'),
           icon: 'grid-fill',
           url: '/taxes',
@@ -1558,12 +1553,12 @@ __webpack_require__.r(__webpack_exports__);
 
       // Deterministic mock fallbacks based on notification ID to simulate realism if not enriched
       var seed = parseInt(String(notification.id || '').replace(/\D/g, '')) || 0;
-      var fallbackCustomers = ['Emily Johnson', 'John Smith', 'Michael Brown', 'Sophia Williams', 'David Jones'];
-      var fallbackStores = ['Green Basket', 'FreshMart', 'Local Harvest', 'Daily Needs', 'Super Saver'];
-      var fallbackTotals = ['1,250', '850', '2,400', '150', '580'];
-      var customerName = notification.data.customer_name || fallbackCustomers[seed % fallbackCustomers.length];
-      var storeName = notification.data.store_name || fallbackStores[seed % fallbackStores.length];
-      var total = notification.data.total || fallbackTotals[seed % fallbackTotals.length];
+      var fallbackCustomers = ['Customer'];
+      var fallbackStores = ['Chandamama Store'];
+      var fallbackTotals = ['0'];
+      var customerName = notification.data.customer_name || 'Customer';
+      var storeName = notification.data.store_name || 'Chandamama Store';
+      var total = notification.data.total || '';
       var currency = notification.data.currency || '₹';
       if (type === 'return_request_new' || type === 'return_request_sent' || type === 'return_request_status' || lowerText.includes('return')) {
         title = 'Return Request Received';
@@ -1573,7 +1568,7 @@ __webpack_require__.r(__webpack_exports__);
         body = "".concat(customerName, " cancelled order ").concat(orderId, " from ").concat(storeName);
       } else if (lowerText.includes('receive') || lowerText.includes('place') || lowerText.includes('new order')) {
         title = 'New Order Placed';
-        body = "".concat(customerName, " placed a new grocery order worth ").concat(currency).concat(total, " from ").concat(storeName);
+        body = "".concat(customerName, " placed a new order worth ").concat(currency).concat(total, " from ").concat(storeName);
       } else if (lowerText.includes('assign')) {
         title = 'Order Assigned';
         body = "Order ".concat(orderId, " from ").concat(storeName, " has been assigned to a delivery boy");
@@ -2388,7 +2383,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.fade-enter-active[data-v-59a2dd7f],\r\n.fade-leave-active[data-v-59a2dd7f] {\r\n    transition: opacity 0.3s;\n}\n.fade-enter[data-v-59a2dd7f],\r\n.fade-leave-to[data-v-59a2dd7f] {\r\n    opacity: 0;\n}\n.logo[data-v-59a2dd7f] {\r\n    width: 230px;\n}\n.container-logo[data-v-59a2dd7f] {\r\n    width: 230px;\r\n    max-width: 100%;\r\n    height: auto;\n}\n.route-loader-wrapper[data-v-59a2dd7f] {\r\n    position: relative;\n}\n.route-loader-overlay[data-v-59a2dd7f] {\r\n    align-items: center;\r\n    background: rgba(255, 255, 255, 0.78);\r\n    bottom: 0;\r\n    color: #0f2544;\r\n    display: flex;\r\n    gap: 10px;\r\n    justify-content: center;\r\n    left: 0;\r\n    min-height: 260px;\r\n    position: absolute;\r\n    right: 0;\r\n    top: 0;\r\n    z-index: 20;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.fade-enter-active[data-v-59a2dd7f],\n.fade-leave-active[data-v-59a2dd7f] {\n    transition: opacity 0.3s;\n}\n.fade-enter[data-v-59a2dd7f],\n.fade-leave-to[data-v-59a2dd7f] {\n    opacity: 0;\n}\n.logo[data-v-59a2dd7f] {\n    width: 230px;\n}\n.container-logo[data-v-59a2dd7f] {\n    width: 230px;\n    max-width: 100%;\n    height: auto;\n}\n.route-loader-wrapper[data-v-59a2dd7f] {\n    position: relative;\n}\n.route-loader-overlay[data-v-59a2dd7f] {\n    align-items: center;\n    background: rgba(255, 255, 255, 0.78);\n    bottom: 0;\n    color: #0f2544;\n    display: flex;\n    gap: 10px;\n    justify-content: center;\n    left: 0;\n    min-height: 260px;\n    position: absolute;\n    right: 0;\n    top: 0;\n    z-index: 20;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
