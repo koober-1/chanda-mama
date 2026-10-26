@@ -948,6 +948,98 @@ class ProductsApiController extends Controller
             if (isset($product->description)) {
                 $product->description = CommonHelper::fixDescriptionImageUrls($product->description);
             }
+
+            // Resolve full category hierarchy & deepest assigned category
+            $categoryMap = Category::select('id', 'name', 'slug', 'parent_id')
+                ->with('translations')
+                ->get()
+                ->keyBy('id');
+
+            $pivot = DB::table('product_category')->where('product_id', $product->id)->first();
+            $subSubCatId = $pivot->sub_sub_category_id ?? null;
+            $subCatId = $pivot->sub_category_id ?? null;
+            $mainCatId = $product->category_id ?: ($pivot->category_id ?? null);
+
+            $mainCategory = $mainCatId ? $categoryMap->get($mainCatId) : null;
+            $subCategory = $subCatId ? $categoryMap->get($subCatId) : null;
+            $subSubCategory = $subSubCatId ? $categoryMap->get($subSubCatId) : null;
+
+            // If subCategory was not in pivot but mainCategory has parent (i.e. product category_id was assigned a nested category)
+            if (!$subCategory && !$subSubCategory && $mainCategory && $mainCategory->parent_id != 0) {
+                $parentCat = $categoryMap->get($mainCategory->parent_id);
+                if ($parentCat && $parentCat->parent_id != 0) {
+                    $grandParent = $categoryMap->get($parentCat->parent_id);
+                    $subSubCategory = $mainCategory;
+                    $subCategory = $parentCat;
+                    $mainCategory = $grandParent;
+                } else if ($parentCat) {
+                    $subCategory = $mainCategory;
+                    $mainCategory = $parentCat;
+                }
+            }
+
+            // Build hierarchy array
+            $hierarchy = [];
+            if ($mainCategory) {
+                $hierarchy[] = [
+                    'id' => $mainCategory->id,
+                    'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
+                    'slug' => $mainCategory->slug,
+                    'level' => 'main',
+                ];
+            }
+            if ($subCategory) {
+                $hierarchy[] = [
+                    'id' => $subCategory->id,
+                    'name' => $subCategory->translations['name'] ?? $subCategory->name,
+                    'slug' => $subCategory->slug,
+                    'level' => 'sub',
+                ];
+            }
+            if ($subSubCategory) {
+                $hierarchy[] = [
+                    'id' => $subSubCategory->id,
+                    'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
+                    'slug' => $subSubCategory->slug,
+                    'level' => 'sub_sub',
+                ];
+            }
+
+            // Deepest assigned category: sub-subcategory if available, otherwise subcategory, otherwise main category
+            $deepest = $subSubCategory ?: ($subCategory ?: $mainCategory);
+            $deepestCategory = $deepest ? [
+                'id' => $deepest->id,
+                'name' => $deepest->translations['name'] ?? $deepest->name,
+                'slug' => $deepest->slug,
+            ] : null;
+
+            $product->category = $mainCategory ? [
+                'id' => $mainCategory->id,
+                'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
+                'slug' => $mainCategory->slug,
+            ] : null;
+            $product->category_name = $mainCategory ? ($mainCategory->translations['name'] ?? $mainCategory->name) : $product->category_name;
+
+            $product->sub_category_id = $subCategory ? $subCategory->id : null;
+            $product->sub_category_name = $subCategory ? ($subCategory->translations['name'] ?? $subCategory->name) : null;
+            $product->sub_category = $subCategory ? [
+                'id' => $subCategory->id,
+                'name' => $subCategory->translations['name'] ?? $subCategory->name,
+                'slug' => $subCategory->slug,
+            ] : null;
+
+            $product->sub_sub_category_id = $subSubCategory ? $subSubCategory->id : null;
+            $product->sub_sub_category_name = $subSubCategory ? ($subSubCategory->translations['name'] ?? $subSubCategory->name) : null;
+            $product->sub_sub_category = $subSubCategory ? [
+                'id' => $subSubCategory->id,
+                'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
+                'slug' => $subSubCategory->slug,
+            ] : null;
+
+            $product->deepest_category = $deepestCategory;
+            $product->deepest_category_name = $deepestCategory ? $deepestCategory['name'] : $product->category_name;
+            $product->category_hierarchy = $hierarchy;
+
             return CommonHelper::responseWithData($product);
         } else {
             return CommonHelper::responseError(__('no_items_found'));

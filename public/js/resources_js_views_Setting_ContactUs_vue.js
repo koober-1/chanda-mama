@@ -37,6 +37,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       defaultLanguageId: null,
       activeLanguageTab: 0,
       record: null,
+      banner_file: null,
+      banner_file_name: "",
+      banner_preview_url: "",
+      remove_banner: 0,
       translatableFields: ['contact_us'],
       translateSuccessMessage: '',
       loadingEmpty: false,
@@ -86,6 +90,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(this.$apiUrl + "/contact_us").then(function (res) {
         _this2.record = res.data.data;
         if (!_this2.record) return;
+        if (_this2.record.contact_us_banner_url) {
+          _this2.banner_preview_url = _this2.record.contact_us_banner_url;
+        }
         try {
           var parsed = JSON.parse(_this2.record.value);
           _this2.languages.forEach(function (lang) {
@@ -99,6 +106,34 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
         }
       });
+    },
+    handleBannerUpload: function handleBannerUpload(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+      this.banner_file = file;
+      this.banner_file_name = file.name;
+      this.banner_preview_url = URL.createObjectURL(file);
+      this.remove_banner = 0;
+    },
+    dropBannerFile: function dropBannerFile(event) {
+      event.preventDefault();
+      if (event.dataTransfer.files && event.dataTransfer.files.length) {
+        this.$refs.contact_us_banner.files = event.dataTransfer.files;
+        this.handleBannerUpload({
+          target: {
+            files: event.dataTransfer.files
+          }
+        });
+      }
+    },
+    removeBanner: function removeBanner() {
+      this.banner_file = null;
+      this.banner_file_name = "";
+      this.banner_preview_url = "";
+      this.remove_banner = 1;
+      if (this.$refs.contact_us_banner) {
+        this.$refs.contact_us_banner.value = "";
+      }
     },
     validateDefaultLanguage: function validateDefaultLanguage() {
       var def = this.translations[this.defaultLanguageId];
@@ -124,11 +159,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.languages.forEach(function (lang) {
         dataByLang[lang.code] = _this4.translations[lang.id].contact_us || "";
       });
-      axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(this.$apiUrl + "/contact_us/save", {
-        contact_us: JSON.stringify(dataByLang)
+      var formData = new FormData();
+      formData.append("contact_us", JSON.stringify(dataByLang));
+      if (this.banner_file) {
+        formData.append("contact_us_banner", this.banner_file);
+      }
+      if (this.remove_banner) {
+        formData.append("remove_contact_us_banner", 1);
+      }
+      axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(this.$apiUrl + "/contact_us/save", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       }).then(function (res) {
         if (res.data.status === 1) {
           _this4.showMessage("success", res.data.message);
+          _this4.banner_file = null;
+          _this4.banner_file_name = "";
+          _this4.remove_banner = 0;
+          _this4.getContactUs();
         } else {
           _this4.showError(res.data.message);
         }
@@ -297,7 +346,74 @@ var render = function render() {
     })], 1)]);
   }), 1)], 1) : _vm.isLoadingLanguages ? _c("div", {
     staticClass: "text-center p-3"
-  }, [_c("b-spinner")], 1) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_c("b-spinner")], 1) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "row mt-4 pt-3 border-top"
+  }, [_c("div", {
+    staticClass: "col-12"
+  }, [_c("h5", {
+    staticClass: "mb-3"
+  }, [_vm._v(_vm._s(_vm.__("banner_image")))])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("div", {
+    staticClass: "form-group"
+  }, [_c("label", [_vm._v(_vm._s(_vm.__("banner_image")))]), _vm._v(" "), _c("input", {
+    ref: "contact_us_banner",
+    staticClass: "file-input",
+    attrs: {
+      type: "file",
+      name: "contact_us_banner",
+      accept: "image/*"
+    },
+    on: {
+      change: function change($event) {
+        return _vm.handleBannerUpload($event);
+      }
+    }
+  }), _vm._v(" "), _c("div", {
+    staticClass: "file-input-div",
+    on: {
+      click: function click($event) {
+        return _vm.$refs.contact_us_banner.click();
+      },
+      drop: _vm.dropBannerFile,
+      dragover: _vm.$dragoverFile,
+      dragleave: _vm.$dragleaveFile
+    }
+  }, [_vm.banner_file_name ? [_c("label", [_vm._v(_vm._s(_vm.__("selected_file_name")) + ":- " + _vm._s(_vm.banner_file_name))])] : [_vm._m(0), _vm._v(" "), _c("label", [_vm._v(_vm._s(_vm.__("drop_files_here_or_click_to_upload")))])]], 2), _vm._v(" "), _c("small", {
+    staticClass: "text-muted d-block mt-1"
+  }, [_vm._v("Recommended aspect ratio: 16:10. Formats: JPG, PNG, WEBP.")])])]), _vm._v(" "), _vm.banner_preview_url ? _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
+    staticClass: "d-block"
+  }, [_vm._v(_vm._s(_vm.__("preview") || "Preview"))]), _vm._v(" "), _c("div", {
+    staticClass: "position-relative d-inline-block"
+  }, [_c("img", {
+    staticClass: "img-thumbnail",
+    staticStyle: {
+      "max-height": "180px",
+      "object-fit": "cover",
+      "border-radius": "8px"
+    },
+    attrs: {
+      src: _vm.banner_preview_url,
+      alt: "Contact Us Banner Preview"
+    }
+  }), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-sm btn-danger position-absolute",
+    staticStyle: {
+      top: "5px",
+      right: "5px"
+    },
+    attrs: {
+      type: "button",
+      title: "Remove Banner"
+    },
+    on: {
+      click: _vm.removeBanner
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-trash"
+  })])])]) : _vm._e()])]), _vm._v(" "), _c("div", {
     staticClass: "card-footer"
   }, [_c("b-button", {
     attrs: {
@@ -311,7 +427,13 @@ var render = function render() {
     }
   }) : _vm._e()], 1)], 1)])])])])]);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("label", [_c("i", {
+    staticClass: "fa fa-cloud-upload-alt fa-2x"
+  })]);
+}];
 render._withStripped = true;
 
 

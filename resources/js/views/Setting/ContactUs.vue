@@ -84,6 +84,62 @@
                                 <b-spinner />
                             </div>
 
+                            <!-- Banner Image Section -->
+                            <div class="row mt-4 pt-3 border-top">
+                                <div class="col-12">
+                                    <h5 class="mb-3">{{ __('banner_image') }}</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ __('banner_image') }}</label>
+                                        <input
+                                            type="file"
+                                            name="contact_us_banner"
+                                            ref="contact_us_banner"
+                                            accept="image/*"
+                                            class="file-input"
+                                            @change="handleBannerUpload($event)"
+                                        />
+                                        <div
+                                            class="file-input-div"
+                                            @click="$refs.contact_us_banner.click()"
+                                            @drop="dropBannerFile"
+                                            @dragover="$dragoverFile"
+                                            @dragleave="$dragleaveFile"
+                                        >
+                                            <template v-if="banner_file_name">
+                                                <label>{{ __('selected_file_name') }}:- {{ banner_file_name }}</label>
+                                            </template>
+                                            <template v-else>
+                                                <label><i class="fa fa-cloud-upload-alt fa-2x"></i></label>
+                                                <label>{{ __('drop_files_here_or_click_to_upload') }}</label>
+                                            </template>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">Recommended aspect ratio: 16:10. Formats: JPG, PNG, WEBP.</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" v-if="banner_preview_url">
+                                    <label class="d-block">{{ __('preview') || 'Preview' }}</label>
+                                    <div class="position-relative d-inline-block">
+                                        <img
+                                            :src="banner_preview_url"
+                                            class="img-thumbnail"
+                                            style="max-height: 180px; object-fit: cover; border-radius: 8px;"
+                                            alt="Contact Us Banner Preview"
+                                        />
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-danger position-absolute"
+                                            style="top: 5px; right: 5px;"
+                                            @click="removeBanner"
+                                            title="Remove Banner"
+                                        >
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="card-footer">
@@ -118,6 +174,11 @@ export default {
             defaultLanguageId: null,
             activeLanguageTab: 0,
             record: null,
+
+            banner_file: null,
+            banner_file_name: "",
+            banner_preview_url: "",
+            remove_banner: 0,
 
             translatableFields: ['contact_us'],
             translateSuccessMessage: '',
@@ -175,6 +236,10 @@ export default {
                 this.record = res.data.data;
                 if (!this.record) return;
 
+                if (this.record.contact_us_banner_url) {
+                    this.banner_preview_url = this.record.contact_us_banner_url;
+                }
+
                 try {
                     const parsed = JSON.parse(this.record.value);
                     this.languages.forEach(lang => {
@@ -188,6 +253,33 @@ export default {
                     }
                 }
             });
+        },
+
+        handleBannerUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            this.banner_file = file;
+            this.banner_file_name = file.name;
+            this.banner_preview_url = URL.createObjectURL(file);
+            this.remove_banner = 0;
+        },
+
+        dropBannerFile(event) {
+            event.preventDefault();
+            if (event.dataTransfer.files && event.dataTransfer.files.length) {
+                this.$refs.contact_us_banner.files = event.dataTransfer.files;
+                this.handleBannerUpload({ target: { files: event.dataTransfer.files } });
+            }
+        },
+
+        removeBanner() {
+            this.banner_file = null;
+            this.banner_file_name = "";
+            this.banner_preview_url = "";
+            this.remove_banner = 1;
+            if (this.$refs.contact_us_banner) {
+                this.$refs.contact_us_banner.value = "";
+            }
         },
 
         validateDefaultLanguage() {
@@ -215,12 +307,27 @@ export default {
                 dataByLang[lang.code] = this.translations[lang.id].contact_us || "";
             });
 
-            axios.post(this.$apiUrl + "/contact_us/save", {
-                contact_us: JSON.stringify(dataByLang),
+            const formData = new FormData();
+            formData.append("contact_us", JSON.stringify(dataByLang));
+            if (this.banner_file) {
+                formData.append("contact_us_banner", this.banner_file);
+            }
+            if (this.remove_banner) {
+                formData.append("remove_contact_us_banner", 1);
+            }
+
+            axios.post(this.$apiUrl + "/contact_us/save", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
             })
             .then(res => {
                 if (res.data.status === 1) {
                     this.showMessage("success", res.data.message);
+                    this.banner_file = null;
+                    this.banner_file_name = "";
+                    this.remove_banner = 0;
+                    this.getContactUs();
                 } else {
                     this.showError(res.data.message);
                 }

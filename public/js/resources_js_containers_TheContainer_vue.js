@@ -315,6 +315,11 @@ __webpack_require__.r(__webpack_exports__);
           permission: 'home_slider_image_list'
         }]
       }, {
+        name: 'Home Flyers',
+        icon: 'clone',
+        url: '/home_flyers',
+        role: true
+      }, {
         name: __('offer_image'),
         icon: 'gift',
         permission: null,

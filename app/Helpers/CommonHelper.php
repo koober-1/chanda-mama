@@ -317,7 +317,7 @@ class CommonHelper
 
     public static function convertSettingsInArray($settings): array
     {
-        $imageArray = array("play_store_logo", "ios_store_logo", "favicon", "web_logo", "loading", "logo", "popup_image", "placeholder_image");
+        $imageArray = array("play_store_logo", "ios_store_logo", "favicon", "web_logo", "loading", "logo", "popup_image", "placeholder_image", "about_us_banner", "contact_us_banner");
         $data = array();
         foreach ($settings as $setting) {
             if (in_array($setting->variable, $imageArray)) {
