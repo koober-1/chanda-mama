@@ -53,6 +53,7 @@ Route::get('policies', [\App\Http\Controllers\SellerController::class, 'getPolic
 
 Route::get('home_slider_images', [\App\Http\Controllers\API\HomeSliderImagesApiController::class, 'index']);
 Route::get('home_flyers', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'getPublicFlyers']);
+Route::get('home_popup', [\App\Http\Controllers\API\HomePopupApiController::class, 'getPublicPopup']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('admin_settings', [\App\Http\Controllers\Controller::class, 'getAdminSettings']);
@@ -199,6 +200,14 @@ Route::middleware('auth:api')->group(function () {
         Route::post('update', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'update'])->name('home_flyers.update');
         Route::post('delete', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'delete'])->name('home_flyers.delete');
         Route::post('update_status', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'updateStatus'])->name('home_flyers.update_status');
+    });
+
+    Route::group(['prefix' => 'home_popup'], function () {
+        Route::get('list', [\App\Http\Controllers\API\HomePopupApiController::class, 'index'])->name('home_popup.list');
+        Route::post('save', [\App\Http\Controllers\API\HomePopupApiController::class, 'save'])->name('home_popup.save');
+        Route::post('update', [\App\Http\Controllers\API\HomePopupApiController::class, 'update'])->name('home_popup.update');
+        Route::post('delete', [\App\Http\Controllers\API\HomePopupApiController::class, 'delete'])->name('home_popup.delete');
+        Route::post('update_status', [\App\Http\Controllers\API\HomePopupApiController::class, 'updateStatus'])->name('home_popup.update_status');
     });
 
     Route::group(['prefix' => 'promo_code'], function () {

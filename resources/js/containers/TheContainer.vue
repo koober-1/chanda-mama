@@ -384,6 +384,12 @@ export default {
                     role: true,
                 },
                 {
+                    name: 'Home Popup',
+                    icon: 'window-maximize',
+                    url: '/home_popup',
+                    role: true,
+                },
+                {
                     name: __('offer_image'),
                     icon: 'gift',
                     permission: null,

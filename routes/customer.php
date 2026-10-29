@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth.customer']], function () {
 
     // Guest
    
+    Route::get('home_popup', [\App\Http\Controllers\API\HomePopupApiController::class, 'getPublicPopup']);
     Route::get('categories', [\App\Http\Controllers\API\Customer\BasicApiController::class, 'getCategories']);
     Route::get('categories/get_seo_things', [\App\Http\Controllers\API\Customer\BasicApiController::class, 'getSeoThings']);
     Route::get('shop', [\App\Http\Controllers\API\Customer\ShopApiController::class, 'getShopData']);

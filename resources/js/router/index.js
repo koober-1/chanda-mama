@@ -57,6 +57,7 @@ const SellerWalletTransactions = () => import("../views/Seller/WalletTransaction
 const HomeSliders = () => import("../views/HomeSliders/HomeSliders");
 const HeroSliderVideos = () => import("../views/HomeSliders/HeroSliderVideos");
 const HomeFlyers = () => import("../views/HomeFlyers/HomeFlyers");
+const HomePopup = () => import("../views/HomePopup/HomePopup");
 
 //Promo Code
 const PromoCode = () => import("../views/PromoCode/PromoCode");
@@ -812,6 +813,15 @@ function configRoutes() {
                     meta: {
                         role: [roleSuperAdmin],
                         title: 'Home Flyers'
+                    },
+                },
+                {
+                    path: "home_popup",
+                    name: "HomePopup",
+                    component: HomePopup,
+                    meta: {
+                        role: [roleSuperAdmin],
+                        title: 'Home Popup'
                     },
                 },
                 {

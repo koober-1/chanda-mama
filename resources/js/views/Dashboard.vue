@@ -718,6 +718,7 @@ export default {
             });
         },
         salesChartOptions() {
+            const currencySymbol = this.$currency || '₹';
             return {
                 chart: { type: 'bar', stacked: true, toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
                 plotOptions: {
@@ -749,7 +750,7 @@ export default {
                 yaxis: {
                     labels: {
                         style: { colors: '#64748B', fontSize: '12px' },
-                        formatter: (val) => '$' + this.formatNumber(val)
+                        formatter: (val) => currencySymbol + this.formatNumber(val)
                     }
                 },
                 grid: { borderColor: '#F1F5F9', strokeDashArray: 4 },
@@ -769,14 +770,14 @@ export default {
                 tooltip: {
                     shared: true,
                     intersect: false,
-                    custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                    custom: ({ series, seriesIndex, dataPointIndex, w }) => {
                         const cat = w.globals.categoryLabels[dataPointIndex] || w.config.xaxis.categories[dataPointIndex];
                         const orders = series[0] ? series[0][dataPointIndex] : 0;
                         const revenue = series[1] ? series[1][dataPointIndex] : 0;
                         return '<div style="background:#111827;color:#fff;padding:12px;border-radius:12px;font-size:13px;line-height:1.6;border:none;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1)">' +
                             '<div style="margin-bottom:4px;font-weight:700">' + cat + '</div>' +
                             '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#68E4A1"></span> Orders : <span style="font-weight:700">' + orders + '</span></div>' +
-                            '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#DCFCE7"></span> Revenue : <span style="font-weight:700">$' + (revenue || 0).toLocaleString() + '</span></div>' +
+                            '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#DCFCE7"></span> Revenue : <span style="font-weight:700">' + currencySymbol + (revenue || 0).toLocaleString() + '</span></div>' +
                             '</div>';
                     }
                 },
