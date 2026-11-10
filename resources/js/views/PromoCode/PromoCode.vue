@@ -32,6 +32,12 @@
                   <span>{{ __('add_promo_code') }}</span>
                 </button>
 
+                <button class="btn d-flex align-items-center gap-2 text-white" @click="showSchoolModal = true"
+                  style="background: linear-gradient(135deg, #0B4F94 0%, #1565C0 100%); border-radius: 8px; font-weight: 600; padding: 0.5rem 1rem; border: none; box-shadow: 0 2px 6px rgba(11,79,148,0.25);">
+                  <i class="fa fa-graduation-cap"></i>
+                  <span>School Physical Coupons</span>
+                </button>
+
                 <button class="btn btn-figma-filter d-flex align-items-center gap-2" @click="getPromoCode()"
                   v-b-tooltip.hover :title="__('refresh')">
                   <i class="fa fa-refresh"></i>
@@ -101,17 +107,22 @@
 
     <app-edit-record v-if="create_new || edit_record" :record="edit_record" @modalClose="hideModal()"></app-edit-record>
 
+    <!-- School Physical Coupons Generator & Batches Modal -->
+    <school-coupons-modal v-if="showSchoolModal" @close="showSchoolModal = false"></school-coupons-modal>
+
   </div>
 </template>
 <script>
 import { VuejsDatatableFactory } from "vuejs-datatable";
 import EditRecord from "./Edit.vue";
+import SchoolCouponsModal from "./SchoolCouponsModal.vue";
 import axios from "axios";
 
 export default {
   components: {
     VuejsDatatableFactory,
     "app-edit-record": EditRecord,
+    "school-coupons-modal": SchoolCouponsModal,
   },
   data: function () {
     return {
@@ -148,6 +159,7 @@ export default {
       max_col_in_single_row: 12,
       create_new: false,
       edit_record: null,
+      showSchoolModal: false,
       // Language handling for translations
       currentLanguageId: null,
       activeLanguages: []

@@ -225,7 +225,12 @@ export default {
         },
         formatColor(color) {
             if (!color) return '-';
-            return color.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            if (typeof color === 'object') {
+                return color.name || color.color_name || color.label || '-';
+            }
+            const str = String(color);
+            if (str.includes('[object Object]')) return '-';
+            return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         },
         editProductRoute(productId) {
             return this.isSellerRoute

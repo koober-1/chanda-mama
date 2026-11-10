@@ -1299,73 +1299,14 @@ class ProductApisController extends Controller
                 $product->tags()->sync($allTagIds);
             }
 
-            // Handle multi-category, sub-category & sub-sub-category support
+            // Handle additional main categories support
             $additionalCategoryIds = [];
             if ($request->has('additional_category_ids') && !empty($request->additional_category_ids)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric')
-                );
-            }
-            if ($request->has('sub_category_id') && !empty($request->sub_category_id)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->sub_category_id)), 'is_numeric')
-                );
-            }
-            if ($request->has('sub_sub_category_id') && !empty($request->sub_sub_category_id)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->sub_sub_category_id)), 'is_numeric')
-                );
+                $additionalCategoryIds = array_values(array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric'));
             }
 
-            // Extract primary single sub_category_id and sub_sub_category_id (to avoid SQL truncation on integer column)
-            $primarySubCategoryId = null;
-            if (!empty($request->sub_category_id)) {
-                $subParts = explode(',', (string)$request->sub_category_id);
-                $firstSub = trim($subParts[0]);
-                if (is_numeric($firstSub)) {
-                    $primarySubCategoryId = (int)$firstSub;
-                }
-            }
-
-            $primarySubSubCategoryId = null;
-            if (!empty($request->sub_sub_category_id)) {
-                $subSubParts = explode(',', (string)$request->sub_sub_category_id);
-                $firstSubSub = trim($subSubParts[0]);
-                if (is_numeric($firstSubSub)) {
-                    $primarySubSubCategoryId = (int)$firstSubSub;
-                }
-            }
-
-            // Sync all categories including the primary one
-            $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
-            $allCategoryIds = array_values(array_unique(array_filter($allCategoryIds, function($value) {
-                return !empty($value) && is_numeric($value);
-            })));
-
-            if (!empty($allCategoryIds)) {
-                $syncData = [];
-                foreach ($allCategoryIds as $catId) {
-                    // Only attach sub_category_id and sub_sub_category_id to the primary category record
-                    if ($catId == $request->category_id) {
-                        $syncData[$catId] = [
-                            'sub_category_id' => $primarySubCategoryId,
-                            'sub_sub_category_id' => $primarySubSubCategoryId,
-                        ];
-                    } else {
-                        $syncData[$catId] = [
-                            'sub_category_id' => null,
-                            'sub_sub_category_id' => null,
-                        ];
-                    }
-                }
-                $product->categories()->sync($syncData);
-            } else {
-                // If no categories, clear any existing ones
-                $product->categories()->detach();
-            }
+            // Sync all multi-category, sub-category, and sub-sub-category combinations
+            $this->syncProductCategories($product, $request, $additionalCategoryIds);
 
             // Save translations using HasTranslations trait
             if ($request->has('translations')) {
@@ -1406,6 +1347,149 @@ class ProductApisController extends Controller
         }
 
         return CommonHelper::responseSuccess('product_saved_successfully');
+    }
+
+    /**
+     * Synchronize multiple categories, sub-categories, and sub-sub-categories for a product.
+     */
+    private function syncProductCategories($product, Request $request, array $additionalCategoryIds = [])
+    {
+        $rawCandidateMainIds = array_merge(
+            $request->filled('category_id') ? (is_array($request->category_id) ? $request->category_id : explode(',', (string)$request->category_id)) : [],
+            $additionalCategoryIds
+        );
+        $rawCandidateMainIds = array_values(array_unique(array_filter(array_map('intval', $rawCandidateMainIds))));
+
+        $subCategoryIds = [];
+        if ($request->filled('sub_category_id')) {
+            $subCategoryIds = array_values(array_unique(array_filter(array_map('intval', explode(',', (string)$request->sub_category_id)))));
+        }
+
+        $subSubCategoryIds = [];
+        if ($request->filled('sub_sub_category_id')) {
+            $subSubCategoryIds = array_values(array_unique(array_filter(array_map('intval', explode(',', (string)$request->sub_sub_category_id)))));
+        }
+
+        // Collect all candidate category IDs to inspect parent_id hierarchy
+        $allIdsToFetch = array_unique(array_merge($rawCandidateMainIds, $subCategoryIds, $subSubCategoryIds));
+        $categoryMap = empty($allIdsToFetch) ? collect() : Category::whereIn('id', $allIdsToFetch)->get()->keyBy('id');
+
+        // Strictly enforce: main categories MUST have parent_id == 0
+        $allMainCategoryIds = [];
+        foreach ($rawCandidateMainIds as $cId) {
+            $cat = $categoryMap->get($cId);
+            if ($cat && empty($cat->parent_id)) {
+                $allMainCategoryIds[] = $cId;
+            }
+        }
+        if (empty($allMainCategoryIds) && !empty($rawCandidateMainIds)) {
+            // Fallback: if all candidate main IDs had parents, trace the first one's root
+            $firstCat = $categoryMap->get($rawCandidateMainIds[0]);
+            while ($firstCat && !empty($firstCat->parent_id)) {
+                $firstCat = Category::find($firstCat->parent_id);
+            }
+            if ($firstCat) {
+                $allMainCategoryIds[] = (int)$firstCat->id;
+                $categoryMap->put($firstCat->id, $firstCat);
+            }
+        }
+
+        $rowsToInsert = [];
+        $addedPairs = [];
+
+        // 1. Process all sub-sub categories
+        foreach ($subSubCategoryIds as $subSubId) {
+            $subSub = $categoryMap->get($subSubId);
+            $subId = ($subSub && !empty($subSub->parent_id)) ? (int)$subSub->parent_id : null;
+            $sub = $subId ? $categoryMap->get($subId) : null;
+            $mainCatId = ($sub && !empty($sub->parent_id)) ? (int)$sub->parent_id : ($request->category_id ?: ($allMainCategoryIds[0] ?? null));
+
+            $key = "{$mainCatId}_{$subId}_{$subSubId}";
+            if (!isset($addedPairs[$key]) && $mainCatId) {
+                $addedPairs[$key] = true;
+                $rowsToInsert[] = [
+                    'product_id' => $product->id,
+                    'category_id' => $mainCatId,
+                    'sub_category_id' => $subId,
+                    'sub_sub_category_id' => $subSubId,
+                ];
+            }
+        }
+
+        // 2. Process all sub-categories that may not have a sub-sub category
+        foreach ($subCategoryIds as $subId) {
+            $sub = $categoryMap->get($subId);
+            $mainCatId = ($sub && !empty($sub->parent_id)) ? (int)$sub->parent_id : ($request->category_id ?: ($allMainCategoryIds[0] ?? null));
+
+            $alreadyCovered = false;
+            foreach ($rowsToInsert as $r) {
+                if ($r['sub_category_id'] == $subId) {
+                    $alreadyCovered = true;
+                    break;
+                }
+            }
+
+            if (!$alreadyCovered && $mainCatId) {
+                $key = "{$mainCatId}_{$subId}_0";
+                if (!isset($addedPairs[$key])) {
+                    $addedPairs[$key] = true;
+                    $rowsToInsert[] = [
+                        'product_id' => $product->id,
+                        'category_id' => $mainCatId,
+                        'sub_category_id' => $subId,
+                        'sub_sub_category_id' => null,
+                    ];
+                }
+            }
+        }
+
+        // 3. Process all main categories that may not have sub-categories
+        foreach ($allMainCategoryIds as $mainCatId) {
+            $alreadyCovered = false;
+            foreach ($rowsToInsert as $r) {
+                if ($r['category_id'] == $mainCatId) {
+                    $alreadyCovered = true;
+                    break;
+                }
+            }
+
+            if (!$alreadyCovered) {
+                $key = "{$mainCatId}_0_0";
+                if (!isset($addedPairs[$key])) {
+                    $addedPairs[$key] = true;
+                    $rowsToInsert[] = [
+                        'product_id' => $product->id,
+                        'category_id' => $mainCatId,
+                        'sub_category_id' => null,
+                        'sub_sub_category_id' => null,
+                    ];
+                }
+            }
+        }
+
+        // Always ensure primary category is present
+        if (!empty($request->category_id)) {
+            $hasPrimary = false;
+            foreach ($rowsToInsert as $r) {
+                if ($r['category_id'] == $request->category_id) {
+                    $hasPrimary = true;
+                    break;
+                }
+            }
+            if (!$hasPrimary) {
+                $rowsToInsert[] = [
+                    'product_id' => $product->id,
+                    'category_id' => (int)$request->category_id,
+                    'sub_category_id' => null,
+                    'sub_sub_category_id' => null,
+                ];
+            }
+        }
+
+        DB::table('product_category')->where('product_id', $product->id)->delete();
+        if (!empty($rowsToInsert)) {
+            DB::table('product_category')->insert($rowsToInsert);
+        }
     }
 
     /** Persist the display order for product or variant media. */
@@ -1494,13 +1578,19 @@ class ProductApisController extends Controller
             $product->description = CommonHelper::fixAdminImagePaths($product->description);
         }
 
-        // Get all category IDs (primary + additional) for the frontend
-        $allCategoryIds = $product->categories->pluck('id')->toArray();
-        // Include the primary category_id if it's not already in the list
+        // Get all category, sub-category, and sub-sub-category IDs from pivot table
+        $pivots = DB::table('product_category')->where('product_id', $product->id)->get();
+        $allCategoryIds = $pivots->pluck('category_id')->filter()->unique()->toArray();
         if ($product->category_id && !in_array($product->category_id, $allCategoryIds)) {
             $allCategoryIds[] = $product->category_id;
         }
         $product->additional_category_ids = implode(',', $allCategoryIds);
+
+        $subCatIds = $pivots->pluck('sub_category_id')->filter()->unique()->toArray();
+        $product->sub_category_id = implode(',', $subCatIds);
+
+        $subSubCatIds = $pivots->pluck('sub_sub_category_id')->filter()->unique()->toArray();
+        $product->sub_sub_category_id = implode(',', $subSubCatIds);
 
         $product->translations = $this->buildProductTranslationsForEdit($product);
 
@@ -1934,73 +2024,14 @@ class ProductApisController extends Controller
                 $product->tags()->sync($allTagIds);
             }
 
-            // Handle multi-category, sub-category & sub-sub-category support
+            // Handle additional main categories support
             $additionalCategoryIds = [];
             if ($request->has('additional_category_ids') && !empty($request->additional_category_ids)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric')
-                );
-            }
-            if ($request->has('sub_category_id') && !empty($request->sub_category_id)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->sub_category_id)), 'is_numeric')
-                );
-            }
-            if ($request->has('sub_sub_category_id') && !empty($request->sub_sub_category_id)) {
-                $additionalCategoryIds = array_merge(
-                    $additionalCategoryIds,
-                    array_filter(array_map('trim', explode(',', (string)$request->sub_sub_category_id)), 'is_numeric')
-                );
+                $additionalCategoryIds = array_values(array_filter(array_map('trim', explode(',', (string)$request->additional_category_ids)), 'is_numeric'));
             }
 
-            // Extract primary single sub_category_id and sub_sub_category_id (to avoid SQL truncation on integer column)
-            $primarySubCategoryId = null;
-            if (!empty($request->sub_category_id)) {
-                $subParts = explode(',', (string)$request->sub_category_id);
-                $firstSub = trim($subParts[0]);
-                if (is_numeric($firstSub)) {
-                    $primarySubCategoryId = (int)$firstSub;
-                }
-            }
-
-            $primarySubSubCategoryId = null;
-            if (!empty($request->sub_sub_category_id)) {
-                $subSubParts = explode(',', (string)$request->sub_sub_category_id);
-                $firstSubSub = trim($subSubParts[0]);
-                if (is_numeric($firstSubSub)) {
-                    $primarySubSubCategoryId = (int)$firstSubSub;
-                }
-            }
-
-            // Sync all categories including the primary one
-            $allCategoryIds = array_merge([$request->category_id], $additionalCategoryIds);
-            $allCategoryIds = array_values(array_unique(array_filter($allCategoryIds, function($value) {
-                return !empty($value) && is_numeric($value);
-            })));
-
-            if (!empty($allCategoryIds)) {
-                $syncData = [];
-                foreach ($allCategoryIds as $catId) {
-                    // Only attach sub_category_id and sub_sub_category_id to the primary category record
-                    if ($catId == $request->category_id) {
-                        $syncData[$catId] = [
-                            'sub_category_id' => $primarySubCategoryId,
-                            'sub_sub_category_id' => $primarySubSubCategoryId,
-                        ];
-                    } else {
-                        $syncData[$catId] = [
-                            'sub_category_id' => null,
-                            'sub_sub_category_id' => null,
-                        ];
-                    }
-                }
-                $product->categories()->sync($syncData);
-            } else {
-                // If no categories, clear any existing ones
-                $product->categories()->detach();
-            }
+            // Sync all multi-category, sub-category, and sub-sub-category combinations
+            $this->syncProductCategories($product, $request, $additionalCategoryIds);
 
             // Save/update translations using HasTranslations trait
             if ($request->has('translations')) {

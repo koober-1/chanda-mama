@@ -55,6 +55,10 @@ Route::get('home_slider_images', [\App\Http\Controllers\API\HomeSliderImagesApiC
 Route::get('home_flyers', [\App\Http\Controllers\API\HomeFlyersApiController::class, 'getPublicFlyers']);
 Route::get('home_popup', [\App\Http\Controllers\API\HomePopupApiController::class, 'getPublicPopup']);
 
+// School Coupon Downloads (Public / Direct Download)
+Route::get('school_coupons/download_pdf/{id}', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'downloadPdf']);
+Route::get('school_coupons/download_excel/{id}', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'downloadExcel']);
+
 Route::middleware('auth:api')->group(function () {
     Route::get('admin_settings', [\App\Http\Controllers\Controller::class, 'getAdminSettings']);
     Route::get('dashboard', [\App\Http\Controllers\Controller::class, 'index']);
@@ -215,6 +219,17 @@ Route::middleware('auth:api')->group(function () {
         Route::post('save', [\App\Http\Controllers\API\PromoCodeApiController::class, 'save'])->name('promo_code.save');
         Route::post('update', [\App\Http\Controllers\API\PromoCodeApiController::class, 'update'])->name('promo_code.update');
         Route::post('delete', [\App\Http\Controllers\API\PromoCodeApiController::class, 'delete'])->name('promo_code.delete');
+    });
+
+    Route::group(['prefix' => 'school_coupons'], function () {
+        Route::get('/', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'index']);
+        Route::post('generate', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'generate'])->name('school_coupons.generate');
+        Route::post('delete', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'delete'])->name('school_coupons.delete');
+        Route::get('codes/{id}', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'getCodes'])->name('school_coupons.codes');
+        Route::get('print_data/{id}', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'getPrintData'])->name('school_coupons.print_data');
+        Route::get('templates', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'getTemplates'])->name('school_coupons.templates');
+        Route::post('templates/save', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'saveTemplate'])->name('school_coupons.templates.save');
+        Route::post('templates/delete', [\App\Http\Controllers\API\SchoolCouponApiController::class, 'deleteTemplate'])->name('school_coupons.templates.delete');
     });
 
     Route::group(['prefix' => 'delivery_settings'], function () {

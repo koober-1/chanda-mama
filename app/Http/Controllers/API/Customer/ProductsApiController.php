@@ -136,11 +136,11 @@ class ProductsApiController extends Controller
             }
 
             if ($sort == 'new') {
-                $sort = 'created_at DESC';
+                $sort = 'p.id DESC';
                 $price = 'MIN(discounted_price)';
                 $price_sort = 'pv.discounted_price  ASC';
             } elseif ($sort == 'old') {
-                $sort = 'created_at ASC';
+                $sort = 'p.id ASC';
                 $price = 'MIN(discounted_price)';
                 $price_sort = 'pv.discounted_price  ASC';
             } elseif ($sort == 'high') {
@@ -162,7 +162,7 @@ class ProductsApiController extends Controller
                 $price = 'MIN(pv.discounted_price)';
                 $price_sort = 'order_counter DESC';
             } else {
-                $sort = 'p.row_order ASC';
+                $sort = 'p.id DESC';
                 $price = 'MIN(pv.discounted_price)';
                 $price_sort = 'pv.id  ASC';
             }
@@ -202,47 +202,51 @@ class ProductsApiController extends Controller
             if (isset($request['seller_slug']) && !empty($request['seller_slug'])) {
                 $seller_slug = $request['seller_slug'];
 
-                // Check if category_ids provided with seller_slug
-                if (isset($request['category_ids']) && !empty($request['category_ids'])) {
-                    // Parse comma-separated category IDs
-                    $category_ids_array = array_map('trim', explode(",", $request['category_ids']));
-                    $category_ids_array = array_filter($category_ids_array, 'is_numeric');
+                // Check if category_ids or category_id provided with seller_slug
+                $cat_ids_input = !empty($request['category_ids']) ? $request['category_ids'] : (!empty($request['category_id']) ? $request['category_id'] : null);
+                if (!empty($cat_ids_input)) {
+                    // Parse category IDs (supports comma-separated string, single ID, or array)
+                    $category_ids_array = is_array($cat_ids_input) ? array_map('trim', $cat_ids_input) : array_map('trim', explode(",", (string)$cat_ids_input));
+                    $category_ids_array = array_values(array_filter($category_ids_array, 'is_numeric'));
 
                     $seller_category = Seller::where('slug', $seller_slug)->first(['categories']);
-                    if (!empty($seller_category)) {
-                        $seller_categories = explode(",", $seller_category['categories']);
-
-                        // Filter to only include categories that belong to this seller
-                        $valid_category_ids = array_intersect($category_ids_array, $seller_categories);
-
-                        if (empty($valid_category_ids)) {
-                            return Response::json(array(
-                                'status' => 1,
-                                'message' => 'success',
-                                'total' => 0,
-                                'total_min_price' => (float) ($total_min_price ?? 0),
-                                'total_max_price' => (float) ($total_max_price ?? 0),
-                                'data' => []
-                            ));
-                        }
-
-                        // Filter by exact category IDs only (no child categories)
-                        // Include both primary category_id and additional categories from pivot table
-                        $where .= " AND s.`slug` = '$seller_slug' AND (p.`category_id` IN (" . implode(",", $valid_category_ids) . ") OR EXISTS (
-                            SELECT 1 FROM product_category pc 
-                            WHERE pc.product_id = p.id 
-                            AND pc.category_id IN (" . implode(",", $valid_category_ids) . ")
-                        ))";
-                    } else {
-                        return Response::json(array(
-                            'status' => 1,
-                            'message' => 'success',
-                            'total' => 0,
-                            'total_min_price' => (float) ($total_min_price ?? 0),
-                            'total_max_price' => (float) ($total_max_price ?? 0),
-                            'data' => []
-                        ));
+                    $allSellerCatIds = [];
+                    if (!empty($seller_category) && !empty($seller_category['categories'])) {
+                        $sellerRootCats = array_filter(explode(",", (string)$seller_category['categories']), 'is_numeric');
+                        $sellerChildCats = !empty($sellerRootCats) ? Category::whereIn('parent_id', $sellerRootCats)->pluck('id')->toArray() : [];
+                        $sellerGrandChildCats = !empty($sellerChildCats) ? Category::whereIn('parent_id', $sellerChildCats)->pluck('id')->toArray() : [];
+                        $allSellerCatIds = array_unique(array_merge($sellerRootCats, $sellerChildCats, $sellerGrandChildCats));
                     }
+
+                    // Include all category IDs requested, allowing sub/sub-sub categories under seller's permitted roots
+                    $valid_category_ids = !empty($allSellerCatIds)
+                        ? array_values(array_intersect($category_ids_array, $allSellerCatIds))
+                        : $category_ids_array;
+
+                    if (empty($valid_category_ids)) {
+                        $valid_category_ids = $category_ids_array;
+                    }
+
+                    // Filter categories including descendants across multi-category product links
+                    $allFilterIds = $valid_category_ids;
+                    $childIds = Category::whereIn('parent_id', $valid_category_ids)->pluck('id')->toArray();
+                    if (!empty($childIds)) {
+                        $grandChildIds = Category::whereIn('parent_id', $childIds)->pluck('id')->toArray();
+                        $allFilterIds = array_unique(array_merge($allFilterIds, $childIds, $grandChildIds));
+                    }
+                    $valid_cat_str = implode(",", $allFilterIds);
+                    $where .= " AND s.`slug` = '$seller_slug' AND (
+                        p.category_id IN ($valid_cat_str)
+                        OR EXISTS (
+                            SELECT 1 FROM product_category pc_match 
+                            WHERE pc_match.product_id = p.id 
+                            AND (
+                                pc_match.category_id IN ($valid_cat_str) 
+                                OR pc_match.sub_category_id IN ($valid_cat_str) 
+                                OR pc_match.sub_sub_category_id IN ($valid_cat_str)
+                            )
+                        )
+                    )";
                 } else {
                     // No category_ids - get all seller categories and their children
                     $seller_category = Seller::where('slug', $seller_slug)->first(['categories']);
@@ -288,47 +292,51 @@ class ProductsApiController extends Controller
 
             // Seller ID filter with optional category_ids
             if (isset($request['seller_id']) && !empty($request['seller_id']) && is_numeric($request['seller_id'])) {
-                // Check if category_ids provided with seller_id
-                if (isset($request['category_ids']) && !empty($request['category_ids'])) {
-                    // Parse comma-separated category IDs
-                    $category_ids_array = array_map('trim', explode(",", $request['category_ids']));
-                    $category_ids_array = array_filter($category_ids_array, 'is_numeric');
+                // Check if category_ids or category_id provided with seller_id
+                $cat_ids_input = !empty($request['category_ids']) ? $request['category_ids'] : (!empty($request['category_id']) ? $request['category_id'] : null);
+                if (!empty($cat_ids_input)) {
+                    // Parse category IDs (supports comma-separated string, single ID, or array)
+                    $category_ids_array = is_array($cat_ids_input) ? array_map('trim', $cat_ids_input) : array_map('trim', explode(",", (string)$cat_ids_input));
+                    $category_ids_array = array_values(array_filter($category_ids_array, 'is_numeric'));
 
                     $seller_category = Seller::where('id', $seller_id)->first(['categories']);
-                    if (!empty($seller_category)) {
-                        $seller_categories = explode(",", $seller_category['categories']);
-
-                        // Filter to only include categories that belong to this seller
-                        $valid_category_ids = array_intersect($category_ids_array, $seller_categories);
-
-                        if (empty($valid_category_ids)) {
-                            return Response::json(array(
-                                'status' => 1,
-                                'message' => 'success',
-                                'total' => 0,
-                                'total_min_price' => (float) ($total_min_price ?? 0),
-                                'total_max_price' => (float) ($total_max_price ?? 0),
-                                'data' => []
-                            ));
-                        }
-
-                        // Filter by exact category IDs only (no child categories)
-                        // Include both primary category_id and additional categories from pivot table
-                        $where .= " AND p.`seller_id` = " . $seller_id . " AND (p.`category_id` IN (" . implode(",", $valid_category_ids) . ") OR EXISTS (
-                            SELECT 1 FROM product_category pc 
-                            WHERE pc.product_id = p.id 
-                            AND pc.category_id IN (" . implode(",", $valid_category_ids) . ")
-                        ))";
-                    } else {
-                        return Response::json(array(
-                            'status' => 1,
-                            'message' => 'success',
-                            'total' => 0,
-                            'total_min_price' => (float) ($total_min_price ?? 0),
-                            'total_max_price' => (float) ($total_max_price ?? 0),
-                            'data' => []
-                        ));
+                    $allSellerCatIds = [];
+                    if (!empty($seller_category) && !empty($seller_category['categories'])) {
+                        $sellerRootCats = array_filter(explode(",", (string)$seller_category['categories']), 'is_numeric');
+                        $sellerChildCats = !empty($sellerRootCats) ? Category::whereIn('parent_id', $sellerRootCats)->pluck('id')->toArray() : [];
+                        $sellerGrandChildCats = !empty($sellerChildCats) ? Category::whereIn('parent_id', $sellerChildCats)->pluck('id')->toArray() : [];
+                        $allSellerCatIds = array_unique(array_merge($sellerRootCats, $sellerChildCats, $sellerGrandChildCats));
                     }
+
+                    // Include all category IDs requested, allowing sub/sub-sub categories under seller's permitted roots
+                    $valid_category_ids = !empty($allSellerCatIds)
+                        ? array_values(array_intersect($category_ids_array, $allSellerCatIds))
+                        : $category_ids_array;
+
+                    if (empty($valid_category_ids)) {
+                        $valid_category_ids = $category_ids_array;
+                    }
+
+                    // Filter categories including descendants across multi-category product links
+                    $allFilterIds = $valid_category_ids;
+                    $childIds = Category::whereIn('parent_id', $valid_category_ids)->pluck('id')->toArray();
+                    if (!empty($childIds)) {
+                        $grandChildIds = Category::whereIn('parent_id', $childIds)->pluck('id')->toArray();
+                        $allFilterIds = array_unique(array_merge($allFilterIds, $childIds, $grandChildIds));
+                    }
+                    $valid_cat_str = implode(",", $allFilterIds);
+                    $where .= " AND p.`seller_id` = " . $seller_id . " AND (
+                        p.category_id IN ($valid_cat_str)
+                        OR EXISTS (
+                            SELECT 1 FROM product_category pc_match 
+                            WHERE pc_match.product_id = p.id 
+                            AND (
+                                pc_match.category_id IN ($valid_cat_str) 
+                                OR pc_match.sub_category_id IN ($valid_cat_str) 
+                                OR pc_match.sub_sub_category_id IN ($valid_cat_str)
+                            )
+                        )
+                    )";
                 } else {
                     // No category_ids - get all seller categories and their children
                     $seller_category = Seller::where('id', $seller_id)->first(['categories']);
@@ -468,20 +476,37 @@ class ProductsApiController extends Controller
                 $unit_ids = explode(",", $request->unit_ids);
                 $products = $products->whereIn('pv.measurement', $sizes)->whereIn('pv.stock_unit_id', $unit_ids);
             }
-            // Filter by category_ids (comma-separated) - only if seller_id or seller_slug not already handling it
-            // Each category ID fetches products from its specific category only (no child categories)
-            if (isset($request->category_ids) && !empty($request->category_ids)) {
+            // Filter by category_ids or category_id - only if seller_id or seller_slug not already handling it
+            // Each category ID fetches products from its specific category only (isolated to product's deepest assigned category)
+            $cat_ids_input = !empty($request->category_ids) ? $request->category_ids : (!empty($request->category_id) ? $request->category_id : null);
+            if (!empty($cat_ids_input)) {
                 // Only apply this filter if seller_id/seller_slug is not set
                 // (because those already handle category_ids in the $where clause)
                 if (empty($request->seller_id) && empty($request->seller_slug)) {
-                    // Parse comma-separated category IDs into array
-                    $category_ids_array = array_map('trim', explode(",", $request->category_ids));
-                    // Filter to keep only numeric IDs
-                    $category_ids_array = array_filter($category_ids_array, 'is_numeric');
+                    // Parse category IDs (supports comma-separated string, single ID, or array)
+                    $category_ids_array = is_array($cat_ids_input) ? array_map('trim', $cat_ids_input) : array_map('trim', explode(",", (string)$cat_ids_input));
+                    $category_ids_array = array_values(array_filter($category_ids_array, 'is_numeric'));
 
                     if (!empty($category_ids_array)) {
-                        // Filter products by exact category IDs only (no child categories)
-                        $products = $products->whereIn('p.category_id', $category_ids_array);
+                        $allFilterIds = $category_ids_array;
+                        $childIds = Category::whereIn('parent_id', $category_ids_array)->pluck('id')->toArray();
+                        if (!empty($childIds)) {
+                            $grandChildIds = Category::whereIn('parent_id', $childIds)->pluck('id')->toArray();
+                            $allFilterIds = array_unique(array_merge($allFilterIds, $childIds, $grandChildIds));
+                        }
+                        $catList = implode(",", $allFilterIds);
+                        $products = $products->whereRaw("(
+                            p.category_id IN ($catList)
+                            OR EXISTS (
+                                SELECT 1 FROM product_category pc_match 
+                                WHERE pc_match.product_id = p.id 
+                                AND (
+                                    pc_match.category_id IN ($catList) 
+                                    OR pc_match.sub_category_id IN ($catList) 
+                                    OR pc_match.sub_sub_category_id IN ($catList)
+                                )
+                            )
+                        )");
                     }
                 }
             }
@@ -558,6 +583,17 @@ class ProductsApiController extends Controller
                 'image',
                 'other_images'
             ]);
+
+            $productIds = $products->pluck('id')->toArray();
+            $productCategoryPivots = DB::table('product_category')
+                ->whereIn('product_id', $productIds)
+                ->get()
+                ->groupBy('product_id');
+
+            $categoryMap = Category::select('id', 'name', 'slug', 'parent_id')
+                ->with('translations')
+                ->get()
+                ->keyBy('id');
 
             $i = 0;
             foreach ($products as $row) {
@@ -662,6 +698,19 @@ class ProductsApiController extends Controller
                         ? ($variant->unit->short_code ?? $variant->unit->name ?? '')
                         : '';
 
+                    $colorInfo = $this->parseVariantColor($variant->color_variant, $variant->variant_name);
+                    $variant->color_variant = $colorInfo['color_variant'];
+                    $variant->color_name = $colorInfo['color_name'];
+                    $variant->color_code = $colorInfo['color_code'];
+                    $variant->color_hex = $colorInfo['color_hex'];
+                    $variant->color = [
+                        'name' => $colorInfo['color_name'],
+                        'hex' => $colorInfo['color_hex']
+                    ];
+                    if (empty($variant->variant_name) && !empty($colorInfo['color_name'])) {
+                        $variant->variant_name = $colorInfo['color_name'];
+                    }
+
                     // Hide description from nested product and its translations
                     if ($variant->product) {
                         $variant->product->makeHidden(['description']);
@@ -680,6 +729,9 @@ class ProductsApiController extends Controller
                     array_push($variantArray, $variant);
                 }
                 $products[$i]['variants'] = $variantArray;
+
+                $pivotsForProduct = $productCategoryPivots->get($row->id, collect());
+                $this->resolveProductCategories($row, $categoryMap, $pivotsForProduct);
 
                 $row->rating_count = CommonHelper::productAverageRating($row['id'])['rating_count'];
                 $row->average_rating = CommonHelper::productAverageRating($row['id'])['average_rating'];
@@ -869,6 +921,19 @@ class ProductsApiController extends Controller
                 $variants[$key]->images = CommonHelper::getImages($variants[$key]->product_id, $variants[$key]->id);
                 $variants[$key]->stock_unit_name = $variants[$key]->stock_unit_name ?? '';
 
+                $colorInfo = $this->parseVariantColor($variants[$key]->color_variant, $variants[$key]->variant_name);
+                $variants[$key]->color_variant = $colorInfo['color_variant'];
+                $variants[$key]->color_name = $colorInfo['color_name'];
+                $variants[$key]->color_code = $colorInfo['color_code'];
+                $variants[$key]->color_hex = $colorInfo['color_hex'];
+                $variants[$key]->color = [
+                    'name' => $colorInfo['color_name'],
+                    'hex' => $colorInfo['color_hex']
+                ];
+                if (empty($variants[$key]->variant_name) && !empty($colorInfo['color_name'])) {
+                    $variants[$key]->variant_name = $colorInfo['color_name'];
+                }
+
                 // Fix description image URLs in nested variant->product->translations
                 if (isset($variants[$key]->product) && isset($variants[$key]->product->translations)) {
                     $translations = $variants[$key]->product->translations;
@@ -955,90 +1020,7 @@ class ProductsApiController extends Controller
                 ->get()
                 ->keyBy('id');
 
-            $pivot = DB::table('product_category')->where('product_id', $product->id)->first();
-            $subSubCatId = $pivot->sub_sub_category_id ?? null;
-            $subCatId = $pivot->sub_category_id ?? null;
-            $mainCatId = $product->category_id ?: ($pivot->category_id ?? null);
-
-            $mainCategory = $mainCatId ? $categoryMap->get($mainCatId) : null;
-            $subCategory = $subCatId ? $categoryMap->get($subCatId) : null;
-            $subSubCategory = $subSubCatId ? $categoryMap->get($subSubCatId) : null;
-
-            // If subCategory was not in pivot but mainCategory has parent (i.e. product category_id was assigned a nested category)
-            if (!$subCategory && !$subSubCategory && $mainCategory && $mainCategory->parent_id != 0) {
-                $parentCat = $categoryMap->get($mainCategory->parent_id);
-                if ($parentCat && $parentCat->parent_id != 0) {
-                    $grandParent = $categoryMap->get($parentCat->parent_id);
-                    $subSubCategory = $mainCategory;
-                    $subCategory = $parentCat;
-                    $mainCategory = $grandParent;
-                } else if ($parentCat) {
-                    $subCategory = $mainCategory;
-                    $mainCategory = $parentCat;
-                }
-            }
-
-            // Build hierarchy array
-            $hierarchy = [];
-            if ($mainCategory) {
-                $hierarchy[] = [
-                    'id' => $mainCategory->id,
-                    'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
-                    'slug' => $mainCategory->slug,
-                    'level' => 'main',
-                ];
-            }
-            if ($subCategory) {
-                $hierarchy[] = [
-                    'id' => $subCategory->id,
-                    'name' => $subCategory->translations['name'] ?? $subCategory->name,
-                    'slug' => $subCategory->slug,
-                    'level' => 'sub',
-                ];
-            }
-            if ($subSubCategory) {
-                $hierarchy[] = [
-                    'id' => $subSubCategory->id,
-                    'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
-                    'slug' => $subSubCategory->slug,
-                    'level' => 'sub_sub',
-                ];
-            }
-
-            // Deepest assigned category: sub-subcategory if available, otherwise subcategory, otherwise main category
-            $deepest = $subSubCategory ?: ($subCategory ?: $mainCategory);
-            $deepestCategory = $deepest ? [
-                'id' => $deepest->id,
-                'name' => $deepest->translations['name'] ?? $deepest->name,
-                'slug' => $deepest->slug,
-            ] : null;
-
-            $product->category = $mainCategory ? [
-                'id' => $mainCategory->id,
-                'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
-                'slug' => $mainCategory->slug,
-            ] : null;
-            $product->category_name = $mainCategory ? ($mainCategory->translations['name'] ?? $mainCategory->name) : $product->category_name;
-
-            $product->sub_category_id = $subCategory ? $subCategory->id : null;
-            $product->sub_category_name = $subCategory ? ($subCategory->translations['name'] ?? $subCategory->name) : null;
-            $product->sub_category = $subCategory ? [
-                'id' => $subCategory->id,
-                'name' => $subCategory->translations['name'] ?? $subCategory->name,
-                'slug' => $subCategory->slug,
-            ] : null;
-
-            $product->sub_sub_category_id = $subSubCategory ? $subSubCategory->id : null;
-            $product->sub_sub_category_name = $subSubCategory ? ($subSubCategory->translations['name'] ?? $subSubCategory->name) : null;
-            $product->sub_sub_category = $subSubCategory ? [
-                'id' => $subSubCategory->id,
-                'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
-                'slug' => $subSubCategory->slug,
-            ] : null;
-
-            $product->deepest_category = $deepestCategory;
-            $product->deepest_category_name = $deepestCategory ? $deepestCategory['name'] : $product->category_name;
-            $product->category_hierarchy = $hierarchy;
+            $this->resolveProductCategories($product, $categoryMap);
 
             return CommonHelper::responseWithData($product);
         } else {
@@ -1654,4 +1636,380 @@ class ProductsApiController extends Controller
             return CommonHelper::responseError("Something Went Wrong!");
         }
     }
+
+    /**
+     * Parse raw variant color string or JSON into structured color data
+     */
+    public function parseVariantColor($rawColor, $variantName = null)
+    {
+        if (empty($rawColor)) {
+            return [
+                'color_variant' => $rawColor,
+                'color_name' => $variantName ?: null,
+                'color_code' => null,
+                'color_hex' => null,
+            ];
+        }
+
+        if (is_array($rawColor)) {
+            $name = $rawColor['name'] ?? $rawColor['color_name'] ?? null;
+            $hex = $rawColor['hex'] ?? $rawColor['color_code'] ?? $rawColor['color'] ?? null;
+            return [
+                'color_variant' => $name ? ($hex ? "$name ($hex)" : $name) : null,
+                'color_name' => $name ?: $variantName,
+                'color_code' => $hex,
+                'color_hex' => $hex,
+            ];
+        }
+
+        $rawStr = trim((string)$rawColor);
+        if ($rawStr === '[object Object]' || str_contains($rawStr, '[object') || $rawStr === 'null' || $rawStr === 'undefined') {
+            return [
+                'color_variant' => null,
+                'color_name' => (!empty($variantName) && !str_contains((string)$variantName, '[object')) ? $variantName : null,
+                'color_code' => null,
+                'color_hex' => null,
+            ];
+        }
+
+        $name = null;
+        $hex = null;
+
+        // Check if JSON
+        if (str_starts_with($rawStr, '{') && str_ends_with($rawStr, '}')) {
+            $json = json_decode($rawStr, true);
+            if (is_array($json)) {
+                $name = $json['name'] ?? $json['color_name'] ?? null;
+                $hex = $json['hex'] ?? $json['color_code'] ?? $json['color'] ?? null;
+            }
+        }
+
+        // Match hex pattern #xxxxxx or #xxx
+        if (!$hex && preg_match('/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b/', $rawStr, $matches)) {
+            $hex = strtoupper($matches[0]);
+        }
+
+        // Extract color name by stripping parentheses e.g. "Cyan / Aqua (#00FFFF)" -> "Cyan / Aqua"
+        if (!$name) {
+            $cleanName = trim(preg_replace('/\s*\([^)]*\)/', '', $rawStr));
+            $cleanName = str_replace('_', ' ', $cleanName);
+            if (!empty($cleanName) && !str_starts_with($cleanName, '#')) {
+                $name = ucwords(strtolower($cleanName));
+            } elseif (!empty($variantName)) {
+                $name = $variantName;
+            }
+        }
+
+        // Fallback presets if hex not found
+        if (!$hex) {
+            $presets = [
+                'black' => '#000000', 'white' => '#FFFFFF', 'grey' => '#808080', 'gray' => '#808080',
+                'red' => '#FF0000', 'crimson' => '#DC143C', 'maroon' => '#800000', 'pink' => '#FFC0CB',
+                'orange' => '#FFA500', 'narangi' => '#E08229', 'yellow' => '#FFFF00', 'blue' => '#0000FF',
+                'navy blue' => '#000080', 'navy' => '#000080', 'green' => '#008000', 'dark green' => '#006400',
+                'khakhi' => '#1D5D18', 'khaki' => '#1D5D18', 'olive green' => '#556B2F', 'purple' => '#800080',
+                'brown' => '#8B4513', 'multi color' => '#4A90E2', 'multi' => '#4A90E2', 'cyan' => '#00FFFF',
+                'aqua' => '#00FFFF', 'teal' => '#008080', 'gold' => '#FFD700', 'silver' => '#C0C0C0'
+            ];
+            $lower = strtolower(trim((string)$name));
+            if (isset($presets[$lower])) {
+                $hex = $presets[$lower];
+            }
+        }
+
+        if (!$name && $hex) {
+            $name = $hex;
+        }
+
+        if ($name && (str_contains((string)$name, '[object') || $name === 'Null')) {
+            $name = $variantName ?: null;
+        }
+
+        return [
+            'color_variant' => $rawColor,
+            'color_name' => $name,
+            'color_code' => $hex,
+            'color_hex' => $hex,
+        ];
+    }
+
+    /**
+     * Resolve full category hierarchy, referred category, and sub/sub-sub categories for a product
+     */
+    public function resolveProductCategories($product, $categoryMap = null, $productPivots = null)
+    {
+        if (!$categoryMap) {
+            $categoryMap = Category::select('id', 'name', 'slug', 'parent_id')
+                ->with('translations')
+                ->get()
+                ->keyBy('id');
+        }
+
+        $productId = is_object($product) ? ($product->id ?? null) : ($product['id'] ?? null);
+        if (!$productId) {
+            return;
+        }
+
+        if ($productPivots === null) {
+            $pivots = DB::table('product_category')->where('product_id', $productId)->get();
+        } else {
+            $pivots = $productPivots instanceof \Illuminate\Support\Collection 
+                ? $productPivots 
+                : collect($productPivots);
+        }
+
+        // Find the most specific pivot record
+        $pivot = $pivots->first(function ($p) {
+            return !empty($p->sub_sub_category_id);
+        }) ?: ($pivots->first(function ($p) {
+            return !empty($p->sub_category_id);
+        }) ?: $pivots->first());
+
+        $subSubCatId = $pivot->sub_sub_category_id ?? null;
+        $subCatId = $pivot->sub_category_id ?? null;
+        $mainCatId = (is_object($product) ? ($product->category_id ?? null) : ($product['category_id'] ?? null))
+            ?: ($pivot->category_id ?? null);
+
+        $mainCategory = $mainCatId ? $categoryMap->get($mainCatId) : null;
+        $subCategory = $subCatId ? $categoryMap->get($subCatId) : null;
+        $subSubCategory = $subSubCatId ? $categoryMap->get($subSubCatId) : null;
+
+        // Trace parents up the tree if child category exists
+        if ($subSubCategory) {
+            if ($subSubCategory->parent_id != 0) {
+                $subCategory = $categoryMap->get($subSubCategory->parent_id) ?: $subCategory;
+            }
+            if ($subCategory && $subCategory->parent_id != 0) {
+                $mainCategory = $categoryMap->get($subCategory->parent_id) ?: $mainCategory;
+            }
+        } elseif ($subCategory) {
+            if ($subCategory->parent_id != 0) {
+                $mainCategory = $categoryMap->get($subCategory->parent_id) ?: $mainCategory;
+            }
+        } elseif ($mainCategory && $mainCategory->parent_id != 0) {
+            $parentCat = $categoryMap->get($mainCategory->parent_id);
+            if ($parentCat && $parentCat->parent_id != 0) {
+                $grandParent = $categoryMap->get($parentCat->parent_id);
+                $subSubCategory = $mainCategory;
+                $subCategory = $parentCat;
+                $mainCategory = $grandParent;
+            } elseif ($parentCat) {
+                $subCategory = $mainCategory;
+                $mainCategory = $parentCat;
+            }
+        }
+
+        // Schema markup fallback: "Category > Sub Category > Sub Sub Category"
+        $schemaMarkup = is_object($product) ? ($product->schema_markup ?? null) : ($product['schema_markup'] ?? null);
+        if ((!$subSubCategory || !$subCategory) && !empty($schemaMarkup)) {
+            $markupArr = is_array($schemaMarkup) ? $schemaMarkup : json_decode((string)$schemaMarkup, true);
+            if (isset($markupArr['category']) && is_string($markupArr['category'])) {
+                $parts = array_filter(array_map('trim', explode('>', $markupArr['category'])));
+                if (count($parts) >= 2) {
+                    $parts = array_values($parts);
+                    foreach ($categoryMap as $cat) {
+                        $cName = strtolower(trim($cat->name));
+                        if (count($parts) >= 3 && !$subSubCategory && $cName === strtolower($parts[2])) {
+                            $subSubCategory = $cat;
+                        }
+                        if (count($parts) >= 2 && !$subCategory && $cName === strtolower($parts[1])) {
+                            $subCategory = $cat;
+                        }
+                        if (!$mainCategory && $cName === strtolower($parts[0])) {
+                            $mainCategory = $cat;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Build hierarchy array
+        $hierarchy = [];
+        if ($mainCategory) {
+            $hierarchy[] = [
+                'id' => $mainCategory->id,
+                'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
+                'slug' => $mainCategory->slug,
+                'level' => 'main',
+            ];
+        }
+        if ($subCategory) {
+            $hierarchy[] = [
+                'id' => $subCategory->id,
+                'name' => $subCategory->translations['name'] ?? $subCategory->name,
+                'slug' => $subCategory->slug,
+                'level' => 'sub',
+            ];
+        }
+        if ($subSubCategory) {
+            $hierarchy[] = [
+                'id' => $subSubCategory->id,
+                'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
+                'slug' => $subSubCategory->slug,
+                'level' => 'sub_sub',
+            ];
+        }
+
+        // Deepest / referred category: sub-sub if available, else sub, else main
+        $deepest = $subSubCategory ?: ($subCategory ?: $mainCategory);
+        $deepestCategory = $deepest ? [
+            'id' => $deepest->id,
+            'name' => $deepest->translations['name'] ?? $deepest->name,
+            'slug' => $deepest->slug,
+            'parent_id' => $deepest->parent_id ?? 0,
+        ] : null;
+
+        // Tier-Isolated Multi-Category Counting:
+        // Rule: Count categories strictly at the product's deepest assigned tier.
+        // Tier 1: If product has sub-sub categories -> count ONLY distinct sub-sub categories
+        // Tier 2: If NO sub-sub categories but has sub categories -> count ONLY distinct sub categories
+        // Tier 3: If NO sub categories -> count ONLY distinct main categories
+        $rawAssignedIds = [];
+        foreach ($pivots as $p) {
+            if (!empty($p->category_id) && (int)$p->category_id > 0) $rawAssignedIds[] = (int)$p->category_id;
+            if (!empty($p->sub_category_id) && (int)$p->sub_category_id > 0) $rawAssignedIds[] = (int)$p->sub_category_id;
+            if (!empty($p->sub_sub_category_id) && (int)$p->sub_sub_category_id > 0) $rawAssignedIds[] = (int)$p->sub_sub_category_id;
+        }
+        if ($mainCatId && (int)$mainCatId > 0) {
+            $rawAssignedIds[] = (int)$mainCatId;
+        }
+        if ($subCatId && (int)$subCatId > 0) {
+            $rawAssignedIds[] = (int)$subCatId;
+        }
+        if ($subSubCatId && (int)$subSubCatId > 0) {
+            $rawAssignedIds[] = (int)$subSubCatId;
+        }
+        $rawAssignedIds = array_values(array_unique(array_filter($rawAssignedIds)));
+
+        // Tier classification strictly based on tree depth:
+        // Tier 1 (Main): parent_id == 0 (root only)
+        // Tier 2 (Sub): parent_id points to root
+        // Tier 3 (Sub-Sub): parent_id points to sub (grandparent exists)
+        $distinctMainIds = [];
+        $distinctSubIds = [];
+        $distinctSubSubIds = [];
+
+        foreach ($rawAssignedIds as $cId) {
+            $cat = $categoryMap->get($cId);
+            if (!$cat) continue;
+
+            if (empty($cat->parent_id) || (int)$cat->parent_id === 0) {
+                if (!in_array($cId, $distinctMainIds, true)) {
+                    $distinctMainIds[] = $cId;
+                }
+            } else {
+                $parent = $categoryMap->get($cat->parent_id);
+                if ($parent && (empty($parent->parent_id) || (int)$parent->parent_id === 0)) {
+                    if (!in_array($cId, $distinctSubIds, true)) {
+                        $distinctSubIds[] = $cId;
+                    }
+                } else {
+                    if (!in_array($cId, $distinctSubSubIds, true)) {
+                        $distinctSubSubIds[] = $cId;
+                    }
+                }
+            }
+        }
+
+        $allMainCategoryNames = [];
+        foreach ($distinctMainIds as $cId) {
+            if ($c = $categoryMap->get($cId)) {
+                $cName = $c->translations['name'] ?? $c->name;
+                if (!empty($cName) && !in_array($cName, $allMainCategoryNames, true)) {
+                    $allMainCategoryNames[] = $cName;
+                }
+            }
+        }
+
+        $allSubCategoryNames = [];
+        foreach ($distinctSubIds as $cId) {
+            if ($c = $categoryMap->get($cId)) {
+                $cName = $c->translations['name'] ?? $c->name;
+                if (!empty($cName) && !in_array($cName, $allSubCategoryNames, true)) {
+                    $allSubCategoryNames[] = $cName;
+                }
+            }
+        }
+
+        $allSubSubCategoryNames = [];
+        foreach ($distinctSubSubIds as $cId) {
+            if ($c = $categoryMap->get($cId)) {
+                $cName = $c->translations['name'] ?? $c->name;
+                if (!empty($cName) && !in_array($cName, $allSubSubCategoryNames, true)) {
+                    $allSubSubCategoryNames[] = $cName;
+                }
+            }
+        }
+
+        $allTierCategoryNames = [];
+        if (!empty($distinctSubSubIds)) {
+            $allTierCategoryNames = $allSubSubCategoryNames;
+        } elseif (!empty($distinctSubIds)) {
+            $allTierCategoryNames = $allSubCategoryNames;
+        } elseif (!empty($distinctMainIds)) {
+            $allTierCategoryNames = $allMainCategoryNames;
+        }
+
+        $extraCategoryCount = max(0, count($allTierCategoryNames) - 1);
+        $primaryDisplayName = $deepest ? ($deepest->translations['name'] ?? $deepest->name) : ($mainCategory ? ($mainCategory->translations['name'] ?? $mainCategory->name) : '');
+        $categoryBadgeText = $extraCategoryCount > 0 ? "{$primaryDisplayName} +{$extraCategoryCount}" : $primaryDisplayName;
+
+        $catData = [
+            'category_id' => $mainCategory ? $mainCategory->id : (is_object($product) ? ($product->category_id ?? null) : ($product['category_id'] ?? null)),
+            'category_name' => $primaryDisplayName ?: (is_object($product) ? ($product->category_name ?? '') : ($product['category_name'] ?? '')),
+            'display_category_name' => $primaryDisplayName,
+            'extra_category_count' => $extraCategoryCount,
+            'category_badge_text' => $categoryBadgeText,
+            'all_category_names' => $allTierCategoryNames,
+            'all_main_categories' => $allMainCategoryNames,
+            'all_sub_categories' => $allSubCategoryNames,
+            'all_sub_sub_categories' => $allSubSubCategoryNames,
+            'main_category_name' => $mainCategory ? ($mainCategory->translations['name'] ?? $mainCategory->name) : null,
+            'category' => $mainCategory ? [
+                'id' => $mainCategory->id,
+                'name' => $mainCategory->translations['name'] ?? $mainCategory->name,
+                'slug' => $mainCategory->slug,
+                'parent_id' => 0,
+            ] : null,
+            'sub_category_id' => $subCategory ? $subCategory->id : null,
+            'sub_category_name' => $subCategory ? ($subCategory->translations['name'] ?? $subCategory->name) : null,
+            'sub_category' => $subCategory ? [
+                'id' => $subCategory->id,
+                'name' => $subCategory->translations['name'] ?? $subCategory->name,
+                'slug' => $subCategory->slug,
+                'parent_id' => $subCategory->parent_id ?? 0,
+            ] : null,
+            'sub_sub_category_id' => $subSubCategory ? $subSubCategory->id : null,
+            'sub_sub_category_name' => $subSubCategory ? ($subSubCategory->translations['name'] ?? $subSubCategory->name) : null,
+            'sub_sub_category' => $subSubCategory ? [
+                'id' => $subSubCategory->id,
+                'name' => $subSubCategory->translations['name'] ?? $subSubCategory->name,
+                'slug' => $subSubCategory->slug,
+                'parent_id' => $subSubCategory->parent_id ?? 0,
+            ] : null,
+            'referred_category' => $deepestCategory,
+            'referred_category_id' => $deepest ? $deepest->id : null,
+            'referred_category_name' => $deepest ? ($deepest->translations['name'] ?? $deepest->name) : null,
+            'deepest_category' => $deepestCategory,
+            'deepest_category_id' => $deepest ? $deepest->id : null,
+            'deepest_category_name' => $deepest ? ($deepest->translations['name'] ?? $deepest->name) : null,
+            'category_hierarchy' => $hierarchy,
+        ];
+
+        if (is_object($product)) {
+            if (method_exists($product, 'unsetRelation')) {
+                $product->unsetRelation('category');
+            }
+            foreach ($catData as $k => $v) {
+                $product->{$k} = $v;
+            }
+        } elseif (is_array($product)) {
+            foreach ($catData as $k => $v) {
+                $product[$k] = $v;
+            }
+        }
+
+        return $catData;
+    }
 }
+

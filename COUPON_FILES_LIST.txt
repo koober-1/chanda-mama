@@ -1,0 +1,97 @@
+================================================================================
+CHANDA MAMA - SCHOOL PHYSICAL COUPON PASSES & DYNAMIC TEMPLATE SYSTEM
+LIST OF CREATED AND MODIFIED FILES (FOR SERVER DEPLOYMENT / MIGRATION)
+Date: 04-Nov-2026
+================================================================================
+
+--------------------------------------------------------------------------------
+1. NEW FILES CREATED (Nayi Files Jo Banayi Gayi Hain)
+--------------------------------------------------------------------------------
+
+[BACKEND CONTROLLER & MODELS]
+1. app/Http/Controllers/API/SchoolCouponApiController.php
+   - Bulk random 6-character unique coupon generator
+   - High-resolution GD image renderer + mPDF A4 multi-page export (4 cards per sheet)
+   - Excel ledger export via PhpSpreadsheet
+   - Direct browser print preview API endpoint (`print_data/{id}`)
+   - Template & 5-variable positions CRUD API
+
+2. app/Models/CouponTemplate.php
+   - Template model storing background image, 5-variable coordinates (X%, Y%, Width%, Height%, Colors, Sizes) and default flag.
+
+3. app/Models/SchoolCouponBatch.php
+   - Batch model linking school name, template, coupons, total count, redeemed/remaining stats, and custom notes.
+
+[DATABASE MIGRATIONS]
+4. database/migrations/2026_11_03_000001_create_school_coupon_batches_table.php
+   - Creates `school_coupon_batches` table
+   - Adds `coupon_batch_id` column to `promo_codes` table
+
+5. database/migrations/2026_11_03_000002_create_coupon_templates_table.php
+   - Creates `coupon_templates` table
+   - Adds `coupon_template_id` and `custom_note` columns to `school_coupon_batches`
+
+[FRONTEND VUE COMPONENT]
+6. resources/js/views/PromoCode/SchoolCouponsModal.vue
+   - Tab 1: Generate New School Batch with Live 3x4 Card Visual Preview
+   - Tab 2: All School Batches & Printouts with Direct Print Preview, PDF/Excel download, Code inspector, and Delete
+   - Tab 3: Template & Variable Positions Mapper (Live canvas sliders for School Name, Code, Worth, Min Purchase, Custom Note)
+   - Full A4 Direct Browser Print Modal with @media print layout
+
+[TEMPLATE GRAPHIC IMAGES]
+7. public/images/school_coupon_blank_template.jpg
+   - 1024x768 Master Blank Template graphic with clean spaces for all 4 variables.
+
+8. public/images/school_coupon_template.jpg
+   - 1024x768 Original reference template graphic.
+
+[COMPILED FRONTEND CHUNKS]
+9. public/js/2232.js
+10. public/js/2481.js
+11. public/js/895.js
+12. public/js/9762.js
+
+
+--------------------------------------------------------------------------------
+2. EXISTING FILES UPDATED (Purani Files Jinme Code Update Kiya Gaya Hai)
+--------------------------------------------------------------------------------
+
+1. routes/api.php
+   - Added public download routes:
+     * Route::get('school_coupons/download_pdf/{id}', ...)
+     * Route::get('school_coupons/download_excel/{id}', ...)
+   - Added authenticated management routes inside `school_coupons` prefix:
+     * GET  /api/school_coupons                (index - batch list)
+     * POST /api/school_coupons/generate       (generate bulk batch)
+     * POST /api/school_coupons/delete         (delete batch)
+     * GET  /api/school_coupons/codes/{id}     (view batch individual codes)
+     * GET  /api/school_coupons/print_data/{id}(full batch print data for direct print)
+     * GET  /api/school_coupons/templates      (list templates & default config)
+     * POST /api/school_coupons/templates/save (save template & coordinate positions)
+     * POST /api/school_coupons/templates/delete (delete template)
+
+2. resources/js/views/PromoCode/PromoCode.vue
+   - Added "School Physical Coupons" button in top action bar
+   - Imported and registered `school-coupons-modal` component
+
+3. public/js/app.js & public/mix-manifest.json
+   - Compiled frontend production bundle (via `npm run prod`)
+
+
+--------------------------------------------------------------------------------
+3. SERVER DEPLOYMENT COMMANDS (Kal Server/aaPanel Pe Update Karte Waqt Ye Steps Karein)
+--------------------------------------------------------------------------------
+
+Step 1: Files upload karne ke baad terminal me ye command chalayein:
+   php artisan migrate --force
+
+Step 2: Agar server par build karna ho (warna local se public/js/app.js aur public/js/*.js upload kar sakte hain):
+   npm run prod
+
+Step 3: Cache clear karein:
+   php artisan config:clear
+   php artisan route:clear
+   php artisan cache:clear
+
+================================================================================
+

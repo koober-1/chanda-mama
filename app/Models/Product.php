@@ -62,17 +62,18 @@ class Product extends Model
             ->withPivot('sub_category_id', 'sub_sub_category_id');
     }
 
-    // Helper method to get all category IDs (both single and multiple)
+    // Helper method to get all category IDs (both single, multiple, sub, and sub-sub)
     public function getAllCategoryIdsAttribute()
     {
-        // Get the primary category ID
         $categoryIds = [$this->category_id];
 
-        // Get additional category IDs from the pivot table
-        $additionalCategories = $this->categories()->pluck('category_id')->toArray();
-        $categoryIds = array_merge($categoryIds, $additionalCategories);
+        $pivots = \DB::table('product_category')->where('product_id', $this->id)->get();
+        foreach ($pivots as $p) {
+            if (!empty($p->category_id)) $categoryIds[] = (int)$p->category_id;
+            if (!empty($p->sub_category_id)) $categoryIds[] = (int)$p->sub_category_id;
+            if (!empty($p->sub_sub_category_id)) $categoryIds[] = (int)$p->sub_sub_category_id;
+        }
 
-        // Remove duplicates and filter out zeros/nulls
         return array_values(array_filter(array_unique($categoryIds), function($id) {
             return !empty($id) && $id > 0;
         }));
